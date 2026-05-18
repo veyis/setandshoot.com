@@ -4,6 +4,8 @@ allowBuilds:
   "@parcel/watcher": true
   "@sentry/cli": true
   "@swc/core": true
+  esbuild: true
   lefthook: true
   sharp: true
+  supabase: true
   unrs-resolver: true
