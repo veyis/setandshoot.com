@@ -13,53 +13,53 @@
  * via the `definition` "supportedTimezones".
  */
 export type SupportedTimezones =
-  | "Pacific/Midway"
-  | "Pacific/Niue"
-  | "Pacific/Honolulu"
-  | "Pacific/Rarotonga"
-  | "America/Anchorage"
-  | "Pacific/Gambier"
-  | "America/Los_Angeles"
-  | "America/Tijuana"
-  | "America/Denver"
-  | "America/Phoenix"
-  | "America/Chicago"
-  | "America/Guatemala"
-  | "America/New_York"
-  | "America/Bogota"
-  | "America/Caracas"
-  | "America/Santiago"
-  | "America/Buenos_Aires"
-  | "America/Sao_Paulo"
-  | "Atlantic/South_Georgia"
-  | "Atlantic/Azores"
-  | "Atlantic/Cape_Verde"
-  | "Europe/London"
-  | "Europe/Berlin"
-  | "Africa/Lagos"
-  | "Europe/Athens"
-  | "Africa/Cairo"
-  | "Europe/Moscow"
-  | "Asia/Riyadh"
-  | "Asia/Dubai"
-  | "Asia/Baku"
-  | "Asia/Karachi"
-  | "Asia/Tashkent"
-  | "Asia/Calcutta"
-  | "Asia/Dhaka"
-  | "Asia/Almaty"
-  | "Asia/Jakarta"
-  | "Asia/Bangkok"
-  | "Asia/Shanghai"
-  | "Asia/Singapore"
-  | "Asia/Tokyo"
-  | "Asia/Seoul"
-  | "Australia/Brisbane"
-  | "Australia/Sydney"
-  | "Pacific/Guam"
-  | "Pacific/Noumea"
-  | "Pacific/Auckland"
-  | "Pacific/Fiji";
+  | 'Pacific/Midway'
+  | 'Pacific/Niue'
+  | 'Pacific/Honolulu'
+  | 'Pacific/Rarotonga'
+  | 'America/Anchorage'
+  | 'Pacific/Gambier'
+  | 'America/Los_Angeles'
+  | 'America/Tijuana'
+  | 'America/Denver'
+  | 'America/Phoenix'
+  | 'America/Chicago'
+  | 'America/Guatemala'
+  | 'America/New_York'
+  | 'America/Bogota'
+  | 'America/Caracas'
+  | 'America/Santiago'
+  | 'America/Buenos_Aires'
+  | 'America/Sao_Paulo'
+  | 'Atlantic/South_Georgia'
+  | 'Atlantic/Azores'
+  | 'Atlantic/Cape_Verde'
+  | 'Europe/London'
+  | 'Europe/Berlin'
+  | 'Africa/Lagos'
+  | 'Europe/Athens'
+  | 'Africa/Cairo'
+  | 'Europe/Moscow'
+  | 'Asia/Riyadh'
+  | 'Asia/Dubai'
+  | 'Asia/Baku'
+  | 'Asia/Karachi'
+  | 'Asia/Tashkent'
+  | 'Asia/Calcutta'
+  | 'Asia/Dhaka'
+  | 'Asia/Almaty'
+  | 'Asia/Jakarta'
+  | 'Asia/Bangkok'
+  | 'Asia/Shanghai'
+  | 'Asia/Singapore'
+  | 'Asia/Tokyo'
+  | 'Asia/Seoul'
+  | 'Australia/Brisbane'
+  | 'Australia/Sydney'
+  | 'Pacific/Guam'
+  | 'Pacific/Noumea'
+  | 'Pacific/Auckland'
+  | 'Pacific/Fiji';
 
 export interface Config {
   auth: {
@@ -73,10 +73,11 @@ export interface Config {
     teams: Team;
     competitions: Competition;
     tags: Tag;
-    "payload-kv": PayloadKv;
-    "payload-locked-documents": PayloadLockedDocument;
-    "payload-preferences": PayloadPreference;
-    "payload-migrations": PayloadMigration;
+    bookings: Booking;
+    'payload-kv': PayloadKv;
+    'payload-locked-documents': PayloadLockedDocument;
+    'payload-preferences': PayloadPreference;
+    'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {};
   collectionsSelect: {
@@ -86,17 +87,16 @@ export interface Config {
     teams: TeamsSelect<false> | TeamsSelect<true>;
     competitions: CompetitionsSelect<false> | CompetitionsSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
-    "payload-kv": PayloadKvSelect<false> | PayloadKvSelect<true>;
-    "payload-locked-documents":
-      | PayloadLockedDocumentsSelect<false>
-      | PayloadLockedDocumentsSelect<true>;
-    "payload-preferences": PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
-    "payload-migrations": PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
+    bookings: BookingsSelect<false> | BookingsSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
+    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: ("false" | "none" | "null") | false | null | ("de" | "en") | ("de" | "en")[];
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('de' | 'en') | ('de' | 'en')[];
   globals: {
     impressum: Impressum;
     datenschutz: Datenschutz;
@@ -107,7 +107,7 @@ export interface Config {
     datenschutz: DatenschutzSelect<false> | DatenschutzSelect<true>;
     settings: SettingsSelect<false> | SettingsSelect<true>;
   };
-  locale: "de" | "en";
+  locale: 'de' | 'en';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -141,7 +141,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
-  role: "admin" | "editor";
+  role: 'admin' | 'editor';
   name?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -160,7 +160,7 @@ export interface User {
       }[]
     | null;
   password?: string | null;
-  collection: "users";
+  collection: 'users';
 }
 /**
  * Foto-Stories — Kern des Portfolios
@@ -189,8 +189,8 @@ export interface Story {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ("ltr" | "rtl") | null;
-      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
       version: number;
     };
@@ -223,7 +223,7 @@ export interface Competition {
   id: number;
   name: string;
   season: string;
-  tier?: ("bundesliga" | "2-bundesliga" | "regional" | "youth") | null;
+  tier?: ('bundesliga' | '2-bundesliga' | 'regional' | 'youth') | null;
   published?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -237,7 +237,7 @@ export interface Team {
   name: string;
   shortName?: string | null;
   city?: string | null;
-  tier?: ("bundesliga" | "2-bundesliga" | "regional" | "youth") | null;
+  tier?: ('bundesliga' | '2-bundesliga' | 'regional' | 'youth') | null;
   published?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -250,7 +250,7 @@ export interface FullBleedPhotoBlock {
   photo: number | Photo;
   id?: string | null;
   blockName?: string | null;
-  blockType: "fullBleedPhoto";
+  blockType: 'fullBleedPhoto';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -267,8 +267,8 @@ export interface Photo {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ("ltr" | "rtl") | null;
-      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
       version: number;
     };
@@ -282,7 +282,7 @@ export interface Photo {
   isHighlight?: boolean | null;
   isCover?: boolean | null;
   orderInStory?: number | null;
-  watermark?: ("none" | "light" | "standard") | null;
+  watermark?: ('none' | 'light' | 'standard') | null;
   published?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -341,10 +341,10 @@ export interface Tag {
 export interface DiptychBlock {
   photoLeft: number | Photo;
   photoRight: number | Photo;
-  ratio?: ("50-50" | "60-40") | null;
+  ratio?: ('50-50' | '60-40') | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: "diptych";
+  blockType: 'diptych';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -354,7 +354,7 @@ export interface TriptychBlock {
   photos: (number | Photo)[];
   id?: string | null;
   blockName?: string | null;
-  blockType: "triptych";
+  blockType: 'triptych';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -370,8 +370,8 @@ export interface InsetPortraitBlock {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ("ltr" | "rtl") | null;
-      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
       version: number;
     };
@@ -379,7 +379,7 @@ export interface InsetPortraitBlock {
   } | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: "insetPortrait";
+  blockType: 'insetPortrait';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -390,7 +390,7 @@ export interface SequenceBlock {
   caption?: string | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: "sequence";
+  blockType: 'sequence';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -401,7 +401,7 @@ export interface PullQuoteBlock {
   attribution?: string | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: "pullQuote";
+  blockType: 'pullQuote';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -416,8 +416,8 @@ export interface TextParagraphBlock {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ("ltr" | "rtl") | null;
-      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
       version: number;
     };
@@ -425,7 +425,21 @@ export interface TextParagraphBlock {
   };
   id?: string | null;
   blockName?: string | null;
-  blockType: "textParagraph";
+  blockType: 'textParagraph';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings".
+ */
+export interface Booking {
+  id: number;
+  name: string;
+  email: string;
+  organization?: string | null;
+  message: string;
+  locale: 'de' | 'en';
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -452,32 +466,36 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: "users";
+        relationTo: 'users';
         value: number | User;
       } | null)
     | ({
-        relationTo: "stories";
+        relationTo: 'stories';
         value: number | Story;
       } | null)
     | ({
-        relationTo: "photos";
+        relationTo: 'photos';
         value: number | Photo;
       } | null)
     | ({
-        relationTo: "teams";
+        relationTo: 'teams';
         value: number | Team;
       } | null)
     | ({
-        relationTo: "competitions";
+        relationTo: 'competitions';
         value: number | Competition;
       } | null)
     | ({
-        relationTo: "tags";
+        relationTo: 'tags';
         value: number | Tag;
+      } | null)
+    | ({
+        relationTo: 'bookings';
+        value: number | Booking;
       } | null);
   globalSlug?: string | null;
   user: {
-    relationTo: "users";
+    relationTo: 'users';
     value: number | User;
   };
   updatedAt: string;
@@ -490,7 +508,7 @@ export interface PayloadLockedDocument {
 export interface PayloadPreference {
   id: number;
   user: {
-    relationTo: "users";
+    relationTo: 'users';
     value: number | User;
   };
   key?: string | null;
@@ -740,6 +758,19 @@ export interface TagsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings_select".
+ */
+export interface BookingsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  organization?: T;
+  message?: T;
+  locale?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -813,8 +844,8 @@ export interface Datenschutz {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ("ltr" | "rtl") | null;
-      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
       version: number;
     };
@@ -828,8 +859,8 @@ export interface Datenschutz {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ("ltr" | "rtl") | null;
-      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
       version: number;
     };
@@ -904,7 +935,7 @@ export interface CollectionsWidget {
   data?: {
     [k: string]: unknown;
   };
-  width: "full";
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -914,6 +945,7 @@ export interface Auth {
   [k: string]: unknown;
 }
 
-declare module "payload" {
+
+declare module 'payload' {
   export interface GeneratedTypes extends Config {}
 }

@@ -25,6 +25,14 @@ export default tseslint.config(
     },
   },
   {
-    ignores: [".next/", "node_modules/", "playwright-report/", "test-results/", "coverage/"],
+    ignores: [
+      ".next/",
+      "node_modules/",
+      "playwright-report/",
+      "test-results/",
+      "coverage/",
+      "src/migrations/",
+      "payload-types.ts",
+    ],
   },
 );

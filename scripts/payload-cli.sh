@@ -12,4 +12,11 @@ if [[ -f .env.local ]]; then
 fi
 
 export PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts
+
+# Non-interactive migrate when dev-mode schema was already pushed
+if [[ "${1:-}" == "migrate" && "${PAYLOAD_MIGRATE_FORCE:-}" == "1" ]]; then
+  printf 'y\n' | pnpm exec payload "$@"
+  exit $?
+fi
+
 exec pnpm exec payload "$@"

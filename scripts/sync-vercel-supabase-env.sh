@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sync app env vars to Vercel (production, preview, development).
+# Sync app env vars to Vercel (DATABASE_URL, Payload, Supabase booking keys).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

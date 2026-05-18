@@ -15,12 +15,13 @@
     "format": "prettier --write .",
     "payload": "bash scripts/payload-cli.sh",
     "payload:migrate": "bash scripts/payload-cli.sh migrate",
+    "payload:migrate:status": "bash scripts/payload-cli.sh migrate:status",
+    "payload:migrate:force": "PAYLOAD_MIGRATE_FORCE=1 bash scripts/payload-cli.sh migrate",
+    "payload:migrate:mark": "bash scripts/payload-mark-migration-applied.sh",
     "payload:generate-types": "bash scripts/payload-cli.sh generate:types",
     "supabase": "supabase",
     "supabase:db-push": "bash scripts/supabase-db-push.sh",
-    "supabase:db-push:hetzner": "bash scripts/supabase-apply-hetzner.sh",
-    "supabase:vercel-env": "bash scripts/sync-vercel-supabase-env.sh",
-    "mcp:tunnel": "bash scripts/supabase-mcp-tunnel.sh"
+    "vercel:env-sync": "bash scripts/sync-vercel-supabase-env.sh"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

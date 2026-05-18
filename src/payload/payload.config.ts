@@ -5,6 +5,7 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import sharp from "sharp";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { Bookings } from "./collections/bookings";
 import { Competitions } from "./collections/competitions";
 import { Photos } from "./collections/photos";
 import { Stories } from "./collections/stories";
@@ -23,7 +24,7 @@ export default buildConfig({
   admin: {
     user: Users.slug,
   },
-  collections: [Users, Stories, Photos, Teams, Competitions, Tags],
+  collections: [Users, Stories, Photos, Teams, Competitions, Tags, Bookings],
   globals: [Impressum, Datenschutz, Settings],
   editor: lexicalEditor({}),
   localization: {

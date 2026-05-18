@@ -1,4 +1,4 @@
--- Foundation schema for setandshoot.com (Hetzner self-hosted Supabase)
+-- Foundation schema for setandshoot.com (booking inquiries — apply via pnpm supabase:db-push)
 -- Apply: pnpm supabase:db-push (requires DATABASE_URL + SSH tunnel or server access)
 
 create table if not exists public.site_meta (
