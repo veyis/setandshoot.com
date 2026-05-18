@@ -1,14 +1,14 @@
 import "./globals.css";
 import { fraunces, inter, jetbrainsMono } from "@/lib/design/fonts";
+import { getLocale } from "next-intl/server";
 
-export const metadata = {
-  title: "Belin Akguel — Volleyball-Fotografie",
-  description: "Cinematic volleyball photography from Bremen.",
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale();
   return (
-    <html lang="de" className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang={locale}
+      className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+    >
       <body>{children}</body>
     </html>
   );

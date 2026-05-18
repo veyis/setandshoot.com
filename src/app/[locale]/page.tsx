@@ -1,0 +1,15 @@
+import { getTranslations, setRequestLocale } from "next-intl/server";
+
+export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations();
+
+  return (
+    <main className="flex min-h-screen flex-col items-start justify-center gap-6 p-12">
+      <h1 className="font-display text-7xl tracking-tight">belin akguel</h1>
+      <p className="text-ink-muted font-sans">{t("site.tagline")}</p>
+      <p className="font-mono text-xs">f/2.8 · 1/2000s · ISO 6400</p>
+    </main>
+  );
+}

@@ -1,0 +1,19 @@
+{
+  "site": {
+    "tagline": "Volleyball-Fotografie. Bremen."
+  },
+  "nav": {
+    "stories": "Stories",
+    "highlights": "Highlights",
+    "athletes": "Athletinnen",
+    "about": "Über mich",
+    "services": "Leistungen",
+    "journal": "Journal",
+    "contact": "Kontakt"
+  },
+  "footer": {
+    "impressum": "Impressum",
+    "datenschutz": "Datenschutz",
+    "bildrechte": "Bildrechte"
+  }
+}
