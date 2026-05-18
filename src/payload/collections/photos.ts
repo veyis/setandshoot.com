@@ -21,7 +21,7 @@ export const Photos: CollectionConfig = {
     delete: isAdmin,
   },
   upload: {
-    staticDir: path.resolve(dirname, "../../../../public/media"),
+    staticDir: path.resolve(dirname, "../../../public/media"),
     mimeTypes: ["image/jpeg", "image/png", "image/webp", "image/avif"],
     adminThumbnail: "thumbnail",
     focalPoint: true,

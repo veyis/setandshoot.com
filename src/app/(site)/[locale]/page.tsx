@@ -12,13 +12,28 @@ import { BookingCTA } from "@/components/landing/booking-cta";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Strip Payload's `serverURL` origin from a file URL so next/image treats it
+ * as same-origin (Next.js 16 blocks optimizing images served from private IPs).
+ */
+function toRelativeUrl(src: string | null | undefined): string {
+  if (!src) return "";
+  try {
+    const url = new URL(src);
+    return url.pathname + url.search;
+  } catch {
+    return src;
+  }
+}
+
 function toHeroPhoto(photo: Photo): HeroPhoto {
   const feed = photo.sizes?.feed;
+  const relSrc = toRelativeUrl(feed?.url ?? photo.url);
   return {
     id: photo.id as number,
     alt: photo.alt ?? "",
-    src: feed?.url ?? photo.url ?? "",
-    srcSet: feed?.url ? `${feed.url} ${feed.width}w` : undefined,
+    src: relSrc,
+    srcSet: feed?.url ? `${relSrc} ${feed.width}w` : undefined,
     width: feed?.width ?? photo.width ?? 1400,
     height: feed?.height ?? photo.height ?? 933,
   };

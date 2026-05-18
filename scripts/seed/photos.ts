@@ -102,6 +102,7 @@ async function ensurePhoto(
       }),
       isHighlight: entry.isHighlight,
       isCover: entry.isCover,
+      published: true,
     },
     locale: "de",
     file: {
