@@ -26,6 +26,9 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "supabase"
+    ],
+    "ignoredBuiltDependencies": [
+      "core-js"
     ]
   },
   "engines": {
@@ -33,6 +36,8 @@
   },
   "packageManager": "pnpm@11.1.1",
   "dependencies": {
+    "@neondatabase/auth": "0.4.1-beta",
+    "@neondatabase/auth-ui": "0.2.0-beta",
     "@payloadcms/db-postgres": "3.84.1",
     "@payloadcms/next": "3.84.1",
     "@payloadcms/richtext-lexical": "3.84.1",
