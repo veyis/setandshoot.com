@@ -20,6 +20,7 @@
     "payload:migrate:mark": "bash scripts/payload-mark-migration-applied.sh",
     "payload:generate-types": "bash scripts/payload-cli.sh generate:types",
     "payload:reset-password": "bash scripts/payload-cli.sh run scripts/reset-payload-password.ts",
+    "neon:reset-password": "bash scripts/payload-cli.sh run scripts/reset-neon-auth-password.ts",
     "seed:photos": "tsx --env-file=.env.local scripts/seed/photos.ts"
   },
   "pnpm": {
@@ -54,6 +55,9 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.10.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
@@ -62,6 +66,7 @@
     "dotenv": "^17.4.2",
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.0.0",
+    "jsdom": "^29.1.1",
     "lefthook": "^1.9.0",
     "prettier": "^3.2.0",
     "prettier-plugin-tailwindcss": "^0.6.0",

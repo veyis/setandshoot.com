@@ -3,8 +3,29 @@
     "tagline": "Volleyball photography. Bremen."
   },
   "home": {
-    "ctaStories": "Explore stories",
-    "ctaBooking": "Book a shoot"
+    "ctaStories": "Browse stories",
+    "ctaBooking": "Get in touch",
+    "highlights": {
+      "title": "Highlights",
+      "subtitle": "Single moments",
+      "viewAll": "View all"
+    },
+    "stories": {
+      "title": "Stories",
+      "subtitle": "Matches as photo series",
+      "comingSoon": "Coming soon"
+    },
+    "about": {
+      "title": "About",
+      "body1": "I photograph volleyball in Bremen and northern Germany — match days, season-long coverage, portraits. My focus is on cinematic single moments that make the game readable as a visual narrative.",
+      "body2": "If you'd like a court, a team, or a federation covered photographically, drop me a line. I plan seasons ahead and like recurring work.",
+      "cta": "More about me"
+    },
+    "cta": {
+      "title": "Got a court date?",
+      "subtitle": "Match, season, portrait — I'll cover it photographically.",
+      "button": "Get a quote"
+    }
   },
   "nav": {
     "stories": "Stories",
@@ -73,5 +94,8 @@
     "successTitle": "Thanks for your inquiry",
     "successBody": "I will get back to you shortly.",
     "errorGeneric": "Could not send your inquiry. Please try again later."
+  },
+  "auth": {
+    "backToSignIn": "Back to sign in"
   }
 }

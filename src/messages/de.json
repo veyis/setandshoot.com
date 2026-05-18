@@ -4,7 +4,28 @@
   },
   "home": {
     "ctaStories": "Stories entdecken",
-    "ctaBooking": "Anfrage stellen"
+    "ctaBooking": "Anfrage stellen",
+    "highlights": {
+      "title": "Highlights",
+      "subtitle": "Einzelmomente",
+      "viewAll": "Alle ansehen"
+    },
+    "stories": {
+      "title": "Stories",
+      "subtitle": "Spiele als Bildserie",
+      "comingSoon": "Bald verfügbar"
+    },
+    "about": {
+      "title": "Über mich",
+      "body1": "Ich fotografiere Volleyball in Bremen und Norddeutschland — Spieltag, Saisonbegleitung, Porträts. Mein Fokus liegt auf cinematischen Einzelmomenten, die das Spiel als visuelle Erzählung lesbar machen.",
+      "body2": "Wenn du Halle, Team oder Verband bildlich begleitet sehen möchtest, schreib mir. Ich plane Saisons im Voraus und arbeite gern wiederkehrend.",
+      "cta": "Mehr über mich"
+    },
+    "cta": {
+      "title": "Halle gebucht?",
+      "subtitle": "Spiel, Saison, Porträt — ich begleite es bildlich.",
+      "button": "Anfrage stellen"
+    }
   },
   "nav": {
     "stories": "Stories",
@@ -73,5 +94,8 @@
     "successTitle": "Danke für deine Anfrage",
     "successBody": "Ich melde mich in Kürze bei dir.",
     "errorGeneric": "Die Anfrage konnte nicht gesendet werden. Bitte versuche es später erneut."
+  },
+  "auth": {
+    "backToSignIn": "Zurück zur Anmeldung"
   }
 }
