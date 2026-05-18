@@ -1,4 +1,6 @@
 packages:
   - "."
 allowBuilds:
+  lefthook: true
   sharp: true
+  unrs-resolver: true

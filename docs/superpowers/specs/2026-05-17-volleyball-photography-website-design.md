@@ -19,6 +19,7 @@ storytelling.
 ## 1. Goals and non-goals
 
 ### Goals
+
 - **Get Belin hired** by clubs, leagues, agencies, sponsors, and editorial outlets
   in Germany and abroad.
 - **Showcase her work** in a way that elevates volleyball photography to an
@@ -31,6 +32,7 @@ storytelling.
   Home and Story routes, WCAG AA).
 
 ### Non-goals (v1)
+
 - E-commerce / print sales.
 - Client galleries with per-event passcodes.
 - Multi-user editorial workflow with review chain.
@@ -43,16 +45,16 @@ storytelling.
 
 ## 2. Audience and core decisions
 
-| Question | Decision |
-|---|---|
-| Primary purpose | Hybrid: hiring + showcase. No e-commerce. |
-| Visual direction | Cinematic Editorial — blue-hour palette, oversized editorial type, restrained motion. |
-| Languages | Bilingual DE + EN; DE primary (unprefixed), EN at `/en/...`. |
-| Archive structure | By Match/Event ("Stories"), with a parallel curated Highlights wall. |
-| Identity | Designed from scratch. Wordmark-only. |
-| Admin / CMS | Payload v3, embedded in the Next.js app. |
-| Sections in v1 | Home, Stories, Story detail, Highlights, Athletes, About, Services + Booking, Journal, Press, Contact, Impressum, Datenschutz. |
-| Engagement | Native cookieless comments (Stories + Journal only), anonymous likes (Stories, Photos, Journal), social share buttons, server-side Instagram sync, OG image generation. |
+| Question          | Decision                                                                                                                                                                |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Primary purpose   | Hybrid: hiring + showcase. No e-commerce.                                                                                                                               |
+| Visual direction  | Cinematic Editorial — blue-hour palette, oversized editorial type, restrained motion.                                                                                   |
+| Languages         | Bilingual DE + EN; DE primary (unprefixed), EN at `/en/...`.                                                                                                            |
+| Archive structure | By Match/Event ("Stories"), with a parallel curated Highlights wall.                                                                                                    |
+| Identity          | Designed from scratch. Wordmark-only.                                                                                                                                   |
+| Admin / CMS       | Payload v3, embedded in the Next.js app.                                                                                                                                |
+| Sections in v1    | Home, Stories, Story detail, Highlights, Athletes, About, Services + Booking, Journal, Press, Contact, Impressum, Datenschutz.                                          |
+| Engagement        | Native cookieless comments (Stories + Journal only), anonymous likes (Stories, Photos, Journal), social share buttons, server-side Instagram sync, OG image generation. |
 
 ## 3. Visual identity
 
@@ -64,15 +66,15 @@ and we don't dilute that. A light theme is a v2 consideration if requested.
 
 ### Palette
 
-| Token | Value | Use |
-|---|---|---|
-| `bg/canvas` | `#0B0E13` | Page background — near-black with blue undertone |
-| `bg/elevated` | `#13171F` | Cards, story panels, lightbox chrome |
-| `ink/primary` | `#F4F1EA` | Body and headings — warm off-white |
-| `ink/muted` | `#8C8F97` | Captions, meta, EXIF, dates |
-| `accent/signal` | `#E63946` | Single hot accent — CTAs, active states |
-| `accent/court` | `#D8B66E` | Brass/sand secondary — sparing |
-| `line/hairline` | `rgba(244,241,234,0.08)` | Dividers, table rules |
+| Token           | Value                    | Use                                              |
+| --------------- | ------------------------ | ------------------------------------------------ |
+| `bg/canvas`     | `#0B0E13`                | Page background — near-black with blue undertone |
+| `bg/elevated`   | `#13171F`                | Cards, story panels, lightbox chrome             |
+| `ink/primary`   | `#F4F1EA`                | Body and headings — warm off-white               |
+| `ink/muted`     | `#8C8F97`                | Captions, meta, EXIF, dates                      |
+| `accent/signal` | `#E63946`                | Single hot accent — CTAs, active states          |
+| `accent/court`  | `#D8B66E`                | Brass/sand secondary — sparing                   |
+| `line/hairline` | `rgba(244,241,234,0.08)` | Dividers, table rules                            |
 
 One hot accent only. Photos carry the rest of the color story.
 
@@ -104,7 +106,7 @@ Inter for all functional copy.
 - Native scroll; no smooth-scroll libraries.
 - 1.02 zoom on photo card hover; underline animation on links.
 - Lightbox: Framer Motion spring (mass 1, stiffness 260, damping 30), arrow-key
-  + swipe nav, ESC to close, deep-linkable `?photo=<id>`.
+  - swipe nav, ESC to close, deep-linkable `?photo=<id>`.
 - All motion disabled under `prefers-reduced-motion`.
 
 ### Logo / wordmark
@@ -148,11 +150,11 @@ locale).
 ### Navigation
 
 - **Top**: `Stories · Highlights · Athletes · About · Services · Journal ·
-  Kontakt`, with locale switcher (DE/EN) on the right and wordmark on the left.
+Kontakt`, with locale switcher (DE/EN) on the right and wordmark on the left.
   Sticky. Text-only. No dropdowns. On viewports ≤ 1024px the nav collapses to
   the wordmark + a hamburger that opens a full-screen overlay menu.
 - **Footer**: Impressum · Datenschutz · Bildrechte · Instagram · Email · ©Year
-  + locale switcher.
+  - locale switcher.
 
 ## 5. Content model
 
@@ -160,45 +162,45 @@ Payload v3 collections. Per-field localization for DE/EN where marked.
 
 ### `photos`
 
-| Field | Type | Notes |
-|---|---|---|
-| `id` | uuid | |
-| `file` | upload | Vercel Blob via Payload's blob adapter |
-| `sizes` | auto | Generated: thumb 400, card 800, feed 1600, hero 2880, in AVIF + WebP |
-| `blurDataURL` | string | Pre-generated 10px placeholder |
-| `width`, `height` | int | From sharp on upload |
-| `exif` | json | Camera, lens, ISO, shutter, aperture, focal length, capturedAt |
-| `altDe`, `altEn` | string | **Required** for publish |
-| `captionDe`, `captionEn` | richtext | Optional |
-| `story` | rel → stories | Nullable (highlights-only photos allowed) |
-| `tags` | rel → tags (many) | Technique/moment only (spike, block, …) |
-| `athletesInPhoto` | rel → athletes (many) | People in this frame |
-| `isHighlight` | bool | Surfaces on `/highlights` |
-| `isCover` | bool | Used as cover for its story |
-| `orderInStory` | int | Drag-to-reorder |
-| `dominantColor` | string | Auto-extracted |
-| `likeCount` | int | Denormalized counter |
-| `watermark` | enum | `inherit` (default) \| `on` \| `off` — per-photo override of `settings.defaultWatermark` |
-| `published` | bool | |
+| Field                    | Type                  | Notes                                                                                    |
+| ------------------------ | --------------------- | ---------------------------------------------------------------------------------------- |
+| `id`                     | uuid                  |                                                                                          |
+| `file`                   | upload                | Vercel Blob via Payload's blob adapter                                                   |
+| `sizes`                  | auto                  | Generated: thumb 400, card 800, feed 1600, hero 2880, in AVIF + WebP                     |
+| `blurDataURL`            | string                | Pre-generated 10px placeholder                                                           |
+| `width`, `height`        | int                   | From sharp on upload                                                                     |
+| `exif`                   | json                  | Camera, lens, ISO, shutter, aperture, focal length, capturedAt                           |
+| `altDe`, `altEn`         | string                | **Required** for publish                                                                 |
+| `captionDe`, `captionEn` | richtext              | Optional                                                                                 |
+| `story`                  | rel → stories         | Nullable (highlights-only photos allowed)                                                |
+| `tags`                   | rel → tags (many)     | Technique/moment only (spike, block, …)                                                  |
+| `athletesInPhoto`        | rel → athletes (many) | People in this frame                                                                     |
+| `isHighlight`            | bool                  | Surfaces on `/highlights`                                                                |
+| `isCover`                | bool                  | Used as cover for its story                                                              |
+| `orderInStory`           | int                   | Drag-to-reorder                                                                          |
+| `dominantColor`          | string                | Auto-extracted                                                                           |
+| `likeCount`              | int                   | Denormalized counter                                                                     |
+| `watermark`              | enum                  | `inherit` (default) \| `on` \| `off` — per-photo override of `settings.defaultWatermark` |
+| `published`              | bool                  |                                                                                          |
 
 ### `stories`
 
-| Field | Type | Notes |
-|---|---|---|
-| `slug` | string | Auto from title, editable |
-| `titleDe`, `titleEn` | string | |
-| `competition` | rel → competitions | Optional |
-| `homeTeam`, `awayTeam` | rel → teams | Optional |
-| `venue` | string | |
-| `playedAt` | datetime | |
-| `result` | string | Free-form (e.g. "3–1 (25–22, 21–25, 25–19, 25–17)") |
-| `summaryDe`, `summaryEn` | richtext | 2–4 sentence editorial intro |
-| `layout` | blocks | Sequence of layout blocks (see below) |
-| `coverPhoto` | rel → photos | |
-| `featured` | bool | Surfaces on Home |
-| `featuredOrder` | int | |
-| `likeCount` | int | |
-| `published`, `publishedAt` | bool / datetime | |
+| Field                      | Type               | Notes                                               |
+| -------------------------- | ------------------ | --------------------------------------------------- |
+| `slug`                     | string             | Auto from title, editable                           |
+| `titleDe`, `titleEn`       | string             |                                                     |
+| `competition`              | rel → competitions | Optional                                            |
+| `homeTeam`, `awayTeam`     | rel → teams        | Optional                                            |
+| `venue`                    | string             |                                                     |
+| `playedAt`                 | datetime           |                                                     |
+| `result`                   | string             | Free-form (e.g. "3–1 (25–22, 21–25, 25–19, 25–17)") |
+| `summaryDe`, `summaryEn`   | richtext           | 2–4 sentence editorial intro                        |
+| `layout`                   | blocks             | Sequence of layout blocks (see below)               |
+| `coverPhoto`               | rel → photos       |                                                     |
+| `featured`                 | bool               | Surfaces on Home                                    |
+| `featuredOrder`            | int                |                                                     |
+| `likeCount`                | int                |                                                     |
+| `published`, `publishedAt` | bool / datetime    |                                                     |
 
 **`layout` block types:**
 
@@ -212,50 +214,50 @@ Payload v3 collections. Per-field localization for DE/EN where marked.
 
 ### `athletes`
 
-| Field | Type | Notes |
-|---|---|---|
-| `slug` | string | |
-| `firstName` | string | **Required**, always shown publicly |
-| `lastName` | string | Required in admin; public only if `!isMinor` or `consentOnFile` |
-| `isMinor` | bool | Default false |
-| `consentOnFile` | bool | Default false; required to publish a minor's full record |
-| `team` | rel → teams | Nullable |
-| `position` | enum | outside / opposite / middle / setter / libero / staff |
-| `jerseyNumber` | int | Nullable |
-| `nationality` | string | ISO-3166 alpha-2, nullable |
-| `bioDe`, `bioEn` | richtext | Nullable |
-| `portraitPhoto` | rel → photos | Editorial portrait |
-| `headshotPhoto` | rel → photos | Square crop |
-| `socialLinks` | json | `{ instagram, x, web }` |
-| `releaseDocument` | upload | **Private, admin-only**, auth-gated |
-| `released` | bool | Model release on file |
-| `published` | bool | |
+| Field             | Type         | Notes                                                           |
+| ----------------- | ------------ | --------------------------------------------------------------- |
+| `slug`            | string       |                                                                 |
+| `firstName`       | string       | **Required**, always shown publicly                             |
+| `lastName`        | string       | Required in admin; public only if `!isMinor` or `consentOnFile` |
+| `isMinor`         | bool         | Default false                                                   |
+| `consentOnFile`   | bool         | Default false; required to publish a minor's full record        |
+| `team`            | rel → teams  | Nullable                                                        |
+| `position`        | enum         | outside / opposite / middle / setter / libero / staff           |
+| `jerseyNumber`    | int          | Nullable                                                        |
+| `nationality`     | string       | ISO-3166 alpha-2, nullable                                      |
+| `bioDe`, `bioEn`  | richtext     | Nullable                                                        |
+| `portraitPhoto`   | rel → photos | Editorial portrait                                              |
+| `headshotPhoto`   | rel → photos | Square crop                                                     |
+| `socialLinks`     | json         | `{ instagram, x, web }`                                         |
+| `releaseDocument` | upload       | **Private, admin-only**, auth-gated                             |
+| `released`        | bool         | Model release on file                                           |
+| `published`       | bool         |                                                                 |
 
 **Jugendschutz enforcement:**
+
 - Admin shows a red banner on any athlete with `isMinor && !consentOnFile`.
 - Server-side publish gate blocks save unless `releaseDocument` is present and
   `consentOnFile` is true.
 - For minors without consent, photos still appear in Story pages but the
-  athlete's name renders as initials (`L.M.`) and `/athletes/[slug]` returns
-  404.
+  athlete's name renders as initials (`L.M.`) and `/athletes/[slug]` returns 404.
 - `releaseDocument` uploads bypass public CDN; served only to authed admin
   sessions.
 
 ### `comments`
 
-| Field | Type | Notes |
-|---|---|---|
-| `targetType` | enum | `story` \| `journal` (no photo comments) |
-| `targetId` | dynamic rel | |
-| `authorName` | string | Required, shown as first name + last initial |
-| `authorEmail` | string | Required, never shown publicly |
-| `bodyText` | text | Plain text, line breaks preserved |
-| `status` | enum | `pending` \| `approved` \| `rejected` \| `spam` (default `pending`) |
-| `language` | enum | `de` \| `en` |
-| `ipHash` | string | Salted, daily-rotating; abuse dedup only |
-| `createdAt` | datetime | |
-| `approvedAt` | datetime | Nullable |
-| `parentComment` | rel → comments | Nullable, max one level deep |
+| Field           | Type           | Notes                                                               |
+| --------------- | -------------- | ------------------------------------------------------------------- |
+| `targetType`    | enum           | `story` \| `journal` (no photo comments)                            |
+| `targetId`      | dynamic rel    |                                                                     |
+| `authorName`    | string         | Required, shown as first name + last initial                        |
+| `authorEmail`   | string         | Required, never shown publicly                                      |
+| `bodyText`      | text           | Plain text, line breaks preserved                                   |
+| `status`        | enum           | `pending` \| `approved` \| `rejected` \| `spam` (default `pending`) |
+| `language`      | enum           | `de` \| `en`                                                        |
+| `ipHash`        | string         | Salted, daily-rotating; abuse dedup only                            |
+| `createdAt`     | datetime       |                                                                     |
+| `approvedAt`    | datetime       | Nullable                                                            |
+| `parentComment` | rel → comments | Nullable, max one level deep                                        |
 
 **Submission flow:** Cloudflare Turnstile (cookieless) → POST to API route →
 status `pending` → admin moderation queue → approve / reject / spam.
@@ -267,6 +269,7 @@ takedown route.
 ### Likes (denormalized, anonymous)
 
 Not a full collection:
+
 - `likeCount` int on `stories`, `photos`, `journal` (default 0).
 - Internal `likes_ledger` table (`targetType`, `targetId`, `fingerprintHash`,
   `createdAt`) for 7-day rolling abuse dedup. Hash uses weekly-rotating salt;
@@ -373,28 +376,28 @@ and `consentOnFile` is true. Enforcement is server-side, not just UI.
 
 ## 7. Tech stack
 
-| Layer | Choice |
-|---|---|
-| Framework | Next.js 16 (App Router) |
-| Runtime | Vercel Fluid Compute (Node 24) |
-| Styling | Tailwind v4 + shadcn/ui |
-| CMS / admin | Payload v3 (embedded) |
-| Database | Neon Postgres (Vercel Marketplace) |
-| Photo storage | Vercel Blob (EU region); R2 swap path documented |
-| Image delivery | `next/image` over Blob URLs (AVIF / WebP) |
-| Auth (admin) | Payload built-in + TOTP 2FA |
-| Motion | Framer Motion (Motion v12) |
-| Forms | React Hook Form + Zod |
-| Email | Resend (EU region preferred) |
-| Spam | Cloudflare Turnstile (cookieless) |
-| Analytics | Vercel Analytics + Speed Insights (cookieless) |
-| Search (admin) | Postgres FTS + pg_trgm |
-| i18n | `next-intl` (routes/UI) + Payload localization (content) |
-| Cron | Vercel Cron |
-| Image processing | sharp (server-side, on upload) |
-| Testing | Vitest + Playwright |
-| Quality | TypeScript strict, ESLint flat, Prettier, lefthook |
-| Error tracking | Sentry (no PII; 100% sample at launch) |
+| Layer            | Choice                                                   |
+| ---------------- | -------------------------------------------------------- |
+| Framework        | Next.js 16 (App Router)                                  |
+| Runtime          | Vercel Fluid Compute (Node 24)                           |
+| Styling          | Tailwind v4 + shadcn/ui                                  |
+| CMS / admin      | Payload v3 (embedded)                                    |
+| Database         | Neon Postgres (Vercel Marketplace)                       |
+| Photo storage    | Vercel Blob (EU region); R2 swap path documented         |
+| Image delivery   | `next/image` over Blob URLs (AVIF / WebP)                |
+| Auth (admin)     | Payload built-in + TOTP 2FA                              |
+| Motion           | Framer Motion (Motion v12)                               |
+| Forms            | React Hook Form + Zod                                    |
+| Email            | Resend (EU region preferred)                             |
+| Spam             | Cloudflare Turnstile (cookieless)                        |
+| Analytics        | Vercel Analytics + Speed Insights (cookieless)           |
+| Search (admin)   | Postgres FTS + pg_trgm                                   |
+| i18n             | `next-intl` (routes/UI) + Payload localization (content) |
+| Cron             | Vercel Cron                                              |
+| Image processing | sharp (server-side, on upload)                           |
+| Testing          | Vitest + Playwright                                      |
+| Quality          | TypeScript strict, ESLint flat, Prettier, lefthook       |
+| Error tracking   | Sentry (no PII; 100% sample at launch)                   |
 
 ### Hosting topology
 
@@ -445,15 +448,15 @@ packages/             # empty unless something is genuinely shared
 
 ### Cost envelope (rough monthly at launch)
 
-| Item | Cost |
-|---|---|
-| Vercel (Hobby → Pro post-launch) | $0 → $20 |
-| Neon Postgres | Free tier |
-| Vercel Blob (~20 GB) | ~$3 |
-| Resend | Free tier |
-| Domain | ~€1/mo |
-| Cloudflare Turnstile | Free |
-| **Total** | **≈ $25 / month** |
+| Item                             | Cost              |
+| -------------------------------- | ----------------- |
+| Vercel (Hobby → Pro post-launch) | $0 → $20          |
+| Neon Postgres                    | Free tier         |
+| Vercel Blob (~20 GB)             | ~$3               |
+| Resend                           | Free tier         |
+| Domain                           | ~€1/mo            |
+| Cloudflare Turnstile             | Free              |
+| **Total**                        | **≈ $25 / month** |
 
 Scales linearly with storage; ~$50/mo at 200 GB.
 
@@ -461,14 +464,14 @@ Scales linearly with storage; ~$50/mo at 200 GB.
 
 ### Performance budgets (hard)
 
-| Metric | Target |
-|---|---|
-| LCP | < 1.8s on 4G |
-| INP | < 200ms |
-| CLS | < 0.05 |
-| Initial JS | < 90 KB gzipped |
-| Lighthouse Performance (Home, Story) | ≥ 95 |
-| Lighthouse Accessibility (site-wide) | ≥ 95 |
+| Metric                               | Target          |
+| ------------------------------------ | --------------- |
+| LCP                                  | < 1.8s on 4G    |
+| INP                                  | < 200ms         |
+| CLS                                  | < 0.05          |
+| Initial JS                           | < 90 KB gzipped |
+| Lighthouse Performance (Home, Story) | ≥ 95            |
+| Lighthouse Accessibility (site-wide) | ≥ 95            |
 
 ### How we hit them
 
@@ -484,7 +487,7 @@ Scales linearly with storage; ~$50/mo at 200 GB.
   `cacheTag('highlights')` on Highlights, invalidated via `updateTag` from
   Payload `afterChange` hooks.
 - ISR for Story pages, revalidated on publish via `revalidateTag('story-' +
-  slug)`.
+slug)`.
 - Edge-cached OG images.
 - Native scroll only.
 - `next/font/google` self-hosts Fraunces, Inter, JetBrains Mono with
@@ -504,13 +507,13 @@ Scales linearly with storage; ~$50/mo at 200 GB.
 - Canonical URLs declared with locale prefix.
 - Payload SEO field on every content type for editable meta title/description.
   German title template: `[Story title] — Belin Akguel · Volleyball-Fotografie
-  Bremen`.
+Bremen`.
 
 ### Local SEO (Bremen)
 
 - Google Business Profile linked.
 - `LocalBusiness` JSON-LD with `addressLocality: "Bremen"`, `addressCountry:
-  "DE"`.
+"DE"`.
 - Target phrases (used naturally in copy): "Volleyball Fotograf Bremen",
   "Sportfotografie Bremen", "Mannschaftsfotos Volleyball", "Volleyball Action
   Fotos".
@@ -587,17 +590,17 @@ Journal posts.
 
 ## 10. Risks and mitigations
 
-| Risk | Likelihood | Impact | Mitigation |
-|---|---|---|---|
-| Belin doesn't have time for EN copy | High | Medium | Per-field i18n; EN falls back to DE with `lang="de"` and a small "Auf Deutsch" badge. |
-| Archive exceeds Blob comfort (~50 GB) | Medium | Low | Storage adapter swappable to Cloudflare R2; migration script ready. |
-| Minor athlete published without release | Medium | **High (legal)** | Triple-guarded: server-side publish gate, admin red banner, full-name redaction default. |
-| Comment spam wave | High | Low | Turnstile + IP-hash blocklist + moderation queue + retention sweep. Settings kill-switch. |
-| Lighthouse drift over time | Medium | Medium | CI runs Lighthouse on every PR; build fails if Performance < 90 or A11y < 95 on Story + Home. |
-| Belin locked out of admin | Low | High | Magic-link reset, recovery codes at signup, secondary admin account. |
-| Domain expires / DNS misconfig | Low | High | Auto-renew, DNS in Vercel, monitored. |
-| Instagram API token expires | High | Low | Cron logs failure; dashboard shows "IG sync failed N days ago" with re-auth button; site never breaks. |
-| Image rights complaint | Low–Medium | Medium | Bildrechte page + takedown form, 48h SLA, one-click unpublish. |
+| Risk                                    | Likelihood | Impact           | Mitigation                                                                                             |
+| --------------------------------------- | ---------- | ---------------- | ------------------------------------------------------------------------------------------------------ |
+| Belin doesn't have time for EN copy     | High       | Medium           | Per-field i18n; EN falls back to DE with `lang="de"` and a small "Auf Deutsch" badge.                  |
+| Archive exceeds Blob comfort (~50 GB)   | Medium     | Low              | Storage adapter swappable to Cloudflare R2; migration script ready.                                    |
+| Minor athlete published without release | Medium     | **High (legal)** | Triple-guarded: server-side publish gate, admin red banner, full-name redaction default.               |
+| Comment spam wave                       | High       | Low              | Turnstile + IP-hash blocklist + moderation queue + retention sweep. Settings kill-switch.              |
+| Lighthouse drift over time              | Medium     | Medium           | CI runs Lighthouse on every PR; build fails if Performance < 90 or A11y < 95 on Story + Home.          |
+| Belin locked out of admin               | Low        | High             | Magic-link reset, recovery codes at signup, secondary admin account.                                   |
+| Domain expires / DNS misconfig          | Low        | High             | Auto-renew, DNS in Vercel, monitored.                                                                  |
+| Instagram API token expires             | High       | Low              | Cron logs failure; dashboard shows "IG sync failed N days ago" with re-auth button; site never breaks. |
+| Image rights complaint                  | Low–Medium | Medium           | Bildrechte page + takedown form, 48h SLA, one-click unpublish.                                         |
 
 ## 11. Success criteria
 
@@ -657,4 +660,4 @@ These can be answered before or during implementation, none block the plan:
 
 ---
 
-*End of spec.*
+_End of spec._

@@ -99,6 +99,7 @@ tests/
 ## Task 1: Initialize Next.js 16 project + pnpm workspace
 
 **Files:**
+
 - Create: `package.json`
 - Create: `pnpm-workspace.yaml`
 - Create: `tsconfig.json`
@@ -283,6 +284,7 @@ git commit -m "feat(foundation): scaffold Next.js 16 + TS strict + pnpm"
 ## Task 2: Quality tooling — ESLint, Prettier, lefthook, editorconfig
 
 **Files:**
+
 - Create: `eslint.config.mjs`
 - Create: `.prettierrc`
 - Create: `.editorconfig`
@@ -408,6 +410,7 @@ git commit -m "feat(foundation): add ESLint, Prettier, lefthook, editorconfig"
 ## Task 3: Tailwind v4 + cinematic editorial design tokens
 
 **Files:**
+
 - Create: `src/styles/tokens.css`
 - Create: `src/app/globals.css`
 - Create: `src/lib/design/tokens.ts`
@@ -542,6 +545,7 @@ git commit -m "feat(foundation): tailwind v4 + cinematic editorial design tokens
 ## Task 4: Fonts via `next/font` (Fraunces, Inter, JetBrains Mono)
 
 **Files:**
+
 - Modify: `src/app/layout.tsx`
 - Create: `src/lib/design/fonts.ts`
 
@@ -588,10 +592,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="de"
-      className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable}`}
-    >
+    <html lang="de" className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
       <body>{children}</body>
     </html>
   );
@@ -605,7 +606,7 @@ export default function HomePlaceholder() {
   return (
     <main className="flex min-h-screen flex-col items-start justify-center gap-6 p-12">
       <h1 className="font-display text-7xl tracking-tight">belin akguel</h1>
-      <p className="font-sans text-ink-muted">Volleyball photography. Bremen.</p>
+      <p className="text-ink-muted font-sans">Volleyball photography. Bremen.</p>
       <p className="font-mono text-xs">f/2.8 · 1/2000s · ISO 6400</p>
     </main>
   );
@@ -628,6 +629,7 @@ git commit -m "feat(foundation): load fonts via next/font (Fraunces, Inter, JetB
 ## Task 5: Vitest + Playwright with first smoke test
 
 **Files:**
+
 - Create: `vitest.config.ts`
 - Create: `tests/unit/sanity.test.ts`
 - Create: `tests/playwright.config.ts`
@@ -753,6 +755,7 @@ git commit -m "test(foundation): vitest + playwright with smoke test"
 ## Task 6: next-intl bilingual routing (DE default + EN)
 
 **Files:**
+
 - Create: `src/lib/i18n/config.ts`
 - Create: `src/lib/i18n/routing.ts`
 - Create: `src/lib/i18n/request.ts`
@@ -994,7 +997,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   return (
     <main className="flex min-h-screen flex-col items-start justify-center gap-6 p-12">
       <h1 className="font-display text-7xl tracking-tight">belin akguel</h1>
-      <p className="font-sans text-ink-muted">{t("site.tagline")}</p>
+      <p className="text-ink-muted font-sans">{t("site.tagline")}</p>
       <p className="font-mono text-xs">f/2.8 · 1/2000s · ISO 6400</p>
     </main>
   );
@@ -1075,6 +1078,7 @@ git commit -m "feat(foundation): next-intl bilingual routing (DE default + EN)"
 ## Task 7: Base header + footer + locale switcher
 
 **Files:**
+
 - Create: `src/components/layout/header.tsx`
 - Create: `src/components/layout/footer.tsx`
 - Create: `src/components/layout/locale-switcher.tsx`
@@ -1113,11 +1117,7 @@ export function LocaleSwitcher() {
           onClick={() => switchTo(l)}
           disabled={pending}
           aria-current={l === locale ? "true" : undefined}
-          className={
-            l === locale
-              ? "text-ink"
-              : "text-ink-muted hover:text-ink transition-colors"
-          }
+          className={l === locale ? "text-ink" : "text-ink-muted hover:text-ink transition-colors"}
         >
           {l.toUpperCase()}
         </button>
@@ -1148,13 +1148,17 @@ export async function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-hairline bg-canvas/90 px-6 py-4 backdrop-blur">
+    <header className="border-hairline bg-canvas/90 sticky top-0 z-40 flex items-center justify-between border-b px-6 py-4 backdrop-blur">
       <Link href="/" className="font-display text-base tracking-tight">
         belin akguel
       </Link>
       <nav className="hidden gap-6 text-sm lg:flex">
         {items.map((item) => (
-          <Link key={item.href} href={item.href} className="text-ink-muted hover:text-ink transition-colors">
+          <Link
+            key={item.href}
+            href={item.href}
+            className="text-ink-muted hover:text-ink transition-colors"
+          >
             {item.label}
           </Link>
         ))}
@@ -1174,7 +1178,7 @@ import { getTranslations } from "next-intl/server";
 export async function Footer() {
   const t = await getTranslations("footer");
   return (
-    <footer className="mt-24 border-t border-hairline px-6 py-8 text-xs text-ink-muted">
+    <footer className="border-hairline text-ink-muted mt-24 border-t px-6 py-8 text-xs">
       <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
         <p>© {new Date().getFullYear()} Belin Akguel</p>
         <nav className="flex gap-4">
@@ -1276,6 +1280,7 @@ git commit -m "feat(foundation): header, footer, locale switcher"
 ## Task 8: Environment-variable schema with Zod validation
 
 **Files:**
+
 - Create: `src/env.ts`
 - Create: `.env.example`
 - Create: `tests/unit/env.test.ts`
@@ -1405,6 +1410,7 @@ git commit -m "feat(foundation): zod-validated env schema"
 This task is human-driven (provisioning external resources) but is captured here so it doesn't get skipped. Mark complete only after `.env.local` contains real values.
 
 **Files:**
+
 - Create: `.env.local` (gitignored)
 
 - [ ] **Step 1: Create a Vercel project and link the local repo**
@@ -1487,6 +1493,7 @@ git commit -m "chore(foundation): provision Neon + Vercel Blob (env vars only do
 ## Task 10: Install Payload v3 + adapters, define Users collection
 
 **Files:**
+
 - Create: `src/payload/payload.config.ts`
 - Create: `src/payload/collections/users.ts`
 - Create: `src/payload/access/is-admin.ts`
@@ -1683,6 +1690,7 @@ git commit -m "feat(foundation): install payload v3 with postgres + vercel blob 
 ## Task 11: Mount Payload admin and REST/GraphQL routes
 
 **Files:**
+
 - Create: `src/app/(payload)/admin/[[...segments]]/page.tsx`
 - Create: `src/app/(payload)/admin/[[...segments]]/not-found.tsx`
 - Create: `src/app/(payload)/api/[...slug]/route.ts`
@@ -1744,7 +1752,14 @@ export default NotFound;
 - [ ] **Step 4: Write `src/app/(payload)/api/[...slug]/route.ts`**
 
 ```ts
-import { REST_GET, REST_POST, REST_DELETE, REST_PATCH, REST_PUT, REST_OPTIONS } from "@payloadcms/next/routes";
+import {
+  REST_GET,
+  REST_POST,
+  REST_DELETE,
+  REST_PATCH,
+  REST_PUT,
+  REST_OPTIONS,
+} from "@payloadcms/next/routes";
 import config from "@/payload/payload.config";
 
 export const GET = REST_GET(config);
@@ -1789,6 +1804,7 @@ curl -i http://localhost:3000/admin
 Expected: 200 (or 307 to `/admin/login`) — Payload's first-run UI loads and prompts to create the first user.
 
 Open `http://localhost:3000/admin` in a browser. Create the first admin user with:
+
 - Email: `belin@belinakguel.com` (or your dev email)
 - Password: a strong one stored in a password manager
 - Role will default to `editor` on first save; manually flip to `admin` in the admin UI after first login.
@@ -1826,6 +1842,7 @@ git commit -m "feat(foundation): mount payload admin and rest/graphql routes"
 ## Task 12: Legal singletons (Impressum, Datenschutz, Settings)
 
 **Files:**
+
 - Create: `src/payload/globals/impressum.ts`
 - Create: `src/payload/globals/datenschutz.ts`
 - Create: `src/payload/globals/settings.ts`
@@ -1865,7 +1882,7 @@ export const Impressum: GlobalConfig = {
 };
 ```
 
-Note: only the *narrative* fields are localized (e.g. `additionalNotesDe` — which we declare as `localized: true` so Payload manages the DE/EN values).
+Note: only the _narrative_ fields are localized (e.g. `additionalNotesDe` — which we declare as `localized: true` so Payload manages the DE/EN values).
 
 - [ ] **Step 2: Write `src/payload/globals/datenschutz.ts`**
 
@@ -1879,7 +1896,13 @@ export const Datenschutz: GlobalConfig = {
   admin: { group: "Rechtliches" },
   access: { read: () => true, update: isAdmin },
   fields: [
-    { name: "title", type: "text", required: true, localized: true, defaultValue: "Datenschutzerklärung" },
+    {
+      name: "title",
+      type: "text",
+      required: true,
+      localized: true,
+      defaultValue: "Datenschutzerklärung",
+    },
     { name: "intro", type: "richText", localized: true },
     { name: "body", type: "richText", localized: true },
     { name: "lastUpdated", type: "date", required: true },
@@ -1953,11 +1976,7 @@ import { setRequestLocale } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
 
-export default async function ImpressumPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function ImpressumPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
 
@@ -1976,7 +1995,12 @@ export default async function ImpressumPage({
           <dt className="text-ink-muted">Anschrift</dt>
           <dd>
             {data.addressLine1}
-            {data.addressLine2 ? <><br />{data.addressLine2}</> : null}
+            {data.addressLine2 ? (
+              <>
+                <br />
+                {data.addressLine2}
+              </>
+            ) : null}
             <br />
             {data.postalCode} {data.city}
             <br />
@@ -1987,7 +2011,12 @@ export default async function ImpressumPage({
           <dt className="text-ink-muted">Kontakt</dt>
           <dd>
             {data.email}
-            {data.phone ? <><br />{data.phone}</> : null}
+            {data.phone ? (
+              <>
+                <br />
+                {data.phone}
+              </>
+            ) : null}
           </dd>
         </div>
         {data.ustIdNr ? (
@@ -2017,11 +2046,7 @@ import { RichText } from "@payloadcms/richtext-lexical/react";
 
 export const dynamic = "force-dynamic";
 
-export default async function DatenschutzPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function DatenschutzPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
 
@@ -2041,7 +2066,7 @@ export default async function DatenschutzPage({
           <RichText data={data.body as never} />
         </div>
       ) : null}
-      <p className="mt-12 text-xs text-ink-muted">
+      <p className="text-ink-muted mt-12 text-xs">
         Stand: {new Date(data.lastUpdated).toLocaleDateString("de-DE")}
       </p>
     </main>
@@ -2056,6 +2081,7 @@ pnpm dev
 ```
 
 Open `http://localhost:3000/admin` → log in → **Globals → Impressum**. Fill in:
+
 - Legal name: `Belin Akguel`
 - Address line 1: `Musterstraße 1`
 - Postal code: `28195`
@@ -2106,6 +2132,7 @@ git commit -m "feat(foundation): impressum + datenschutz + settings globals with
 ## Task 13: Cookieless analytics (Vercel Analytics + Speed Insights)
 
 **Files:**
+
 - Modify: `src/app/layout.tsx`
 - Modify: `package.json`
 
@@ -2157,6 +2184,7 @@ git commit -m "feat(foundation): wire cookieless Vercel Analytics + Speed Insigh
 ## Task 14: Sentry (errors only, no PII)
 
 **Files:**
+
 - Create: `sentry.server.config.ts`
 - Create: `sentry.client.config.ts`
 - Create: `sentry.edge.config.ts`
@@ -2277,6 +2305,7 @@ git commit -m "feat(foundation): sentry error tracking (no PII, low sample rate)
 ## Task 15: `vercel.ts` configuration
 
 **Files:**
+
 - Create: `vercel.ts`
 - Modify: `package.json`
 
@@ -2303,9 +2332,7 @@ export const config: VercelConfig = {
       immutable: true,
     }),
   ],
-  redirects: [
-    routes.redirect("/admin/", "/admin", { permanent: true }),
-  ],
+  redirects: [routes.redirect("/admin/", "/admin", { permanent: true })],
 };
 ```
 
@@ -2329,6 +2356,7 @@ git commit -m "feat(foundation): vercel.ts config with fra1 region + cache heade
 ## Task 16: GitHub Actions CI
 
 **Files:**
+
 - Create: `.github/workflows/ci.yml`
 
 - [ ] **Step 1: Write `.github/workflows/ci.yml`**
@@ -2434,6 +2462,7 @@ jobs:
 - [ ] **Step 2: Add `DATABASE_URL_PREVIEW` and `PAYLOAD_SECRET` to GitHub repo secrets**
 
 In GitHub → Settings → Secrets and variables → Actions, add:
+
 - `DATABASE_URL_PREVIEW` — a Neon branch URL dedicated to CI
 - `PAYLOAD_SECRET` — same as production for now (can rotate later)
 
@@ -2459,6 +2488,7 @@ git commit -m "ci(foundation): github actions for typecheck, lint, unit, e2e"
 ## Task 17: README + healthcheck + first preview deploy
 
 **Files:**
+
 - Create: `README.md`
 - Create: `src/app/api/health/route.ts`
 
@@ -2498,7 +2528,7 @@ Expected: all e2e tests pass.
 
 - [ ] **Step 4: Write `README.md`**
 
-```markdown
+````markdown
 # belin akguel — volleyball photography
 
 Production website + admin for Belin Akguel, Bremen-based volleyball photographer.
@@ -2526,6 +2556,7 @@ vercel link              # one-time, links the project
 vercel env pull .env.local
 pnpm exec lefthook install
 ```
+````
 
 ## Run
 
@@ -2534,20 +2565,20 @@ pnpm dev
 ```
 
 Public site: http://localhost:3000
-Admin:       http://localhost:3000/admin
+Admin: http://localhost:3000/admin
 
 First-run: open `/admin`, create the initial admin user, then set its role to `admin` in the user record.
 
 ## Common commands
 
-| Command | What it does |
-| --- | --- |
-| `pnpm dev` | Next.js + Payload dev server |
-| `pnpm build` | Production build |
-| `pnpm typecheck` | TypeScript strict check |
-| `pnpm lint` | ESLint |
-| `pnpm test` | Vitest unit tests |
-| `pnpm test:e2e` | Playwright end-to-end tests |
+| Command                       | What it does                                       |
+| ----------------------------- | -------------------------------------------------- |
+| `pnpm dev`                    | Next.js + Payload dev server                       |
+| `pnpm build`                  | Production build                                   |
+| `pnpm typecheck`              | TypeScript strict check                            |
+| `pnpm lint`                   | ESLint                                             |
+| `pnpm test`                   | Vitest unit tests                                  |
+| `pnpm test:e2e`               | Playwright end-to-end tests                        |
 | `pnpm payload:generate-types` | Regenerate `payload-types.ts` after schema changes |
 
 ## Deployment
@@ -2558,14 +2589,15 @@ PRs get a preview URL with an isolated Neon branch.
 ## Specs and plans
 
 See `docs/superpowers/specs/` and `docs/superpowers/plans/`.
-```
+
+````
 
 - [ ] **Step 5: Commit**
 
 ```bash
 git add .
 git commit -m "docs(foundation): readme + healthcheck endpoint"
-```
+````
 
 - [ ] **Step 6: Deploy to Vercel preview**
 
@@ -2574,6 +2606,7 @@ vercel
 ```
 
 Expected: preview URL printed. Open it; verify:
+
 - Home page loads with cinematic palette + Fraunces wordmark
 - `/en` works
 - `/impressum` renders the seeded data (from preview DB branch)
@@ -2622,4 +2655,4 @@ Expected: production deployment to `belinakguel.com` (or chosen domain).
 
 ---
 
-*End of Foundation plan.*
+_End of Foundation plan._
