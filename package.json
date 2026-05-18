@@ -18,7 +18,8 @@
     "payload:migrate:status": "bash scripts/payload-cli.sh migrate:status",
     "payload:migrate:force": "PAYLOAD_MIGRATE_FORCE=1 bash scripts/payload-cli.sh migrate",
     "payload:migrate:mark": "bash scripts/payload-mark-migration-applied.sh",
-    "payload:generate-types": "bash scripts/payload-cli.sh generate:types"
+    "payload:generate-types": "bash scripts/payload-cli.sh generate:types",
+    "payload:reset-password": "bash scripts/payload-cli.sh run scripts/reset-payload-password.ts"
   },
   "pnpm": {
     "ignoredBuiltDependencies": [
@@ -33,6 +34,7 @@
     "@neondatabase/auth": "0.4.1-beta",
     "@neondatabase/auth-ui": "0.2.0-beta",
     "@payloadcms/db-postgres": "3.84.1",
+    "@payloadcms/email-resend": "3.84.1",
     "@payloadcms/next": "3.84.1",
     "@payloadcms/richtext-lexical": "3.84.1",
     "@sentry/nextjs": "^10.53.1",
@@ -56,11 +58,13 @@
     "@types/react-dom": "^19.0.0",
     "@vercel/config": "^0.5.0",
     "@vitest/coverage-v8": "^4.1.6",
+    "dotenv": "^17.4.2",
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.0.0",
     "lefthook": "^1.9.0",
     "prettier": "^3.2.0",
     "prettier-plugin-tailwindcss": "^0.6.0",
+    "tsx": "^4.22.1",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.0.0",
     "vitest": "^4.1.6"
