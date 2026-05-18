@@ -6,6 +6,9 @@ import sharp from "sharp";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Users } from "./collections/users";
+import { Datenschutz } from "./globals/datenschutz";
+import { Impressum } from "./globals/impressum";
+import { Settings } from "./globals/settings";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -16,7 +19,7 @@ export default buildConfig({
     user: Users.slug,
   },
   collections: [Users],
-  globals: [],
+  globals: [Impressum, Datenschutz, Settings],
   editor: lexicalEditor({}),
   localization: {
     locales: [

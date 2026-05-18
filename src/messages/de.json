@@ -1,6 +1,9 @@
 {
   "site": {
-    "tagline": "Volleyball-Fotografie. Bremen."
+    "tagline": "Volleyball-Fotografie. Bremen.",
+    "supabaseReady": "Supabase · Schema v{version}",
+    "supabaseNoSchema": "Supabase · verbunden (Migration ausstehend)",
+    "supabaseOffline": "Supabase · nicht erreichbar"
   },
   "nav": {
     "stories": "Stories",
@@ -15,5 +18,22 @@
     "impressum": "Impressum",
     "datenschutz": "Datenschutz",
     "bildrechte": "Bildrechte"
+  },
+  "services": {
+    "title": "Leistungen",
+    "intro": "Volleyball-Fotografie für Vereine, Verbände und Medien — von Spieltag bis Saisonreportage.",
+    "bookingHeading": "Anfrage senden"
+  },
+  "booking": {
+    "name": "Name",
+    "email": "E-Mail",
+    "organization": "Verein / Organisation",
+    "optional": "optional",
+    "message": "Nachricht",
+    "submit": "Anfrage senden",
+    "submitting": "Wird gesendet …",
+    "successTitle": "Danke für deine Anfrage",
+    "successBody": "Ich melde mich in Kürze bei dir.",
+    "errorGeneric": "Die Anfrage konnte nicht gesendet werden. Bitte versuche es später erneut."
   }
 }

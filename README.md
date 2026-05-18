@@ -57,3 +57,5 @@ PRs get a preview URL with an isolated Neon branch.
 ## Specs and plans
 
 See `docs/superpowers/specs/` and `docs/superpowers/plans/`.
+
+# setandshoot.com

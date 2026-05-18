@@ -5,4 +5,5 @@ test("healthcheck returns ok", async ({ request }) => {
   expect(response.status()).toBe(200);
   const body = await response.json();
   expect(body.status).toBe("ok");
+  expect(body.supabase?.ok).toBe(true);
 });

@@ -87,8 +87,16 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: ("false" | "none" | "null") | false | null | ("de" | "en") | ("de" | "en")[];
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    impressum: Impressum;
+    datenschutz: Datenschutz;
+    settings: Setting;
+  };
+  globalsSelect: {
+    impressum: ImpressumSelect<false> | ImpressumSelect<true>;
+    datenschutz: DatenschutzSelect<false> | DatenschutzSelect<true>;
+    settings: SettingsSelect<false> | SettingsSelect<true>;
+  };
   locale: "de" | "en";
   widgets: {
     collections: CollectionsWidget;
@@ -276,6 +284,124 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "impressum".
+ */
+export interface Impressum {
+  id: number;
+  legalName: string;
+  addressLine1: string;
+  addressLine2?: string | null;
+  postalCode: string;
+  city: string;
+  country: string;
+  email: string;
+  phone?: string | null;
+  ustIdNr?: string | null;
+  responsibleForContent?: string | null;
+  additionalNotes?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "datenschutz".
+ */
+export interface Datenschutz {
+  id: number;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  lastUpdated: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings".
+ */
+export interface Setting {
+  id: number;
+  defaultWatermark?: boolean | null;
+  accentColor?: string | null;
+  homeFeaturedCount?: number | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "impressum_select".
+ */
+export interface ImpressumSelect<T extends boolean = true> {
+  legalName?: T;
+  addressLine1?: T;
+  addressLine2?: T;
+  postalCode?: T;
+  city?: T;
+  country?: T;
+  email?: T;
+  phone?: T;
+  ustIdNr?: T;
+  responsibleForContent?: T;
+  additionalNotes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "datenschutz_select".
+ */
+export interface DatenschutzSelect<T extends boolean = true> {
+  title?: T;
+  intro?: T;
+  body?: T;
+  lastUpdated?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings_select".
+ */
+export interface SettingsSelect<T extends boolean = true> {
+  defaultWatermark?: T;
+  accentColor?: T;
+  homeFeaturedCount?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

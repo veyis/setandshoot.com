@@ -5,7 +5,10 @@ export const Users: CollectionConfig = {
   slug: "users",
   auth: {
     tokenExpiration: 60 * 60 * 24 * 30,
-    cookies: { sameSite: "Lax", secure: true },
+    cookies: {
+      sameSite: "Lax",
+      secure: process.env.NODE_ENV === "production",
+    },
   },
   admin: {
     useAsTitle: "email",

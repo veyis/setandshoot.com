@@ -1,6 +1,9 @@
 {
   "site": {
-    "tagline": "Volleyball photography. Bremen."
+    "tagline": "Volleyball photography. Bremen.",
+    "supabaseReady": "Supabase · schema v{version}",
+    "supabaseNoSchema": "Supabase · connected (migration pending)",
+    "supabaseOffline": "Supabase · unreachable"
   },
   "nav": {
     "stories": "Stories",
@@ -15,5 +18,22 @@
     "impressum": "Imprint",
     "datenschutz": "Privacy",
     "bildrechte": "Image rights"
+  },
+  "services": {
+    "title": "Services",
+    "intro": "Volleyball photography for clubs, federations, and media — from match day to season coverage.",
+    "bookingHeading": "Send an inquiry"
+  },
+  "booking": {
+    "name": "Name",
+    "email": "Email",
+    "organization": "Club / organization",
+    "optional": "optional",
+    "message": "Message",
+    "submit": "Send inquiry",
+    "submitting": "Sending …",
+    "successTitle": "Thanks for your inquiry",
+    "successBody": "I will get back to you shortly.",
+    "errorGeneric": "Could not send your inquiry. Please try again later."
   }
 }
