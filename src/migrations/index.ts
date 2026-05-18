@@ -1,5 +1,5 @@
 import * as migration_20260518_163754_stories_collections from './20260518_163754_stories_collections';
-import * as migration_20260518_175524_bookings from './20260518_175524_bookings';
+import * as migration_20260518_185513_bookings from './20260518_185513_bookings';
 
 export const migrations = [
   {
@@ -8,8 +8,8 @@ export const migrations = [
     name: '20260518_163754_stories_collections',
   },
   {
-    up: migration_20260518_175524_bookings.up,
-    down: migration_20260518_175524_bookings.down,
-    name: '20260518_175524_bookings'
+    up: migration_20260518_185513_bookings.up,
+    down: migration_20260518_185513_bookings.down,
+    name: '20260518_185513_bookings'
   },
 ];

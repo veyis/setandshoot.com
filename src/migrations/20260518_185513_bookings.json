@@ -2859,6 +2859,12 @@
           "notNull": true,
           "default": "'de'"
         },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp(3) with time zone",
@@ -2875,6 +2881,21 @@
         }
       },
       "indexes": {
+        "bookings_customer_id_idx": {
+          "name": "bookings_customer_id_idx",
+          "columns": [
+            {
+              "expression": "customer_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
         "bookings_updated_at_idx": {
           "name": "bookings_updated_at_idx",
           "columns": [
@@ -4109,6 +4130,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "79279589-2035-4930-8ee7-316828c71d12",
+  "id": "00767c2c-9412-412b-9812-5b79715299e0",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
