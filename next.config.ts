@@ -17,6 +17,9 @@ const config: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "api.setandshoot.com", pathname: "/storage/**" },
       { protocol: "https", hostname: "*.setandshoot.com", pathname: "/**" },
+      // Payload's local upload adapter returns absolute URLs against the dev
+      // server (e.g. http://localhost:3000/api/photos/file/<name>).
+      { protocol: "http", hostname: "localhost", pathname: "/api/**" },
     ],
   },
 };
