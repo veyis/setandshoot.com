@@ -36,7 +36,8 @@
     "stories": {
       "title": "Stories",
       "intro": "Spielberichte und Bildserien — jedes Match als narrative Sequenz.",
-      "comingSoon": "Stories werden bald veröffentlicht. Für aktuelle Anfragen erreichst du mich über das Kontaktformular."
+      "comingSoon": "Stories werden bald veröffentlicht. Für aktuelle Anfragen erreichst du mich über das Kontaktformular.",
+      "empty": "Noch keine veröffentlichten Stories. Lege Inhalte im Admin unter Portfolio an."
     },
     "highlights": {
       "title": "Highlights",

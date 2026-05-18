@@ -36,7 +36,8 @@
     "stories": {
       "title": "Stories",
       "intro": "Match reports and image sequences — each game as a narrative series.",
-      "comingSoon": "Stories will publish soon. For current inquiries, use the contact form."
+      "comingSoon": "Stories will publish soon. For current inquiries, use the contact form.",
+      "empty": "No published stories yet. Add content in Admin under Portfolio."
     },
     "highlights": {
       "title": "Highlights",

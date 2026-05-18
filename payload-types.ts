@@ -68,6 +68,11 @@ export interface Config {
   blocks: {};
   collections: {
     users: User;
+    stories: Story;
+    photos: Photo;
+    teams: Team;
+    competitions: Competition;
+    tags: Tag;
     "payload-kv": PayloadKv;
     "payload-locked-documents": PayloadLockedDocument;
     "payload-preferences": PayloadPreference;
@@ -76,6 +81,11 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
+    stories: StoriesSelect<false> | StoriesSelect<true>;
+    photos: PhotosSelect<false> | PhotosSelect<true>;
+    teams: TeamsSelect<false> | TeamsSelect<true>;
+    competitions: CompetitionsSelect<false> | CompetitionsSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     "payload-kv": PayloadKvSelect<false> | PayloadKvSelect<true>;
     "payload-locked-documents":
       | PayloadLockedDocumentsSelect<false>
@@ -153,6 +163,271 @@ export interface User {
   collection: "users";
 }
 /**
+ * Foto-Stories — Kern des Portfolios
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stories".
+ */
+export interface Story {
+  id: number;
+  /**
+   * Gemeinsamer Slug für DE/EN (z. B. vcw-sc-potsdam-2025)
+   */
+  slug: string;
+  title: string;
+  competition?: (number | null) | Competition;
+  homeTeam?: (number | null) | Team;
+  awayTeam?: (number | null) | Team;
+  venue?: string | null;
+  playedAt?: string | null;
+  result?: string | null;
+  summary?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  layout?:
+    | (
+        | FullBleedPhotoBlock
+        | DiptychBlock
+        | TriptychBlock
+        | InsetPortraitBlock
+        | SequenceBlock
+        | PullQuoteBlock
+        | TextParagraphBlock
+      )[]
+    | null;
+  coverPhoto?: (number | null) | Photo;
+  featured?: boolean | null;
+  featuredOrder?: number | null;
+  published?: boolean | null;
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "competitions".
+ */
+export interface Competition {
+  id: number;
+  name: string;
+  season: string;
+  tier?: ("bundesliga" | "2-bundesliga" | "regional" | "youth") | null;
+  published?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "teams".
+ */
+export interface Team {
+  id: number;
+  name: string;
+  shortName?: string | null;
+  city?: string | null;
+  tier?: ("bundesliga" | "2-bundesliga" | "regional" | "youth") | null;
+  published?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FullBleedPhotoBlock".
+ */
+export interface FullBleedPhotoBlock {
+  photo: number | Photo;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: "fullBleedPhoto";
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "photos".
+ */
+export interface Photo {
+  id: number;
+  alt: string;
+  caption?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Leer lassen für reine Highlight-Fotos
+   */
+  story?: (number | null) | Story;
+  tags?: (number | Tag)[] | null;
+  isHighlight?: boolean | null;
+  isCover?: boolean | null;
+  orderInStory?: number | null;
+  watermark?: ("none" | "light" | "standard") | null;
+  published?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    feed?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    full?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  name: string;
+  slug: string;
+  published?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DiptychBlock".
+ */
+export interface DiptychBlock {
+  photoLeft: number | Photo;
+  photoRight: number | Photo;
+  ratio?: ("50-50" | "60-40") | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: "diptych";
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TriptychBlock".
+ */
+export interface TriptychBlock {
+  photos: (number | Photo)[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: "triptych";
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InsetPortraitBlock".
+ */
+export interface InsetPortraitBlock {
+  photo: number | Photo;
+  text?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: "insetPortrait";
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SequenceBlock".
+ */
+export interface SequenceBlock {
+  photos: (number | Photo)[];
+  caption?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: "sequence";
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PullQuoteBlock".
+ */
+export interface PullQuoteBlock {
+  quote: string;
+  attribution?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: "pullQuote";
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TextParagraphBlock".
+ */
+export interface TextParagraphBlock {
+  text: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: "textParagraph";
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -175,10 +450,31 @@ export interface PayloadKv {
  */
 export interface PayloadLockedDocument {
   id: number;
-  document?: {
-    relationTo: "users";
-    value: number | User;
-  } | null;
+  document?:
+    | ({
+        relationTo: "users";
+        value: number | User;
+      } | null)
+    | ({
+        relationTo: "stories";
+        value: number | Story;
+      } | null)
+    | ({
+        relationTo: "photos";
+        value: number | Photo;
+      } | null)
+    | ({
+        relationTo: "teams";
+        value: number | Team;
+      } | null)
+    | ({
+        relationTo: "competitions";
+        value: number | Competition;
+      } | null)
+    | ({
+        relationTo: "tags";
+        value: number | Tag;
+      } | null);
   globalSlug?: string | null;
   user: {
     relationTo: "users";
@@ -244,6 +540,203 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stories_select".
+ */
+export interface StoriesSelect<T extends boolean = true> {
+  slug?: T;
+  title?: T;
+  competition?: T;
+  homeTeam?: T;
+  awayTeam?: T;
+  venue?: T;
+  playedAt?: T;
+  result?: T;
+  summary?: T;
+  layout?:
+    | T
+    | {
+        fullBleedPhoto?: T | FullBleedPhotoBlockSelect<T>;
+        diptych?: T | DiptychBlockSelect<T>;
+        triptych?: T | TriptychBlockSelect<T>;
+        insetPortrait?: T | InsetPortraitBlockSelect<T>;
+        sequence?: T | SequenceBlockSelect<T>;
+        pullQuote?: T | PullQuoteBlockSelect<T>;
+        textParagraph?: T | TextParagraphBlockSelect<T>;
+      };
+  coverPhoto?: T;
+  featured?: T;
+  featuredOrder?: T;
+  published?: T;
+  publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FullBleedPhotoBlock_select".
+ */
+export interface FullBleedPhotoBlockSelect<T extends boolean = true> {
+  photo?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DiptychBlock_select".
+ */
+export interface DiptychBlockSelect<T extends boolean = true> {
+  photoLeft?: T;
+  photoRight?: T;
+  ratio?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TriptychBlock_select".
+ */
+export interface TriptychBlockSelect<T extends boolean = true> {
+  photos?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InsetPortraitBlock_select".
+ */
+export interface InsetPortraitBlockSelect<T extends boolean = true> {
+  photo?: T;
+  text?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SequenceBlock_select".
+ */
+export interface SequenceBlockSelect<T extends boolean = true> {
+  photos?: T;
+  caption?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PullQuoteBlock_select".
+ */
+export interface PullQuoteBlockSelect<T extends boolean = true> {
+  quote?: T;
+  attribution?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TextParagraphBlock_select".
+ */
+export interface TextParagraphBlockSelect<T extends boolean = true> {
+  text?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "photos_select".
+ */
+export interface PhotosSelect<T extends boolean = true> {
+  alt?: T;
+  caption?: T;
+  story?: T;
+  tags?: T;
+  isHighlight?: T;
+  isCover?: T;
+  orderInStory?: T;
+  watermark?: T;
+  published?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        feed?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        full?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "teams_select".
+ */
+export interface TeamsSelect<T extends boolean = true> {
+  name?: T;
+  shortName?: T;
+  city?: T;
+  tier?: T;
+  published?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "competitions_select".
+ */
+export interface CompetitionsSelect<T extends boolean = true> {
+  name?: T;
+  season?: T;
+  tier?: T;
+  published?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  published?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

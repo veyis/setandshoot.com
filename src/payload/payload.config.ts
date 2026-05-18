@@ -5,6 +5,11 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import sharp from "sharp";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { Competitions } from "./collections/competitions";
+import { Photos } from "./collections/photos";
+import { Stories } from "./collections/stories";
+import { Tags } from "./collections/tags";
+import { Teams } from "./collections/teams";
 import { Users } from "./collections/users";
 import { Datenschutz } from "./globals/datenschutz";
 import { Impressum } from "./globals/impressum";
@@ -18,7 +23,7 @@ export default buildConfig({
   admin: {
     user: Users.slug,
   },
-  collections: [Users],
+  collections: [Users, Stories, Photos, Teams, Competitions, Tags],
   globals: [Impressum, Datenschutz, Settings],
   editor: lexicalEditor({}),
   localization: {
@@ -38,8 +43,10 @@ export default buildConfig({
   }),
   plugins: [
     s3Storage({
-      enabled: false,
-      collections: {},
+      enabled: Boolean(process.env.SUPABASE_S3_BUCKET),
+      collections: {
+        photos: true,
+      },
       bucket: process.env.SUPABASE_S3_BUCKET ?? "",
       config: {
         endpoint: process.env.SUPABASE_S3_ENDPOINT ?? "",

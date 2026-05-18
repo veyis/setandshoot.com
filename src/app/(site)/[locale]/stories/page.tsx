@@ -1,5 +1,39 @@
-import { SectionPage } from "@/components/site/section-page";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { isLocale, type Locale } from "@/lib/i18n/config";
+import { notFound } from "next/navigation";
+import { getPublishedStories } from "@/lib/payload/queries/stories";
+import { StoryCard } from "@/components/story/story-card";
 
-export default function StoriesPage(props: { params: Promise<{ locale: string }> }) {
-  return <SectionPage {...props} namespace="pages.stories" />;
+export default async function StoriesPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  setRequestLocale(locale);
+
+  const t = await getTranslations("pages.stories");
+  const tCommon = await getTranslations("pages.common");
+  const stories = await getPublishedStories(locale as Locale);
+
+  return (
+    <main className="mx-auto flex max-w-6xl flex-col gap-12 px-6 py-16 md:px-12">
+      <header className="flex max-w-3xl flex-col gap-4">
+        <p className="text-ink-muted font-mono text-xs tracking-widest uppercase">
+          {tCommon("label")}
+        </p>
+        <h1 className="font-display text-5xl tracking-tight md:text-6xl">{t("title")}</h1>
+        <p className="text-ink-muted max-w-prose text-base leading-relaxed">{t("intro")}</p>
+      </header>
+
+      {stories.length === 0 ? (
+        <p className="border-hairline text-ink-muted rounded-sm border px-4 py-3 text-sm">
+          {t("empty")}
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+          {stories.map((story) => (
+            <StoryCard key={story.id} story={story} locale={locale} />
+          ))}
+        </div>
+      )}
+    </main>
+  );
 }
