@@ -5,6 +5,10 @@
     "supabaseNoSchema": "Supabase · connected (migration pending)",
     "supabaseOffline": "Supabase · unreachable"
   },
+  "home": {
+    "ctaStories": "Explore stories",
+    "ctaBooking": "Book a shoot"
+  },
   "nav": {
     "stories": "Stories",
     "highlights": "Highlights",
@@ -23,6 +27,42 @@
     "title": "Services",
     "intro": "Volleyball photography for clubs, federations, and media — from match day to season coverage.",
     "bookingHeading": "Send an inquiry"
+  },
+  "pages": {
+    "common": {
+      "label": "Section",
+      "cta": "Send an inquiry"
+    },
+    "stories": {
+      "title": "Stories",
+      "intro": "Match reports and image sequences — each game as a narrative series.",
+      "comingSoon": "Stories will publish soon. For current inquiries, use the contact form."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "intro": "Curated single frames and signature moments from the court.",
+      "comingSoon": "The highlights wall is in progress."
+    },
+    "athletes": {
+      "title": "Athletes",
+      "intro": "Portraits and profiles of the athletes I cover.",
+      "comingSoon": "Athlete profiles are coming soon."
+    },
+    "about": {
+      "title": "About",
+      "intro": "Belin Akguel — volleyball photographer based in Bremen, Germany.",
+      "comingSoon": "The full about page will be added shortly."
+    },
+    "journal": {
+      "title": "Journal",
+      "intro": "Notes from the court, gear, and work behind the scenes.",
+      "comingSoon": "Journal posts are on the way."
+    }
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "For bookings, press, or collaborations — send a message using the form below.",
+    "bookingHeading": "Send a message"
   },
   "booking": {
     "name": "Name",

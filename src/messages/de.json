@@ -5,6 +5,10 @@
     "supabaseNoSchema": "Supabase · verbunden (Migration ausstehend)",
     "supabaseOffline": "Supabase · nicht erreichbar"
   },
+  "home": {
+    "ctaStories": "Stories entdecken",
+    "ctaBooking": "Anfrage stellen"
+  },
   "nav": {
     "stories": "Stories",
     "highlights": "Highlights",
@@ -23,6 +27,42 @@
     "title": "Leistungen",
     "intro": "Volleyball-Fotografie für Vereine, Verbände und Medien — von Spieltag bis Saisonreportage.",
     "bookingHeading": "Anfrage senden"
+  },
+  "pages": {
+    "common": {
+      "label": "Bereich",
+      "cta": "Anfrage stellen"
+    },
+    "stories": {
+      "title": "Stories",
+      "intro": "Spielberichte und Bildserien — jedes Match als narrative Sequenz.",
+      "comingSoon": "Stories werden bald veröffentlicht. Für aktuelle Anfragen erreichst du mich über das Kontaktformular."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "intro": "Kuratierte Einzelbilder und Signature-Momente aus der Halle.",
+      "comingSoon": "Die Highlights-Wand ist in Arbeit."
+    },
+    "athletes": {
+      "title": "Athletinnen",
+      "intro": "Porträts und Profile der Spielerinnen, die ich begleite.",
+      "comingSoon": "Athletinnen-Profile folgen in Kürze."
+    },
+    "about": {
+      "title": "Über mich",
+      "intro": "Belin Akguel — Volleyball-Fotografin aus Bremen.",
+      "comingSoon": "Die ausführliche About-Seite wird ergänzt."
+    },
+    "journal": {
+      "title": "Journal",
+      "intro": "Notizen aus der Halle, Ausrüstung und Arbeit hinter den Kulissen.",
+      "comingSoon": "Journal-Beiträge erscheinen demnächst."
+    }
+  },
+  "contact": {
+    "title": "Kontakt",
+    "intro": "Für Buchungen, Presseanfragen oder Kooperationen — schreib mir direkt über das Formular.",
+    "bookingHeading": "Nachricht senden"
   },
   "booking": {
     "name": "Name",
