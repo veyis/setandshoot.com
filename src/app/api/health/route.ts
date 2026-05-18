@@ -1,30 +1,50 @@
 import { NextResponse } from "next/server";
 import { getPayload } from "payload";
 import config from "@/payload/payload.config";
+import { env } from "@/env";
 
 export const dynamic = "force-dynamic";
+
+const JWKS_TIMEOUT_MS = 5_000;
 
 export async function GET() {
   const timestamp = new Date().toISOString();
 
+  const postgres: { ok: boolean; message?: string } = { ok: false };
+  const neonAuth: { ok: boolean; message?: string } = { ok: false };
+
   try {
     const payload = await getPayload({ config });
-    // Touching any collection forces a Postgres roundtrip via the Payload-managed pool.
     await payload.find({ collection: "users", limit: 1, depth: 0 });
-    return NextResponse.json({
-      status: "ok",
-      timestamp,
-      postgres: { ok: true },
-    });
+    postgres.ok = true;
   } catch (cause) {
-    const message = cause instanceof Error ? cause.message : "Unknown error";
-    return NextResponse.json(
-      {
-        status: "degraded",
-        timestamp,
-        postgres: { ok: false, message },
-      },
-      { status: 503 },
-    );
+    postgres.message = cause instanceof Error ? cause.message : "Unknown error";
   }
+
+  try {
+    const jwksUrl = new URL("/.well-known/jwks.json", env.NEON_AUTH_BASE_URL);
+    const response = await fetch(jwksUrl, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(JWKS_TIMEOUT_MS),
+    });
+    if (response.ok) {
+      neonAuth.ok = true;
+    } else {
+      neonAuth.message = `JWKS endpoint returned HTTP ${response.status}`;
+    }
+  } catch (cause) {
+    neonAuth.message = cause instanceof Error ? cause.message : "Unknown error";
+  }
+
+  const ok = postgres.ok && neonAuth.ok;
+
+  return NextResponse.json(
+    {
+      status: ok ? "ok" : "degraded",
+      timestamp,
+      postgres,
+      neonAuth,
+    },
+    { status: ok ? 200 : 503 },
+  );
 }

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
+@import "@neondatabase/auth-ui/css";
 
 @theme {
   --color-canvas: var(--bg-canvas);

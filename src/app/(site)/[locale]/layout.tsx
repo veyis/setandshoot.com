@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { isLocale, locales } from "@/lib/i18n/config";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { AuthUIProvider } from "@/components/auth/auth-ui-provider";
 
 export const metadata: Metadata = {
   title: "Belin Akguel — Volleyball-Fotografie",
@@ -30,9 +31,11 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <Header />
-      {children}
-      <Footer />
+      <AuthUIProvider>
+        <Header />
+        {children}
+        <Footer />
+      </AuthUIProvider>
     </NextIntlClientProvider>
   );
 }
