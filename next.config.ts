@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
+import { withSentryConfig } from "@sentry/nextjs";
 
 const withNextIntl = createNextIntlPlugin("./src/lib/i18n/request.ts");
 
@@ -15,4 +16,7 @@ const config: NextConfig = {
   },
 };
 
-export default withNextIntl(config);
+export default withSentryConfig(withNextIntl(config), {
+  silent: true,
+  tunnelRoute: "/monitoring",
+});
