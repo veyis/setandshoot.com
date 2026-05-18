@@ -1,16 +1,12 @@
 import { NextResponse } from "next/server";
+import { getPayload } from "payload";
+import config from "@/payload/payload.config";
 import { bookingInquirySchema } from "@/lib/booking/schema";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { env } from "@/env";
+import { auth } from "@/lib/auth/server";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-  if (!env.SUPABASE_SERVICE_ROLE_KEY) {
-    return NextResponse.json(
-      { error: "Booking storage is not configured (missing SUPABASE_SERVICE_ROLE_KEY)." },
-      { status: 503 },
-    );
-  }
-
   let body: unknown;
   try {
     body = await request.json();
@@ -26,32 +22,32 @@ export async function POST(request: Request) {
     );
   }
 
-  const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from("booking_inquiries")
-    .insert({
-      name: parsed.data.name,
-      email: parsed.data.email,
-      organization: parsed.data.organization ?? null,
-      message: parsed.data.message,
-      locale: parsed.data.locale,
-    })
-    .select("id, created_at")
-    .single();
+  const { data: session } = await auth.getSession();
+  const customerId = session?.user?.id ?? null;
 
-  if (error) {
-    const missingTable = error.code === "PGRST205" || error.message.includes("booking_inquiries");
+  try {
+    const payload = await getPayload({ config });
+    const doc = await payload.create({
+      collection: "bookings",
+      data: {
+        name: parsed.data.name,
+        email: parsed.data.email,
+        organization: parsed.data.organization ?? null,
+        message: parsed.data.message,
+        locale: parsed.data.locale,
+        customerId,
+      },
+      overrideAccess: true,
+    });
+    return NextResponse.json({ ok: true, id: doc.id, createdAt: doc.createdAt }, { status: 201 });
+  } catch (error) {
     const isDev = process.env.NODE_ENV === "development";
     return NextResponse.json(
       {
-        error: missingTable
-          ? "Database schema not applied. Run pnpm supabase:db-push on the server."
-          : "Failed to save inquiry.",
-        ...(isDev && { code: error.code, detail: error.message }),
+        error: "Failed to save inquiry.",
+        ...(isDev && error instanceof Error ? { detail: error.message } : {}),
       },
-      { status: missingTable ? 503 : 500 },
+      { status: 500 },
     );
   }
-
-  return NextResponse.json({ ok: true, id: data.id, createdAt: data.created_at }, { status: 201 });
 }

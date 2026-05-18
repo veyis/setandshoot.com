@@ -49,5 +49,14 @@ export const Bookings: CollectionConfig = {
         { label: "English", value: "en" },
       ],
     },
+    {
+      name: "customerId",
+      type: "text",
+      admin: {
+        description: "Neon Auth user id (null for anonymous submissions).",
+        readOnly: true,
+      },
+      index: true,
+    },
   ],
 };

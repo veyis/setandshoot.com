@@ -438,6 +438,10 @@ export interface Booking {
   organization?: string | null;
   message: string;
   locale: 'de' | 'en';
+  /**
+   * Neon Auth user id (null for anonymous submissions).
+   */
+  customerId?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -766,6 +770,7 @@ export interface BookingsSelect<T extends boolean = true> {
   organization?: T;
   message?: T;
   locale?: T;
+  customerId?: T;
   updatedAt?: T;
   createdAt?: T;
 }

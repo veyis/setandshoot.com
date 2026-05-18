@@ -1,12 +1,10 @@
 import Link from "next/link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { getSiteBootstrap } from "@/lib/supabase/data";
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations();
-  const bootstrap = await getSiteBootstrap();
 
   return (
     <main className="flex min-h-[80vh] flex-col items-start justify-center gap-8 p-12">
@@ -27,15 +25,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           {t("home.ctaBooking")}
         </Link>
       </div>
-      {process.env.NODE_ENV === "development" && (
-        <p className="text-ink-muted font-mono text-xs" data-testid="supabase-bootstrap">
-          {bootstrap.schemaReady
-            ? t("site.supabaseReady", { version: bootstrap.foundationVersion ?? 1 })
-            : bootstrap.connected
-              ? t("site.supabaseNoSchema")
-              : t("site.supabaseOffline")}
-        </p>
-      )}
     </main>
   );
 }

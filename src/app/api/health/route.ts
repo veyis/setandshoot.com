@@ -1,28 +1,20 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { getPayload } from "payload";
+import config from "@/payload/payload.config";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   const timestamp = new Date().toISOString();
 
   try {
-    const supabase = await createClient();
-    const { error } = await supabase.auth.getSession();
-
-    if (error) {
-      return NextResponse.json(
-        {
-          status: "degraded",
-          timestamp,
-          supabase: { ok: false, message: error.message },
-        },
-        { status: 503 },
-      );
-    }
-
+    const payload = await getPayload({ config });
+    // Touching any collection forces a Postgres roundtrip via the Payload-managed pool.
+    await payload.find({ collection: "users", limit: 1, depth: 0 });
     return NextResponse.json({
       status: "ok",
       timestamp,
-      supabase: { ok: true, url: process.env.NEXT_PUBLIC_SUPABASE_URL },
+      postgres: { ok: true },
     });
   } catch (cause) {
     const message = cause instanceof Error ? cause.message : "Unknown error";
@@ -30,7 +22,7 @@ export async function GET() {
       {
         status: "degraded",
         timestamp,
-        supabase: { ok: false, message },
+        postgres: { ok: false, message },
       },
       { status: 503 },
     );

@@ -1,9 +1,6 @@
 {
   "site": {
-    "tagline": "Volleyball-Fotografie. Bremen.",
-    "supabaseReady": "Supabase · Schema v{version}",
-    "supabaseNoSchema": "Supabase · verbunden (Migration ausstehend)",
-    "supabaseOffline": "Supabase · nicht erreichbar"
+    "tagline": "Volleyball-Fotografie. Bremen."
   },
   "home": {
     "ctaStories": "Stories entdecken",

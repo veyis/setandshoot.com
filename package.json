@@ -18,15 +18,9 @@
     "payload:migrate:status": "bash scripts/payload-cli.sh migrate:status",
     "payload:migrate:force": "PAYLOAD_MIGRATE_FORCE=1 bash scripts/payload-cli.sh migrate",
     "payload:migrate:mark": "bash scripts/payload-mark-migration-applied.sh",
-    "payload:generate-types": "bash scripts/payload-cli.sh generate:types",
-    "supabase": "supabase",
-    "supabase:db-push": "bash scripts/supabase-db-push.sh",
-    "vercel:env-sync": "bash scripts/sync-vercel-supabase-env.sh"
+    "payload:generate-types": "bash scripts/payload-cli.sh generate:types"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "supabase"
-    ],
     "ignoredBuiltDependencies": [
       "core-js"
     ]
@@ -41,10 +35,7 @@
     "@payloadcms/db-postgres": "3.84.1",
     "@payloadcms/next": "3.84.1",
     "@payloadcms/richtext-lexical": "3.84.1",
-    "@payloadcms/storage-s3": "3.84.1",
     "@sentry/nextjs": "^10.53.1",
-    "@supabase/ssr": "^0.10.3",
-    "@supabase/supabase-js": "^2.105.4",
     "@tailwindcss/postcss": "^4.3.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
@@ -70,7 +61,6 @@
     "lefthook": "^1.9.0",
     "prettier": "^3.2.0",
     "prettier-plugin-tailwindcss": "^0.6.0",
-    "supabase": "^2.98.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.0.0",
     "vitest": "^4.1.6"

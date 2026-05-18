@@ -1,63 +1,56 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
 
+const emptyToUndefined = (value: unknown) =>
+  typeof value === "string" && value.trim() === "" ? undefined : value;
+
+const optionalUrl = z.preprocess(emptyToUndefined, z.string().url().optional());
+
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  DATABASE_URL: z.string().url().optional(),
+  DATABASE_URL: z.string().url(),
   PAYLOAD_SECRET: z.string().min(32),
-  BLOB_READ_WRITE_TOKEN: z.string().min(1).optional(),
   NEXT_PUBLIC_SITE_URL: z.string().url(),
-  NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
-  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
-  SENTRY_DSN: z.string().url().optional(),
-  NEXT_PUBLIC_SENTRY_DSN: z.string().url().optional(),
+  NEON_AUTH_BASE_URL: z.string().url(),
+  NEON_AUTH_COOKIE_SECRET: z.string().min(32),
+  SENTRY_DSN: optionalUrl,
+  NEXT_PUBLIC_SENTRY_DSN: optionalUrl,
 });
 
 const validBase = {
+  DATABASE_URL: "postgres://u:p@h/d",
   PAYLOAD_SECRET: "x".repeat(32),
   NEXT_PUBLIC_SITE_URL: "http://localhost:3000",
-  NEXT_PUBLIC_SUPABASE_URL: "https://api.setandshoot.com",
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test",
+  NEON_AUTH_BASE_URL: "https://ep-xxx.neonauth.eu-central-1.aws.neon.tech/neondb/auth",
+  NEON_AUTH_COOKIE_SECRET: "y".repeat(32),
 };
 
 describe("env schema", () => {
-  it("accepts a valid configuration with Supabase", () => {
+  it("accepts a valid configuration", () => {
     expect(envSchema.parse(validBase)).toMatchObject({
       NODE_ENV: "development",
-      NEXT_PUBLIC_SUPABASE_URL: "https://api.setandshoot.com",
+      NEON_AUTH_BASE_URL: validBase.NEON_AUTH_BASE_URL,
     });
   });
 
-  it("accepts optional DATABASE_URL", () => {
-    expect(
-      envSchema.parse({
-        ...validBase,
-        DATABASE_URL: "postgres://u:p@h/d",
-      }),
-    ).toMatchObject({ DATABASE_URL: "postgres://u:p@h/d" });
-  });
-
-  it("rejects missing Supabase URL", () => {
-    const { NEXT_PUBLIC_SUPABASE_URL: _, ...rest } = validBase;
+  it("rejects missing DATABASE_URL", () => {
+    const { DATABASE_URL: _, ...rest } = validBase;
     expect(() => envSchema.parse(rest)).toThrow();
   });
 
   it("rejects a short payload secret", () => {
-    expect(() =>
-      envSchema.parse({
-        ...validBase,
-        PAYLOAD_SECRET: "tooshort",
-      }),
-    ).toThrow();
+    expect(() => envSchema.parse({ ...validBase, PAYLOAD_SECRET: "tooshort" })).toThrow();
+  });
+
+  it("rejects a short Neon Auth cookie secret", () => {
+    expect(() => envSchema.parse({ ...validBase, NEON_AUTH_COOKIE_SECRET: "tooshort" })).toThrow();
   });
 
   it("rejects a non-URL site URL", () => {
-    expect(() =>
-      envSchema.parse({
-        ...validBase,
-        NEXT_PUBLIC_SITE_URL: "not-a-url",
-      }),
-    ).toThrow();
+    expect(() => envSchema.parse({ ...validBase, NEXT_PUBLIC_SITE_URL: "not-a-url" })).toThrow();
+  });
+
+  it("rejects a non-URL Neon Auth base URL", () => {
+    expect(() => envSchema.parse({ ...validBase, NEON_AUTH_BASE_URL: "not-a-url" })).toThrow();
   });
 });

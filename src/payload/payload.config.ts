@@ -1,6 +1,5 @@
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
-import { s3Storage } from "@payloadcms/storage-s3";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import sharp from "sharp";
 import path from "node:path";
@@ -42,23 +41,8 @@ export default buildConfig({
     pool: { connectionString: process.env.DATABASE_URL ?? "" },
     schemaName: "payload",
   }),
-  plugins: [
-    s3Storage({
-      enabled: Boolean(process.env.SUPABASE_S3_BUCKET),
-      collections: {
-        photos: true,
-      },
-      bucket: process.env.SUPABASE_S3_BUCKET ?? "",
-      config: {
-        endpoint: process.env.SUPABASE_S3_ENDPOINT ?? "",
-        credentials: {
-          accessKeyId: process.env.SUPABASE_S3_ACCESS_KEY_ID ?? "",
-          secretAccessKey: process.env.SUPABASE_S3_SECRET_ACCESS_KEY ?? "",
-        },
-        region: process.env.SUPABASE_S3_REGION ?? "us-east-1",
-        forcePathStyle: true,
-      },
-    }),
-  ],
+  // TODO: re-enable object storage with a non-Supabase S3 provider (or Vercel Blob)
+  // in a separate task. Media falls back to local disk for now.
+  plugins: [],
   sharp,
 });

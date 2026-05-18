@@ -1,9 +1,6 @@
 {
   "site": {
-    "tagline": "Volleyball photography. Bremen.",
-    "supabaseReady": "Supabase · schema v{version}",
-    "supabaseNoSchema": "Supabase · connected (migration pending)",
-    "supabaseOffline": "Supabase · unreachable"
+    "tagline": "Volleyball photography. Bremen."
   },
   "home": {
     "ctaStories": "Explore stories",
