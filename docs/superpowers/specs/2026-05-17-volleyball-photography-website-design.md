@@ -165,7 +165,7 @@ Payload v3 collections. Per-field localization for DE/EN where marked.
 | Field                    | Type                  | Notes                                                                                    |
 | ------------------------ | --------------------- | ---------------------------------------------------------------------------------------- |
 | `id`                     | uuid                  |                                                                                          |
-| `file`                   | upload                | Vercel Blob via Payload's blob adapter                                                   |
+| `file`                   | upload                | Self-hosted Supabase Storage via Payload's S3 adapter (`@payloadcms/storage-s3`)         |
 | `sizes`                  | auto                  | Generated: thumb 400, card 800, feed 1600, hero 2880, in AVIF + WebP                     |
 | `blurDataURL`            | string                | Pre-generated 10px placeholder                                                           |
 | `width`, `height`        | int                   | From sharp on upload                                                                     |
@@ -376,28 +376,28 @@ and `consentOnFile` is true. Enforcement is server-side, not just UI.
 
 ## 7. Tech stack
 
-| Layer            | Choice                                                   |
-| ---------------- | -------------------------------------------------------- |
-| Framework        | Next.js 16 (App Router)                                  |
-| Runtime          | Vercel Fluid Compute (Node 24)                           |
-| Styling          | Tailwind v4 + shadcn/ui                                  |
-| CMS / admin      | Payload v3 (embedded)                                    |
-| Database         | Neon Postgres (Vercel Marketplace)                       |
-| Photo storage    | Vercel Blob (EU region); R2 swap path documented         |
-| Image delivery   | `next/image` over Blob URLs (AVIF / WebP)                |
-| Auth (admin)     | Payload built-in + TOTP 2FA                              |
-| Motion           | Framer Motion (Motion v12)                               |
-| Forms            | React Hook Form + Zod                                    |
-| Email            | Resend (EU region preferred)                             |
-| Spam             | Cloudflare Turnstile (cookieless)                        |
-| Analytics        | Vercel Analytics + Speed Insights (cookieless)           |
-| Search (admin)   | Postgres FTS + pg_trgm                                   |
-| i18n             | `next-intl` (routes/UI) + Payload localization (content) |
-| Cron             | Vercel Cron                                              |
-| Image processing | sharp (server-side, on upload)                           |
-| Testing          | Vitest + Playwright                                      |
-| Quality          | TypeScript strict, ESLint flat, Prettier, lefthook       |
-| Error tracking   | Sentry (no PII; 100% sample at launch)                   |
+| Layer            | Choice                                                                   |
+| ---------------- | ------------------------------------------------------------------------ |
+| Framework        | Next.js 16 (App Router)                                                  |
+| Runtime          | Vercel Fluid Compute (Node 24)                                           |
+| Styling          | Tailwind v4 + shadcn/ui                                                  |
+| CMS / admin      | Payload v3 (embedded)                                                    |
+| Database         | Self-hosted Supabase Postgres at `api.setandshoot.com` (Hetzner Germany) |
+| Photo storage    | Self-hosted Supabase Storage (S3-compatible) on same instance            |
+| Image delivery   | `next/image` over Supabase Storage URLs (AVIF / WebP)                    |
+| Auth (admin)     | Payload built-in + TOTP 2FA                                              |
+| Motion           | Framer Motion (Motion v12)                                               |
+| Forms            | React Hook Form + Zod                                                    |
+| Email            | Resend (EU region preferred)                                             |
+| Spam             | Cloudflare Turnstile (cookieless)                                        |
+| Analytics        | Vercel Analytics + Speed Insights (cookieless)                           |
+| Search (admin)   | Postgres FTS + pg_trgm                                                   |
+| i18n             | `next-intl` (routes/UI) + Payload localization (content)                 |
+| Cron             | Vercel Cron                                                              |
+| Image processing | sharp (server-side, on upload)                                           |
+| Testing          | Vitest + Playwright                                                      |
+| Quality          | TypeScript strict, ESLint flat, Prettier, lefthook                       |
+| Error tracking   | Sentry (no PII; 100% sample at launch)                                   |
 
 ### Hosting topology
 
@@ -407,8 +407,8 @@ Vercel (one project, fra1 primary)
 ├── Payload /admin
 └── /api/* (likes, comments, OG image, sitemap, IG webhook)
 
-→ Neon Postgres (eu-central-1)
-→ Vercel Blob (EU)
+→ Supabase Postgres at api.setandshoot.com (Hetzner Germany, self-hosted)
+→ Supabase Storage at api.setandshoot.com (Hetzner Germany, self-hosted, S3-compatible)
 → Resend (EU preferred, US-EU SCC otherwise)
 → Cloudflare Turnstile (no cookies)
 → Instagram Basic Display API (daily cron)
@@ -417,7 +417,7 @@ Vercel (one project, fra1 primary)
 ### Environments
 
 - **Production**: `belinakguel.com` (or equivalent). Branch `main`.
-- **Preview**: Per-PR Vercel preview URL with isolated Neon branch.
+- **Preview**: Per-PR Vercel preview URL. Database strategy: a dedicated `setandshoot_preview` schema on the same Supabase instance (or a separate Supabase project) — to be decided in Plan 2.
 - **Local**: `.env.local` via `vercel env pull`; optional Docker Postgres for
   offline work. Payload runs in the same `pnpm dev` process.
 
@@ -448,15 +448,14 @@ packages/             # empty unless something is genuinely shared
 
 ### Cost envelope (rough monthly at launch)
 
-| Item                             | Cost              |
-| -------------------------------- | ----------------- |
-| Vercel (Hobby → Pro post-launch) | $0 → $20          |
-| Neon Postgres                    | Free tier         |
-| Vercel Blob (~20 GB)             | ~$3               |
-| Resend                           | Free tier         |
-| Domain                           | ~€1/mo            |
-| Cloudflare Turnstile             | Free              |
-| **Total**                        | **≈ $25 / month** |
+| Item                                      | Cost                          |
+| ----------------------------------------- | ----------------------------- |
+| Vercel (Hobby → Pro post-launch)          | $0 → $20                      |
+| Self-hosted Supabase (Postgres + Storage) | already paid (own Hetzner VM) |
+| Resend                                    | Free tier                     |
+| Domain                                    | ~€1/mo                        |
+| Cloudflare Turnstile                      | Free                          |
+| **Total**                                 | **≈ $25 / month**             |
 
 Scales linearly with storage; ~$50/mo at 200 GB.
 
@@ -538,7 +537,8 @@ Journal section.
 **Datenschutzerklärung** covering: data collected (form submissions, comments,
 likes ledger, server logs), legal basis per process, retention (comments
 unapproved 12mo / approved indefinitely; likes ledger 7 days; server logs 7
-days), data subject rights, sub-processors (Vercel, Neon, Resend, Cloudflare —
+days), data subject rights, sub-processors (Vercel, Resend, Cloudflare —
+note: database + photo storage live on Belin's own Hetzner Germany Supabase, so no DB sub-processor —
 each with DPA link), server/CDN location.
 
 **Bildrechte (image rights)** page explaining the policy and providing a
@@ -551,8 +551,7 @@ Prevents DSGVO regression.
 ### Hosting and data residency
 
 - Vercel Frankfurt (`fra1`).
-- Neon EU (`eu-central-1`).
-- Vercel Blob region-pinned EU.
+- Self-hosted Supabase on Hetzner Germany (DB + Storage on the same VM, owner-controlled).
 - Resend EU region where possible (otherwise US-EU SCC documented).
 
 ### Monitoring
@@ -618,7 +617,7 @@ Journal posts.
 
 The implementation plan will detail the steps. The shape:
 
-1. **Foundation** — repo, Vercel project, Neon DB, Payload v3 mounted, auth,
+1. **Foundation** — repo, Vercel project, self-hosted Supabase DB + Storage, Payload v3 mounted, auth,
    design tokens, base layouts in DE+EN.
 2. **Content backbone** — collections (photos, stories, teams, competitions,
    tags, athletes, journal, press, comments), upload pipeline, EXIF/blur/
