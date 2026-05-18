@@ -11,5 +11,6 @@ playwright-report
 test-results
 .turbo
 *.tsbuildinfo
-public/media
+public/media/*
+!public/media/seeds/
 .claude
