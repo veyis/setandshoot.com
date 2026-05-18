@@ -1,0 +1,13 @@
+:root {
+  --bg-canvas: #0b0e13;
+  --bg-elevated: #13171f;
+  --ink-primary: #f4f1ea;
+  --ink-muted: #8c8f97;
+  --accent-signal: #e63946;
+  --accent-court: #d8b66e;
+  --line-hairline: rgba(244, 241, 234, 0.08);
+
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
