@@ -22,7 +22,7 @@ export async function GET() {
   }
 
   try {
-    const jwksUrl = new URL("/.well-known/jwks.json", env.NEON_AUTH_BASE_URL);
+    const jwksUrl = `${env.NEON_AUTH_BASE_URL.replace(/\/$/, "")}/.well-known/jwks.json`;
     const response = await fetch(jwksUrl, {
       cache: "no-store",
       signal: AbortSignal.timeout(JWKS_TIMEOUT_MS),

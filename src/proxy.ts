@@ -4,15 +4,19 @@ import { routing } from "@/lib/i18n/routing";
 import { auth } from "@/lib/auth/server";
 
 const handleI18nRouting = createIntlMiddleware(routing);
-const authMiddleware = auth.middleware();
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 1. Refresh Neon Auth session cookie.
-  const authResponse = await authMiddleware(request);
+  // /api/* (other than /api/auth, which the matcher already excludes) must
+  // bypass intl rewriting — locale prefixes would turn /api/health into
+  // /de/api/health and 404.
+  if (pathname.startsWith("/api/")) {
+    return NextResponse.next({ request });
+  }
 
-  // 2. Gate /admin: must be signed in AND have admin role.
+  // Gate /admin: must be signed in AND have admin role. Payload still owns
+  // editor auth after this gate.
   if (pathname.startsWith("/admin")) {
     const { data: session } = await auth.getSession();
     if (!session?.user) {
@@ -26,20 +30,10 @@ export async function proxy(request: NextRequest) {
       url.pathname = "/";
       return NextResponse.redirect(url);
     }
-    return authResponse ?? NextResponse.next({ request });
+    return NextResponse.next({ request });
   }
 
-  // 3. Apply intl routing for everything else.
-  const intlResponse = handleI18nRouting(request);
-
-  // 4. Forward any auth cookies set by step 1 onto the intl response.
-  if (authResponse) {
-    authResponse.cookies.getAll().forEach((cookie) => {
-      intlResponse.cookies.set(cookie.name, cookie.value);
-    });
-  }
-
-  return intlResponse;
+  return handleI18nRouting(request);
 }
 
 export const config = {
