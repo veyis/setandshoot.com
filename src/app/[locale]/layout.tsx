@@ -3,6 +3,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { isLocale, locales } from "@/lib/i18n/config";
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
 
 export const metadata: Metadata = {
   title: "Belin Akguel — Volleyball-Fotografie",
@@ -28,7 +30,9 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
+      <Header />
       {children}
+      <Footer />
     </NextIntlClientProvider>
   );
 }
