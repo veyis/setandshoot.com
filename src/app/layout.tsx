@@ -1,4 +1,5 @@
 import "./globals.css";
+import { fraunces, inter, jetbrainsMono } from "@/lib/design/fonts";
 
 export const metadata = {
   title: "Belin Akguel — Volleyball-Fotografie",
@@ -7,7 +8,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de">
+    <html lang="de" className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
       <body>{children}</body>
     </html>
   );
