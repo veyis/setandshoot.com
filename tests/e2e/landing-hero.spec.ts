@@ -21,9 +21,12 @@ test.describe("Hero — Slate × Cover", () => {
     const ctaBar = page.locator('[data-test="hero-cta-bar"]');
     await expect(ctaBar).toBeVisible();
 
-    // No sticky-CTA gradient backing on desktop (border-top should be 'none')
-    const borderTop = await ctaBar.evaluate((el) => getComputedStyle(el).borderTopStyle);
-    expect(borderTop).toBe("none");
+    // No sticky-CTA gradient backing on desktop — bar has zero visible border + no gradient image.
+    // (Tailwind v4 Preflight forces border-style:solid globally, so check width + bg-image.)
+    const borderTopWidth = await ctaBar.evaluate((el) => getComputedStyle(el).borderTopWidth);
+    const backgroundImage = await ctaBar.evaluate((el) => getComputedStyle(el).backgroundImage);
+    expect(borderTopWidth).toBe("0px");
+    expect(backgroundImage).toBe("none");
 
     // Desktop letterbox bar present
     const topBar = page.locator(".hero-bar-top");
@@ -56,8 +59,11 @@ test.describe("Hero — Slate × Cover", () => {
 
     const ctaBar = page.locator('[data-test="hero-cta-bar"]');
     await expect(ctaBar).toBeVisible();
-    const borderTop = await ctaBar.evaluate((el) => getComputedStyle(el).borderTopStyle);
-    expect(borderTop).toBe("solid");
+    // Mobile bar shows the gradient backing + a visible 1px top hairline.
+    const borderTopWidth = await ctaBar.evaluate((el) => getComputedStyle(el).borderTopWidth);
+    const backgroundImage = await ctaBar.evaluate((el) => getComputedStyle(el).backgroundImage);
+    expect(borderTopWidth).toBe("1px");
+    expect(backgroundImage).toContain("linear-gradient");
 
     // Letterbox bars hidden on mobile
     const topBar = page.locator(".hero-bar-top");
