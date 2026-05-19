@@ -145,3 +145,86 @@
     border-top: 1px solid rgba(244, 241, 234, 0.12);
   }
 }
+
+/* ------- First-load reveal stagger (Slate × Cover) ------- */
+
+.hero-scene[data-first-load="true"] .hero-kicker-rule {
+  transform-origin: left center;
+  animation: hero-rule-scale 600ms cubic-bezier(0.16, 1, 0.3, 1) 600ms both;
+}
+.hero-scene[data-first-load="true"] .hero-kicker-text {
+  animation: hero-fade-up 600ms cubic-bezier(0.16, 1, 0.3, 1) 700ms both;
+}
+.hero-scene[data-first-load="true"] .hero-cover-line-1 {
+  clip-path: inset(0 0 100% 0);
+  animation: hero-mask-reveal 700ms cubic-bezier(0.16, 1, 0.3, 1) 900ms both;
+}
+.hero-scene[data-first-load="true"] .hero-cover-line-2 {
+  clip-path: inset(0 0 100% 0);
+  animation: hero-mask-reveal 700ms cubic-bezier(0.16, 1, 0.3, 1) 1080ms both;
+}
+.hero-scene[data-first-load="true"] .hero-camera {
+  animation: hero-fade-up 600ms cubic-bezier(0.16, 1, 0.3, 1) 1500ms both;
+}
+.hero-scene[data-first-load="true"] .hero-cta-bar > * {
+  animation: hero-fade-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.hero-scene[data-first-load="true"] .hero-cta-bar > *:nth-child(1) {
+  animation-delay: 1700ms;
+}
+.hero-scene[data-first-load="true"] .hero-cta-bar > *:nth-child(2) {
+  animation-delay: 1780ms;
+}
+.hero-scene[data-first-load="true"] .hero-masthead,
+.hero-scene[data-first-load="true"] .hero-progress {
+  animation: hero-fade-in 600ms linear 200ms both;
+}
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes hero-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes hero-mask-reveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes hero-rule-scale {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.hero-scene[data-reduced-motion="true"] .hero-kicker-rule,
+.hero-scene[data-reduced-motion="true"] .hero-kicker-text,
+.hero-scene[data-reduced-motion="true"] .hero-cover-line-1,
+.hero-scene[data-reduced-motion="true"] .hero-cover-line-2,
+.hero-scene[data-reduced-motion="true"] .hero-camera,
+.hero-scene[data-reduced-motion="true"] .hero-cta-bar > *,
+.hero-scene[data-reduced-motion="true"] .hero-masthead,
+.hero-scene[data-reduced-motion="true"] .hero-progress {
+  animation: none;
+  clip-path: none;
+  opacity: 1;
+  transform: none;
+}
