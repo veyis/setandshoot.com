@@ -1,13 +1,13 @@
 import { test, expect } from "@playwright/test";
 
-test("German home renders the German tagline", async ({ page }) => {
+test("German home renders the German hero masthead", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByText("Volleyball-Fotografie. Bremen.")).toBeVisible();
+  await expect(page.getByText("belin akguel · sportfotografie")).toBeVisible();
 });
 
-test("English home renders the English tagline at /en", async ({ page }) => {
+test("English home renders the English hero masthead at /en", async ({ page }) => {
   await page.goto("/en");
-  await expect(page.getByText("Volleyball photography. Bremen.")).toBeVisible();
+  await expect(page.getByText("belin akguel · sports photography")).toBeVisible();
 });
 
 test("Landing renders all five elevation scenes (DE)", async ({ page }) => {
@@ -26,7 +26,12 @@ test("Landing renders all five elevation scenes (DE)", async ({ page }) => {
   await expect(page.getByText("ÜBER MICH").first()).toBeVisible();
 
   // Booking CTA primary link
-  await expect(page.getByRole("link", { name: "ANFRAGE STELLEN →" })).toBeVisible();
+  // Booking CTA primary link — scoped to the booking-cta section to avoid colliding
+  // with the hero sticky-CTA which uses a near-identical label ("Anfrage stellen").
+  // The arrow is aria-hidden, so accessible name is just the text.
+  await expect(
+    page.locator(".booking-cta").getByRole("link", { name: "ANFRAGE STELLEN" }),
+  ).toBeVisible();
 });
 
 test("Landing scroll cue is present", async ({ page }) => {
@@ -42,5 +47,10 @@ test("Landing renders under prefers-reduced-motion", async ({ page }) => {
   await expect(page.getByRole("heading", { name: /belin akguel/i, level: 1 })).toBeVisible();
   await expect(page.getByText(/Pre-Saison/i).first()).toBeVisible();
   await expect(page.getByText("ÜBER MICH").first()).toBeVisible();
-  await expect(page.getByRole("link", { name: "ANFRAGE STELLEN →" })).toBeVisible();
+  // Booking CTA primary link — scoped to the booking-cta section to avoid colliding
+  // with the hero sticky-CTA which uses a near-identical label ("Anfrage stellen").
+  // The arrow is aria-hidden, so accessible name is just the text.
+  await expect(
+    page.locator(".booking-cta").getByRole("link", { name: "ANFRAGE STELLEN" }),
+  ).toBeVisible();
 });

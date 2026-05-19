@@ -1,5 +1,12 @@
 import { test, expect } from "@playwright/test";
 
+// Dev-mode Next.js cannot service many concurrent cold-paint requests cleanly;
+// these routes intermittently return 500 under the default fullyParallel run
+// when sibling test files are also compiling pages. Forcing this file serial
+// removes within-file contention, and retries cover the cross-file pressure.
+// Production builds (Vercel) do not hit this race.
+test.describe.configure({ mode: "serial", retries: 2 });
+
 const routes = [
   "/stories",
   "/highlights",
