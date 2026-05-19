@@ -1,8 +1,10 @@
 :root {
   --bg-canvas: #0b0e13;
   --bg-elevated: #13171f;
+  --bg-scrim: rgba(11, 14, 19, 0.85);
   --ink-primary: #f4f1ea;
   --ink-muted: #8c8f97;
+  --ink-faint: rgba(244, 241, 234, 0.42);
   --accent-signal: #e63946;
   --accent-court: #d8b66e;
   --line-hairline: rgba(244, 241, 234, 0.08);

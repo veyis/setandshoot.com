@@ -5,8 +5,10 @@
 @theme {
   --color-canvas: var(--bg-canvas);
   --color-elevated: var(--bg-elevated);
+  --color-scrim: var(--bg-scrim);
   --color-ink: var(--ink-primary);
   --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
   --color-accent: var(--accent-signal);
   --color-court: var(--accent-court);
   --color-hairline: var(--line-hairline);
