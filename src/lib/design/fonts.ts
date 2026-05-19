@@ -6,7 +6,6 @@ export const fraunces = Fraunces({
   display: "swap",
   axes: ["opsz", "SOFT"],
   style: ["normal", "italic"],
-  weight: ["400", "500", "600"],
 });
 
 export const inter = Inter({

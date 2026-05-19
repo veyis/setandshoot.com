@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { isLocale, locales } from "@/lib/i18n/config";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { AuthUIProvider } from "@/components/auth/auth-ui-provider";
+import { LenisProvider } from "@/components/motion/lenis-provider";
 
 export const metadata: Metadata = {
   title: "Belin Akguel — Volleyball-Fotografie",
@@ -31,11 +31,11 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <AuthUIProvider>
+      <LenisProvider>
         <Header />
         {children}
         <Footer />
-      </AuthUIProvider>
+      </LenisProvider>
     </NextIntlClientProvider>
   );
 }
