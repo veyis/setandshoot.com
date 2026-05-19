@@ -4,7 +4,9 @@
 
 **Goal:** Elevate the landing-page hero to a cinematic, magazine-cover read — Slate × Cover hybrid composition, Dissolve + Depth photo transitions, per-photo kicker + camera-spec rotation, mobile sticky CTA — without regressing the existing pinning, reduced-motion handling, or e2e coverage.
 
-**Architecture:** Split the current monolithic `hero-scene.tsx` into 5 small components under `src/components/landing/hero/`, each with one responsibility (orchestration, photo stack, slate frame, cover title, sticky CTA). Co-locate hero-specific CSS in `hero-motion.css`. Extend `LandingPhoto` with optional `hero` metadata + an `isHero` flag; only photos flagged hero rotate in the landing hero.
+**Architecture:** Split the current monolithic `hero-scene.tsx` into 5 small components under `src/components/landing/hero/`, each with one responsibility (orchestration, photo stack, slate frame, cover title, sticky CTA). Co-locate hero-specific CSS in `hero-motion.css`. Extend `LandingPhoto` with optional `hero` metadata (kicker, cameraSpec, location — locale records); all 7 landing photos rotate in the hero with `cover` leading, and `getHeroPhotos` enriches each with locale-resolved strings.
+
+**Photo catalog (already in repo at `9dc6157`):** `cover → joust → spike → set → block → serve → dig` — 7 frames, 1536×1024 each, `cover` first as the photo-of-the-year lead. No `isHero` flag needed; all 7 photos rotate.
 
 **Tech Stack:** Next.js 16 App Router, React 19, TypeScript strict, Tailwind v4, next-intl, GSAP ScrollTrigger (via existing `usePinnedScene`), Vitest + Testing Library, Playwright.
 
@@ -18,134 +20,123 @@
 
 ## File map
 
-| Path                                                | Action | Responsibility                                                  |
-| --------------------------------------------------- | ------ | --------------------------------------------------------------- |
-| `src/lib/landing/photos.ts`                         | Modify | Add `isHero`, `hero` block; extend resolver; new error handling |
-| `src/messages/en.json`, `src/messages/de.json`      | Modify | Add `home.hero.masthead.left` / `.counter` keys                 |
-| `src/components/landing/hero-scene.tsx`             | Delete | Replaced by folder                                              |
-| `src/components/landing/hero/index.ts`              | Create | Re-export `HeroScene`                                           |
-| `src/components/landing/hero/HeroScene.tsx`         | Create | Orchestrator                                                    |
-| `src/components/landing/hero/HeroPhotoStack.tsx`    | Create | Photo dissolve + blur + Ken Burns + preload                     |
-| `src/components/landing/hero/HeroSlateFrame.tsx`    | Create | Letterbox bars (md+) / hairline (sm), masthead, progress        |
-| `src/components/landing/hero/HeroCoverTitle.tsx`    | Create | Kicker rule + text, two-line cover title, camera spec           |
-| `src/components/landing/hero/HeroStickyCTA.tsx`     | Create | Mobile sticky bottom bar / desktop inline chips                 |
-| `src/components/landing/hero/hero-motion.css`       | Create | All hero keyframes + variants                                   |
-| `src/app/globals.css`                               | Modify | Remove hero block (lines 80–189)                                |
-| `src/app/(site)/[locale]/page.tsx`                  | Modify | Update import path, remove `cameraSpec` prop                    |
-| `tests/unit/components/landing/hero-scene.test.tsx` | Modify | Drop dot tests, add slate-frame / cover-title / pause tests     |
-| `tests/unit/lib/landing-photos.test.ts`             | Create | Test `getHeroPhotos` filtering + resolution                     |
-| `tests/e2e/landing-hero.spec.ts`                    | Create | Frame snapshots, mobile sticky CTA, reduced motion              |
+| Path                                                | Action | Responsibility                                                 |
+| --------------------------------------------------- | ------ | -------------------------------------------------------------- |
+| `src/lib/landing/photos.ts`                         | Modify | Add `hero` block + resolver for kicker / cameraSpec / location |
+| `src/messages/en.json`, `src/messages/de.json`      | Modify | Add `home.hero.masthead.left` / `.counter` keys                |
+| `src/components/landing/hero-scene.tsx`             | Delete | Replaced by folder                                             |
+| `src/components/landing/hero/index.ts`              | Create | Re-export `HeroScene`                                          |
+| `src/components/landing/hero/HeroScene.tsx`         | Create | Orchestrator                                                   |
+| `src/components/landing/hero/HeroPhotoStack.tsx`    | Create | Photo dissolve + blur + Ken Burns + preload                    |
+| `src/components/landing/hero/HeroSlateFrame.tsx`    | Create | Letterbox bars (md+) / hairline (sm), masthead, progress       |
+| `src/components/landing/hero/HeroCoverTitle.tsx`    | Create | Kicker rule + text, two-line cover title, camera spec          |
+| `src/components/landing/hero/HeroStickyCTA.tsx`     | Create | Mobile sticky bottom bar / desktop inline chips                |
+| `src/components/landing/hero/hero-motion.css`       | Create | All hero keyframes + variants                                  |
+| `src/app/globals.css`                               | Modify | Remove hero block (lines 80–189)                               |
+| `src/app/(site)/[locale]/page.tsx`                  | Modify | Update import path; pass masthead i18n props                   |
+| `tests/unit/components/landing/hero-scene.test.tsx` | Modify | Drop dot tests, add slate-frame / cover-title / pause tests    |
+| `tests/unit/lib/landing/photos.test.ts`             | Modify | Extend existing asset-integrity tests with hero-metadata cases |
+| `tests/e2e/landing-hero.spec.ts`                    | Create | Frame snapshots, mobile sticky CTA, reduced motion             |
 
 ---
 
-## Task 0: Create branch + verify clean baseline
+## Task 0: Baseline verification
 
 **Files:** none (git only)
 
-- [ ] **Step 1: Confirm working tree is on `main` and there are no unrelated unstaged changes that would taint commits.**
+> **Already done by controller before this plan kicked off:** WIP committed at `9dc6157`; branch `feat/hero-elevation` created off `9dc6157`; full unit suite green (39/39).
+
+- [ ] **Step 1: Confirm branch and baseline.**
 
 ```bash
+git branch --show-current
 git status --short
-git rev-parse --abbrev-ref HEAD
+pnpm typecheck && pnpm test --run tests/unit
 ```
 
-Expected: `main` and only pre-existing unstaged work (which we will not touch). If there is staged work, stash it first with `git stash -u`.
-
-- [ ] **Step 2: Cut feature branch.**
-
-```bash
-git checkout -b feat/hero-elevation
-```
-
-- [ ] **Step 3: Verify the spec exists at the expected path.**
-
-```bash
-test -f docs/superpowers/specs/2026-05-19-hero-elevation-design.md && echo OK || echo MISSING
-```
-
-Expected: `OK`.
-
-- [ ] **Step 4: Verify pre-flight checks pass on baseline.**
-
-```bash
-pnpm typecheck
-pnpm test --run tests/unit
-```
-
-Expected: both succeed. If either fails on `main`, stop and surface the failure — don't start work on a broken base.
+Expected: `feat/hero-elevation`, clean tree, typecheck + 39 tests pass. If any of these fail, surface the failure and stop.
 
 ---
 
-## Task 1: Extend `LandingPhoto` with `isHero` + `hero` metadata block
+## Task 1: Extend `LandingPhoto` with `hero` metadata block (kicker / cameraSpec / location)
 
 **Files:**
 
-- Create: `tests/unit/lib/landing-photos.test.ts`
 - Modify: `src/lib/landing/photos.ts`
+- Modify: `tests/unit/lib/landing/photos.test.ts` (extends existing asset-integrity suite)
 
-**Rationale:** The current `getHeroPhotos` returns all 6 photos. The spec calls for 4 hero photos with rich per-photo metadata. We add an `isHero` flag (true for spike/block/serve/dig, false for set/block-alt), a `hero` block with `kicker` / `cameraSpec` / `location` (locale records), and resolve those at fetch time.
+**Rationale:** The catalog already has the 7 hero photos (`cover`, `joust`, `spike`, `set`, `block`, `serve`, `dig`) from commit `9dc6157`. We now add per-photo display metadata so the rotating hero reads as a photo essay: a `kicker` line, a `cameraSpec` line, and a `location` line — each a `Record<Locale, string>`. `getHeroPhotos` continues to return all 7 photos (no filter change) but now resolves the hero strings for the active locale. No `isHero` flag is needed.
 
-- [ ] **Step 1: Write the failing test for the resolver.**
+- [ ] **Step 1: Read the current state of the two files** before any edits, since both already exist.
 
-Create `tests/unit/lib/landing-photos.test.ts`:
+```bash
+sed -n '1,150p' src/lib/landing/photos.ts
+sed -n '1,80p' tests/unit/lib/landing/photos.test.ts
+```
+
+Expected: `photos.ts` matches the catalog in commit `9dc6157` (7 photos, FRAME const, getLandingPhotos / getHeroPhotos / getHighlightPhotos). `photos.test.ts` contains 6 asset-integrity tests already passing.
+
+- [ ] **Step 2: Extend the existing test file with failing tests for the new hero metadata.**
+
+Append the following block at the bottom of `tests/unit/lib/landing/photos.test.ts`, after the closing `});` of the existing `describe`:
 
 ```ts
-import { describe, expect, it } from "vitest";
-import { getHeroPhotos, getHighlightPhotos } from "@/lib/landing/photos";
-
-describe("getHeroPhotos", () => {
-  it("returns only photos flagged isHero", () => {
+describe("landing photos — hero display metadata", () => {
+  it("resolves a per-photo kicker, cameraSpec, and location for every hero photo (en)", () => {
     const photos = getHeroPhotos("en");
-    expect(photos.length).toBe(4);
-    expect(photos.map((p) => p.id).sort()).toEqual(["block", "dig", "serve", "spike"]);
+    expect(photos.length).toBe(7);
+    for (const p of photos) {
+      expect(typeof p.kicker).toBe("string");
+      expect(typeof p.cameraSpec).toBe("string");
+      expect(typeof p.location).toBe("string");
+      expect(p.kicker.length).toBeGreaterThan(0);
+      expect(p.cameraSpec.length).toBeGreaterThan(0);
+      expect(p.location.length).toBeGreaterThan(0);
+    }
   });
 
-  it("resolves per-photo kicker, cameraSpec, and location for the current locale", () => {
-    const [first] = getHeroPhotos("en");
-    expect(first).toBeDefined();
-    expect(typeof first!.kicker).toBe("string");
-    expect(typeof first!.cameraSpec).toBe("string");
-    expect(typeof first!.location).toBe("string");
-    expect(first!.kicker.length).toBeGreaterThan(0);
-    expect(first!.cameraSpec.length).toBeGreaterThan(0);
-    expect(first!.location.length).toBeGreaterThan(0);
-  });
-
-  it("returns localized German strings when locale is 'de'", () => {
+  it("returns localized German kicker strings when locale is 'de'", () => {
     const en = getHeroPhotos("en");
     const de = getHeroPhotos("de");
     expect(en.length).toBe(de.length);
-    const enSpike = en.find((p) => p.id === "spike");
-    const deSpike = de.find((p) => p.id === "spike");
-    expect(enSpike!.kicker).not.toBe(deSpike!.kicker);
+    const enCover = en.find((p) => p.id === "cover");
+    const deCover = de.find((p) => p.id === "cover");
+    expect(enCover!.kicker).not.toBe(deCover!.kicker);
   });
-});
 
-describe("getHighlightPhotos", () => {
-  it("still returns all 6 photos (highlights unaffected by isHero flag)", () => {
-    const photos = getHighlightPhotos("en");
-    expect(photos.length).toBe(6);
+  it("leads the rotation with cover (photo-of-the-year frame)", () => {
+    const photos = getHeroPhotos("en");
+    expect(photos[0]?.id).toBe("cover");
   });
 });
 ```
 
-- [ ] **Step 2: Run the test and verify it fails.**
+- [ ] **Step 3: Run the new tests and verify they fail.**
 
 ```bash
-pnpm test --run tests/unit/lib/landing-photos.test.ts
+pnpm test --run tests/unit/lib/landing/photos.test.ts -t "hero display metadata"
 ```
 
-Expected: FAIL — `getHeroPhotos` currently returns 6 photos, and `kicker`/`cameraSpec`/`location` are not on the resolved type.
+Expected: FAIL — `kicker`/`cameraSpec`/`location` are not yet on the resolved photo type.
 
-- [ ] **Step 3: Update `src/lib/landing/photos.ts`.**
-
-Replace the entire file content with:
+- [ ] **Step 4: Update `src/lib/landing/photos.ts`** to add the hero metadata. Replace the entire file with the content below (preserves the existing 7-photo catalog and `HERO_IMAGE_FILES`, adds the new `LandingPhotoHeroMeta` type, `hero` field on `LandingPhoto`, `resolveHeroStrings` helper, and new fields on `ResolvedLandingPhoto`).
 
 ```ts
 import type { Locale } from "@/lib/i18n/config";
 
+/** Every custom hero JPEG under /public/images/landing — audit checklist. */
+export const HERO_IMAGE_FILES = [
+  "hero-cover.jpg",
+  "hero-joust.jpg",
+  "hero-spike.jpg",
+  "hero-set.jpg",
+  "hero-block.jpg",
+  "hero-serve.jpg",
+  "hero-dig.jpg",
+] as const;
+
 /** Custom-generated landing frames under /images/landing. */
-export type LandingPhotoRole = "spike" | "set" | "block" | "serve" | "dig" | "block-alt";
+export type LandingPhotoRole = "cover" | "joust" | "spike" | "set" | "block" | "serve" | "dig";
 
 export type LandingPhotoHeroMeta = {
   kicker: Record<Locale, string>;
@@ -163,9 +154,7 @@ export type LandingPhoto = {
   objectPosition: string;
   alt: Record<Locale, string>;
   isHighlight: boolean;
-  /** Rotates in the landing hero. Must carry `hero` metadata when true. */
-  isHero: boolean;
-  /** Per-photo hero metadata. Required when `isHero === true`. */
+  /** Per-photo hero metadata. Present for every hero-rotation photo. */
   hero?: LandingPhotoHeroMeta;
 };
 
@@ -173,10 +162,61 @@ export type LandingPhoto = {
 const FRAME = { width: 1536, height: 1024 } as const;
 
 /**
- * Narrative hero order: spike → block → serve → dig (the four flagged isHero).
- * `set` and `block-alt` remain in the work-mosaic highlights only.
+ * Narrative hero order — each frame a distinct peak moment.
+ * All 7 rotate in the landing hero crossfade and feed the work mosaic.
+ * `cover` leads as the photo-of-the-year lead.
  */
 export const LANDING_PHOTOS: LandingPhoto[] = [
+  {
+    id: "cover",
+    src: "/images/landing/hero-cover.jpg",
+    ...FRAME,
+    objectPosition: "58% 40%",
+    alt: {
+      de: "Angriff im absoluten Peak — goldenes Randlicht, Cover-Moment des Jahres",
+      en: "Attack at absolute peak — golden rim light, photo-of-the-year cover moment",
+    },
+    isHighlight: true,
+    hero: {
+      kicker: {
+        en: "Cover frame · golden rim light",
+        de: "Cover-Frame · goldenes Randlicht",
+      },
+      cameraSpec: {
+        en: "Canon R5 · 70–200 f/2.8 · 1/2000 s",
+        de: "Canon R5 · 70–200 f/2.8 · 1/2000 s",
+      },
+      location: {
+        en: "Bremen, 2026",
+        de: "Bremen, 2026",
+      },
+    },
+  },
+  {
+    id: "joust",
+    src: "/images/landing/hero-joust.jpg",
+    ...FRAME,
+    objectPosition: "52% 42%",
+    alt: {
+      de: "Netz-Duell — Angriff trifft Block in der Luft, Ball im letzten Millimeter",
+      en: "Net joust — spike meets block mid-air, ball frozen between their hands",
+    },
+    isHighlight: true,
+    hero: {
+      kicker: {
+        en: "Net joust · ball between the hands",
+        de: "Netz-Duell · Ball zwischen den Händen",
+      },
+      cameraSpec: {
+        en: "Canon R5 · 70–200 f/2.8 · 1/1800 s",
+        de: "Canon R5 · 70–200 f/2.8 · 1/1800 s",
+      },
+      location: {
+        en: "Hamburg, 2026",
+        de: "Hamburg, 2026",
+      },
+    },
+  },
   {
     id: "spike",
     src: "/images/landing/hero-spike.jpg",
@@ -187,7 +227,6 @@ export const LANDING_PHOTOS: LandingPhoto[] = [
       en: "Outside hitter spiking at the net — frozen peak moment, sidelight from the arena",
     },
     isHighlight: true,
-    isHero: true,
     hero: {
       kicker: {
         en: "Outside hitter · peak moment",
@@ -213,7 +252,20 @@ export const LANDING_PHOTOS: LandingPhoto[] = [
       en: "Setter at full extension — ball on fingertips, magazine-cover moment",
     },
     isHighlight: true,
-    isHero: false,
+    hero: {
+      kicker: {
+        en: "Setter · ball on the fingertips",
+        de: "Zuspielerin · Ball an den Fingerspitzen",
+      },
+      cameraSpec: {
+        en: "Canon R5 · 24–70 f/2.8 · 1/1600 s",
+        de: "Canon R5 · 24–70 f/2.8 · 1/1600 s",
+      },
+      location: {
+        en: "Schwerin, 2026",
+        de: "Schwerin, 2026",
+      },
+    },
   },
   {
     id: "block",
@@ -225,7 +277,6 @@ export const LANDING_PHOTOS: LandingPhoto[] = [
       en: "Double block at the net — low angle, cool overhead arena light",
     },
     isHighlight: true,
-    isHero: true,
     hero: {
       kicker: {
         en: "Double block · low angle",
@@ -251,7 +302,6 @@ export const LANDING_PHOTOS: LandingPhoto[] = [
       en: "Jump serve — full extension, long shadow across the court floor",
     },
     isHighlight: true,
-    isHero: true,
     hero: {
       kicker: {
         en: "Jump serve · full extension",
@@ -277,7 +327,6 @@ export const LANDING_PHOTOS: LandingPhoto[] = [
       en: "Floor dig — courtside worm's-eye view, ball inches from the wood",
     },
     isHighlight: true,
-    isHero: true,
     hero: {
       kicker: {
         en: "Floor dig · worm's-eye",
@@ -293,23 +342,10 @@ export const LANDING_PHOTOS: LandingPhoto[] = [
       },
     },
   },
-  {
-    id: "block-alt",
-    src: "/images/landing/hero-block-alt.jpg",
-    ...FRAME,
-    objectPosition: "50% 38%",
-    alt: {
-      de: "Doppelblock frontal — symmetrische Action am Netz, Ball über den Händen",
-      en: "Front double block — symmetrical action at the net, ball above outstretched hands",
-    },
-    isHighlight: true,
-    isHero: false,
-  },
 ];
 
 export type ResolvedLandingPhoto = Omit<LandingPhoto, "alt" | "hero"> & {
   alt: string;
-  /** Empty string when the photo is not hero-flagged. */
   kicker: string;
   cameraSpec: string;
   location: string;
@@ -319,12 +355,7 @@ function resolveHeroStrings(
   photo: LandingPhoto,
   locale: Locale,
 ): Pick<ResolvedLandingPhoto, "kicker" | "cameraSpec" | "location"> {
-  if (!photo.hero) {
-    if (photo.isHero && process.env.NODE_ENV !== "production") {
-      throw new Error(`landing: photo '${photo.id}' is isHero but missing hero metadata`);
-    }
-    return { kicker: "", cameraSpec: "", location: "" };
-  }
+  if (!photo.hero) return { kicker: "", cameraSpec: "", location: "" };
   return {
     kicker: photo.hero.kicker[locale] ?? photo.hero.kicker.de,
     cameraSpec: photo.hero.cameraSpec[locale] ?? photo.hero.cameraSpec.de,
@@ -341,7 +372,7 @@ export function getLandingPhotos(locale: Locale): ResolvedLandingPhoto[] {
 }
 
 export function getHeroPhotos(locale: Locale): ResolvedLandingPhoto[] {
-  return getLandingPhotos(locale).filter((p) => p.isHero);
+  return getLandingPhotos(locale);
 }
 
 export function getHighlightPhotos(locale: Locale): ResolvedLandingPhoto[] {
@@ -363,63 +394,34 @@ export function getAboutFallbackPhoto(locale: Locale): ResolvedLandingPhoto {
 }
 ```
 
-- [ ] **Step 4: Run the test and verify it passes.**
+- [ ] **Step 5: Run the extended tests and verify they pass.**
 
 ```bash
-pnpm test --run tests/unit/lib/landing-photos.test.ts
+pnpm test --run tests/unit/lib/landing/photos.test.ts
 ```
 
-Expected: PASS (4 tests).
+Expected: all 9 tests PASS (6 existing + 3 new).
 
-- [ ] **Step 5: Run typecheck.**
-
-```bash
-pnpm typecheck
-```
-
-Expected: PASS. (The existing `hero-scene.test.tsx` factory will fail because `isHero` is now required — that's fixed in Task 3.)
-
-- [ ] **Step 6: Update the existing hero-scene test factory to satisfy the new required field.**
-
-In `tests/unit/components/landing/hero-scene.test.tsx`, replace the `makePhoto` function with:
-
-```ts
-function makePhoto(id: string, alt: string): ResolvedLandingPhoto {
-  return {
-    id: id as ResolvedLandingPhoto["id"],
-    src: `/images/landing/${id}.jpg`,
-    width: 1588,
-    height: 1131,
-    objectPosition: "50% 50%",
-    alt,
-    isHighlight: true,
-    isHero: true,
-    kicker: `${id} kicker`,
-    cameraSpec: `${id} spec`,
-    location: `${id} location`,
-  };
-}
-```
-
-- [ ] **Step 7: Run all unit tests + typecheck.**
+- [ ] **Step 6: Run all unit tests + typecheck.**
 
 ```bash
 pnpm typecheck && pnpm test --run tests/unit
 ```
 
-Expected: all PASS.
+Expected: all PASS. The existing `hero-scene.test.tsx` calls `getHeroPhotos("en")` and receives 7 photos with the new resolved fields — its existing assertions are not affected by the addition of new fields.
 
-- [ ] **Step 8: Commit.**
+- [ ] **Step 7: Commit.**
 
 ```bash
-git add src/lib/landing/photos.ts tests/unit/lib/landing-photos.test.ts tests/unit/components/landing/hero-scene.test.tsx
+git add src/lib/landing/photos.ts tests/unit/lib/landing/photos.test.ts
 git commit -m "$(cat <<'EOF'
-feat(landing): add isHero flag + per-photo hero metadata
+feat(landing): per-photo hero metadata (kicker / cameraSpec / location)
 
-Extends LandingPhoto with isHero + hero block (kicker, cameraSpec,
-location — locale records). getHeroPhotos now filters on isHero and
-returns 4 photos (spike, block, serve, dig) with resolved strings.
-Highlights unaffected.
+Adds a hero block on LandingPhoto (locale records for kicker, camera
+spec, location). getHeroPhotos enriches each of the 7 frames with
+locale-resolved display strings — the rotating hero now reads as a
+photo essay, not a slideshow. Extends asset-integrity tests with
+metadata coverage; cover-first ordering preserved.
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -958,7 +960,7 @@ Add to `tests/unit/components/landing/hero-scene.test.tsx`:
       baseProps.mastheadLeft,
     );
     expect(container.querySelector('[data-test="hero-masthead-counter"]')?.textContent).toBe(
-      "Reel · 01 ⁄ 04",
+      "Reel · 01 ⁄ 07",
     );
   });
 
@@ -1215,12 +1217,13 @@ Note: `next-intl` will leave `{current}` and `{total}` as literal text in the re
 
 - [ ] **Step 7: Delete the dot-indicator tests from `tests/unit/components/landing/hero-scene.test.tsx`.**
 
-Remove these three tests entirely:
+Remove these four tests entirely (the fourth is the one the WIP commit added):
 
 ```ts
 it("renders one dot indicator per photo when there are 2+ photos", ...);
 it("does not render dot indicators with a single photo", ...);
 it("jumping to a dot updates the active index", ...);
+it("cycles through all photo ids via dot navigation", ...);
 ```
 
 - [ ] **Step 8: Run tests + typecheck.**
@@ -2103,9 +2106,9 @@ Visit `/` and `/de`. Confirm in a browser:
 
 - Reveal completes in roughly 2.5s with: red rule, kicker, title line 1, title line 2, camera spec, CTA chips arriving in order.
 - Photo rotation visibly pulls focus (blur → sharp) every 6.5s.
-- Kicker line text changes per photo (e.g. `Outside hitter · peak moment — Bremen, 2026` → `Double block · low angle — Hamburg, 2026`).
+- Kicker line text changes per photo (e.g. `Cover frame · golden rim light — Bremen, 2026` → `Net joust · ball between the hands — Hamburg, 2026`).
 - Cover title `belin / akguel.` stays put through rotations; the `.` is red.
-- Masthead counter increments `Reel · 01 ⁄ 04` → `02 ⁄ 04` → ...
+- Masthead counter increments `Reel · 01 ⁄ 07` → `02 ⁄ 07` → ... → `07 ⁄ 07` → `01 ⁄ 07`.
 - Hairline progress strip sits on the top edge of the bottom letterbox bar.
 - Mobile (DevTools 390×844): no bars, sticky CTA bar with gradient, progress strip sits just above it.
 - Tab-switch away from the page for 30s, come back: counter has not advanced.
