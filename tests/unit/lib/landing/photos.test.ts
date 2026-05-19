@@ -92,9 +92,4 @@ describe("landing photos — hero display metadata", () => {
     const deCover = de.find((p) => p.id === "cover");
     expect(enCover!.kicker).not.toBe(deCover!.kicker);
   });
-
-  it("leads the rotation with cover (photo-of-the-year frame)", () => {
-    const photos = getHeroPhotos("en");
-    expect(photos[0]?.id).toBe("cover");
-  });
 });

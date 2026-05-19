@@ -31,7 +31,7 @@ export type LandingPhoto = {
   alt: Record<Locale, string>;
   isHighlight: boolean;
   /** Per-photo hero metadata. Present for every hero-rotation photo. */
-  hero?: LandingPhotoHeroMeta;
+  hero: LandingPhotoHeroMeta;
 };
 
 /** Shared output dimensions — 3:2, generated at 1536×1024 then JPEG-compressed. */
@@ -227,15 +227,19 @@ export type ResolvedLandingPhoto = Omit<LandingPhoto, "alt" | "hero"> & {
   location: string;
 };
 
+/** German-primary fallback: every record carries `de`, others may be missing. */
+function pick<T>(rec: Record<Locale, T>, locale: Locale): T {
+  return rec[locale] ?? rec.de;
+}
+
 function resolveHeroStrings(
   photo: LandingPhoto,
   locale: Locale,
 ): Pick<ResolvedLandingPhoto, "kicker" | "cameraSpec" | "location"> {
-  if (!photo.hero) return { kicker: "", cameraSpec: "", location: "" };
   return {
-    kicker: photo.hero.kicker[locale] ?? photo.hero.kicker.de,
-    cameraSpec: photo.hero.cameraSpec[locale] ?? photo.hero.cameraSpec.de,
-    location: photo.hero.location[locale] ?? photo.hero.location.de,
+    kicker: pick(photo.hero.kicker, locale),
+    cameraSpec: pick(photo.hero.cameraSpec, locale),
+    location: pick(photo.hero.location, locale),
   };
 }
 
@@ -244,7 +248,7 @@ export function getLandingPhotos(locale: Locale): ResolvedLandingPhoto[] {
     const { alt, hero: _hero, ...rest } = photo;
     return {
       ...rest,
-      alt: alt[locale] ?? alt.de,
+      alt: pick(alt, locale),
       ...resolveHeroStrings(photo, locale),
     };
   });
