@@ -17,7 +17,7 @@ function diskPath(src: string): string {
 }
 
 describe("landing photos — hero asset integrity", () => {
-  it("registers exactly the 7 generated hero JPEGs", () => {
+  it("registers exactly the 8 generated hero JPEGs", () => {
     expect(LANDING_PHOTOS).toHaveLength(HERO_IMAGE_FILES.length);
     expect(getHeroPhotos("en")).toHaveLength(HERO_IMAGE_FILES.length);
   });
@@ -73,7 +73,7 @@ describe("landing photos — hero asset integrity", () => {
 describe("landing photos — hero display metadata", () => {
   it("resolves a per-photo kicker, cameraSpec, and location for every hero photo (en)", () => {
     const photos = getHeroPhotos("en");
-    expect(photos.length).toBe(7);
+    expect(photos.length).toBe(8);
     for (const p of photos) {
       expect(typeof p.kicker).toBe("string");
       expect(typeof p.cameraSpec).toBe("string");

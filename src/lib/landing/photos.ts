@@ -9,10 +9,19 @@ export const HERO_IMAGE_FILES = [
   "hero-block.jpg",
   "hero-serve.jpg",
   "hero-dig.jpg",
+  "hero-audience.jpg",
 ] as const;
 
 /** Custom-generated landing frames under /images/landing. */
-export type LandingPhotoRole = "cover" | "joust" | "spike" | "set" | "block" | "serve" | "dig";
+export type LandingPhotoRole =
+  | "cover"
+  | "joust"
+  | "spike"
+  | "set"
+  | "block"
+  | "serve"
+  | "dig"
+  | "audience";
 
 export type LandingPhotoHeroMeta = {
   kicker: Record<Locale, string>;
@@ -39,7 +48,7 @@ const FRAME = { width: 1536, height: 1024 } as const;
 
 /**
  * Narrative hero order — each frame a distinct peak moment.
- * All 7 rotate in the landing hero crossfade and feed the work mosaic.
+ * All 8 rotate in the landing hero crossfade and feed the work mosaic.
  * `cover` leads as the photo-of-the-year lead.
  */
 export const LANDING_PHOTOS: LandingPhoto[] = [
@@ -215,6 +224,31 @@ export const LANDING_PHOTOS: LandingPhoto[] = [
       location: {
         en: "Bremen, 2026",
         de: "Bremen, 2026",
+      },
+    },
+  },
+  {
+    id: "audience",
+    src: "/images/landing/hero-audience.jpg",
+    ...FRAME,
+    objectPosition: "55% 45%",
+    alt: {
+      de: "Zuschauer in der Halle — angespannte Erwartung, blaues Hallenlicht",
+      en: "Arena crowd — tense anticipation under cool blue stadium light",
+    },
+    isHighlight: true,
+    hero: {
+      kicker: {
+        en: "Crowd · edge of their seats",
+        de: "Publikum · gespannte Erwartung",
+      },
+      cameraSpec: {
+        en: "Canon R5 · 85 f/1.4 · 1/500 s",
+        de: "Canon R5 · 85 f/1.4 · 1/500 s",
+      },
+      location: {
+        en: "Stuttgart, 2026",
+        de: "Stuttgart, 2026",
       },
     },
   },

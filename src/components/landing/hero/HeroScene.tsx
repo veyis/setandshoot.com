@@ -52,6 +52,7 @@ export function HeroScene({
   const sectionRef = useRef<HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [inView, setInView] = useState(true);
+  const [firstLoad, setFirstLoad] = useState(true);
   usePinnedScene({ pin: sectionRef, end: "+=100%" });
 
   const activePhoto = photos[activeIndex];
@@ -85,13 +86,21 @@ export function HeroScene({
     return () => window.clearInterval(id);
   }, [hasMultiple, reducedMotion, inView, photos.length, intervalMs]);
 
+  useEffect(() => {
+    const t = window.setTimeout(() => setFirstLoad(false), 2500);
+    return () => window.clearTimeout(t);
+  }, []);
+
   return (
     <section
       ref={sectionRef}
       className="hero-scene bg-canvas relative flex w-full items-end overflow-hidden"
+      role="region"
+      aria-label="Belin Akguel — sports photography hero"
       style={{ minHeight: "80vh", height: "100dvh" }}
       data-reduced-motion={reducedMotion ? "true" : "false"}
       data-active-index={activeIndex}
+      data-first-load={firstLoad ? "true" : "false"}
     >
       <HeroPhotoStack photos={photos} activeIndex={activeIndex} />
 
