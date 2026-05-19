@@ -173,4 +173,12 @@ describe("HeroScene", () => {
     const { container } = render(<HeroScene {...baseProps} photos={photos} />);
     expect(container.querySelector('[data-test="hero-cta-bar"]')).toBeInTheDocument();
   });
+
+  it("listens for document visibilitychange to pause rotation", () => {
+    const addSpy = vi.spyOn(document, "addEventListener");
+    render(<HeroScene {...baseProps} photos={photos} />);
+    const calls = addSpy.mock.calls.map((c) => c[0]);
+    expect(calls).toContain("visibilitychange");
+    addSpy.mockRestore();
+  });
 });

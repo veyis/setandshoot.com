@@ -52,6 +52,9 @@ export function HeroScene({
   const sectionRef = useRef<HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [inView, setInView] = useState(true);
+  const [tabVisible, setTabVisible] = useState(
+    typeof document === "undefined" ? true : document.visibilityState !== "hidden",
+  );
   const [firstLoad, setFirstLoad] = useState(true);
   usePinnedScene({ pin: sectionRef, end: "+=100%" });
 
@@ -77,14 +80,22 @@ export function HeroScene({
     return () => observer.disconnect();
   }, []);
 
+  // Pause rotation when the browser tab is hidden (visibilitychange).
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const onVis = () => setTabVisible(document.visibilityState !== "hidden");
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
   // Crossfade rotation.
   useEffect(() => {
-    if (!hasMultiple || reducedMotion || !inView) return;
+    if (!hasMultiple || reducedMotion || !inView || !tabVisible) return;
     const id = window.setInterval(() => {
       setActiveIndex((i) => (i + 1) % photos.length);
     }, intervalMs);
     return () => window.clearInterval(id);
-  }, [hasMultiple, reducedMotion, inView, photos.length, intervalMs]);
+  }, [hasMultiple, reducedMotion, inView, tabVisible, photos.length, intervalMs]);
 
   useEffect(() => {
     const t = window.setTimeout(() => setFirstLoad(false), 2500);
