@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { HeaderShell } from "./header-shell";
 import { LocaleSwitcher } from "./locale-switcher";
 
 type NavItem = {
@@ -22,9 +23,12 @@ export async function Header() {
   ];
 
   return (
-    <header className="border-hairline bg-canvas/90 sticky top-0 z-40 flex items-center justify-between border-b px-6 py-4 backdrop-blur">
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      <Link href={"/" as any} className="font-display text-base tracking-tight">
+    <HeaderShell>
+      <Link
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        href={"/" as any}
+        className="font-display text-base tracking-tight"
+      >
         belin akguel
       </Link>
       <nav className="hidden gap-6 text-sm lg:flex">
@@ -39,6 +43,6 @@ export async function Header() {
         ))}
       </nav>
       <LocaleSwitcher />
-    </header>
+    </HeaderShell>
   );
 }
