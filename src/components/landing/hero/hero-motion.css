@@ -1,47 +1,48 @@
-/* ------- Hero rotation: crossfade + per-variant Ken Burns ------- */
+/* ------- Hero rotation: Dissolve + Depth + per-variant Ken Burns ------- */
 
 .hero-scene .hero-photo {
   opacity: 0;
+  filter: blur(8px);
+  transform: scale(1.1);
   transition:
-    opacity 1200ms cubic-bezier(0.4, 0, 0.2, 1),
-    transform 8500ms cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: opacity, transform;
+    opacity 1800ms cubic-bezier(0.6, 0.05, 0.4, 1),
+    filter 1800ms cubic-bezier(0.6, 0.05, 0.4, 1),
+    transform 11000ms cubic-bezier(0.5, 0, 0.2, 1);
+  will-change: opacity, filter, transform;
 }
 .hero-scene .hero-photo[data-active="true"] {
   opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
 }
 
-.hero-scene .hero-photo[data-variant="1"] {
-  transform: scale(1.06) translate(0.4%, -0.4%);
+/* Per-photo Ken Burns offsets layered on top of the active-state base scale */
+.hero-scene .hero-photo[data-variant="1"][data-active="true"] {
+  transform: scale(1) translate(0.4%, -0.4%);
   transform-origin: 30% 70%;
 }
-.hero-scene .hero-photo[data-variant="1"][data-active="true"] {
-  transform: scale(1) translate(0, 0);
-}
-.hero-scene .hero-photo[data-variant="2"] {
-  transform: scale(1.06) translate(-0.4%, 0.4%);
+.hero-scene .hero-photo[data-variant="2"][data-active="true"] {
+  transform: scale(1) translate(-0.4%, 0.4%);
   transform-origin: 70% 30%;
 }
-.hero-scene .hero-photo[data-variant="2"][data-active="true"] {
-  transform: scale(1) translate(0, 0);
-}
-.hero-scene .hero-photo[data-variant="3"] {
-  transform: scale(1.06) translate(0.5%, 0.3%);
+.hero-scene .hero-photo[data-variant="3"][data-active="true"] {
+  transform: scale(1) translate(0.5%, 0.3%);
   transform-origin: 50% 50%;
 }
-.hero-scene .hero-photo[data-variant="3"][data-active="true"] {
-  transform: scale(1) translate(0, 0);
-}
-.hero-scene .hero-photo[data-variant="4"] {
-  transform: scale(1.06) translate(-0.3%, -0.3%);
+.hero-scene .hero-photo[data-variant="4"][data-active="true"] {
+  transform: scale(1) translate(-0.3%, -0.3%);
   transform-origin: 20% 30%;
 }
-.hero-scene .hero-photo[data-variant="4"][data-active="true"] {
-  transform: scale(1) translate(0, 0);
+
+@media (max-width: 767px) {
+  .hero-scene .hero-photo {
+    filter: blur(4px);
+  }
 }
 
 .hero-scene[data-reduced-motion="true"] .hero-photo {
-  transform: none;
+  filter: none !important;
+  transform: none !important;
   transition: opacity 200ms linear;
 }
 .hero-scene[data-reduced-motion="true"] .hero-photo[data-active="false"] {

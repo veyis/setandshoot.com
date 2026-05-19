@@ -120,4 +120,22 @@ describe("HeroScene", () => {
     expect(screen.queryAllByRole("img").length).toBe(0);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("belin akguel");
   });
+
+  it("marks the active photo via data-active='true' and others 'false'", () => {
+    const { container } = render(<HeroScene {...baseProps} photos={photos} />);
+    const stack = container.querySelectorAll(".hero-photo");
+    expect(stack.length).toBe(photos.length);
+    expect(stack[0]!.getAttribute("data-active")).toBe("true");
+    for (let i = 1; i < stack.length; i++) {
+      expect(stack[i]!.getAttribute("data-active")).toBe("false");
+    }
+  });
+
+  it("emits a data-variant in 1..4 cycling across photos for Ken Burns trajectory", () => {
+    const { container } = render(<HeroScene {...baseProps} photos={photos} />);
+    const stack = container.querySelectorAll(".hero-photo");
+    for (let i = 0; i < stack.length; i++) {
+      expect(stack[i]!.getAttribute("data-variant")).toBe(String((i % 4) + 1));
+    }
+  });
 });

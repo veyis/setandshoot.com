@@ -4,11 +4,11 @@ import "./hero-motion.css";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { LandingImage } from "@/components/landing/landing-image";
 import { ScrollCue } from "@/components/landing/scroll-cue";
 import { usePinnedScene } from "@/components/motion/use-pinned-scene";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import type { ResolvedLandingPhoto } from "@/lib/landing/photos";
+import { HeroPhotoStack } from "./HeroPhotoStack";
 
 type Props = {
   photos: ResolvedLandingPhoto[];
@@ -83,27 +83,7 @@ export function HeroScene({
       data-reduced-motion={reducedMotion ? "true" : "false"}
       data-active-index={activeIndex}
     >
-      {photos.length > 0 && (
-        <div className="hero-photo-stack absolute inset-0">
-          {photos.map((photo, index) => (
-            <div
-              key={photo.id}
-              className="hero-photo absolute inset-0"
-              data-photo-id={photo.id}
-              data-active={index === activeIndex ? "true" : "false"}
-              data-variant={(index % 4) + 1}
-              aria-hidden={index !== activeIndex}
-            >
-              <LandingImage
-                photo={photo}
-                sizes="100vw"
-                priority={index === 0}
-                className="size-full object-cover"
-              />
-            </div>
-          ))}
-        </div>
-      )}
+      <HeroPhotoStack photos={photos} activeIndex={activeIndex} />
 
       {/* Bottom scrim for text legibility */}
       <div
