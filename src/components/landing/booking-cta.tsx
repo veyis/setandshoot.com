@@ -14,9 +14,7 @@ export async function BookingCTA() {
         <h2 className="font-display text-[clamp(2.5rem,7vw,6rem)] leading-[0.95] whitespace-pre-line">
           {t("title").replace(" / ", "\n")}
         </h2>
-        <p className="text-ink max-w-[42ch] font-sans text-base leading-relaxed">
-          {t("body")}
-        </p>
+        <p className="text-ink max-w-[42ch] font-sans text-base leading-relaxed">{t("body")}</p>
         <p className="text-ink-faint font-mono text-[10px] tracking-[0.15em] uppercase">
           {t("detail")}
         </p>

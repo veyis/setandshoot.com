@@ -13,4 +13,8 @@ test-results
 *.tsbuildinfo
 public/media/*
 !public/media/seeds/
+# Reference / scratch image dumps — only landing assets ship to prod.
+public/images/*
+!public/images/landing/
+public/videos/*
 .claude

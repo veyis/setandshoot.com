@@ -32,40 +32,42 @@ export async function WorkMosaicScene({ photos }: Props) {
       </Reveal>
 
       {useAsymmetric && hero && two && three && wide ? (
-        <div className="grid grid-cols-2 gap-3 lg:auto-rows-[minmax(280px,40vh)] lg:grid-cols-12 lg:gap-4">
-          <Reveal className="col-span-2 lg:col-span-8 lg:row-span-2">
-            <figure className="bg-elevated relative size-full overflow-hidden">
-              <LandingImage
-                photo={hero}
-                sizes="(min-width: 1024px) 66vw, 100vw"
-                className="size-full object-cover"
-              />
-            </figure>
-          </Reveal>
-          <Reveal className="col-span-1 lg:col-span-4">
-            <figure className="bg-elevated relative size-full overflow-hidden">
-              <LandingImage
-                photo={two}
-                sizes="(min-width: 1024px) 33vw, 50vw"
-                className="size-full object-cover"
-              />
-            </figure>
-          </Reveal>
-          <Reveal className="col-span-1 lg:col-span-4">
-            <figure className="bg-elevated relative size-full overflow-hidden">
-              <LandingImage
-                photo={three}
-                sizes="(min-width: 1024px) 33vw, 50vw"
-                className="size-full object-cover"
-              />
-            </figure>
-          </Reveal>
-          <Reveal className="col-span-2 lg:col-span-12">
-            <figure className="bg-elevated relative aspect-[16/7] w-full overflow-hidden">
-              <LandingImage photo={wide} sizes="100vw" className="size-full object-cover" />
-            </figure>
-          </Reveal>
-        </div>
+        <>
+          <div className="grid grid-cols-2 gap-3 lg:auto-rows-[minmax(280px,40vh)] lg:grid-cols-12 lg:gap-4">
+            <Reveal className="col-span-2 lg:col-span-8 lg:row-span-2">
+              <figure className="bg-elevated relative size-full overflow-hidden">
+                <LandingImage
+                  photo={hero}
+                  sizes="(min-width: 1024px) 66vw, 100vw"
+                  className="size-full object-cover"
+                />
+              </figure>
+            </Reveal>
+            <Reveal className="col-span-1 lg:col-span-4">
+              <figure className="bg-elevated relative size-full overflow-hidden">
+                <LandingImage
+                  photo={two}
+                  sizes="(min-width: 1024px) 33vw, 50vw"
+                  className="size-full object-cover"
+                />
+              </figure>
+            </Reveal>
+            <Reveal className="col-span-1 lg:col-span-4">
+              <figure className="bg-elevated relative size-full overflow-hidden">
+                <LandingImage
+                  photo={three}
+                  sizes="(min-width: 1024px) 33vw, 50vw"
+                  className="size-full object-cover"
+                />
+              </figure>
+            </Reveal>
+            <Reveal className="col-span-2 lg:col-span-12">
+              <figure className="bg-elevated relative aspect-[16/7] w-full overflow-hidden">
+                <LandingImage photo={wide} sizes="100vw" className="size-full object-cover" />
+              </figure>
+            </Reveal>
+          </div>
+        </>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {photos.map((p) => (

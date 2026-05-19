@@ -2,11 +2,32 @@ import createIntlMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "@/lib/i18n/routing";
 import { auth } from "@/lib/auth/server";
+import { isAdminEmail } from "@/lib/auth/admin-emails";
+import { promoteNeonAdminByEmail } from "@/lib/auth/promote-neon-admin";
 
 const handleI18nRouting = createIntlMiddleware(routing);
 
+/** Neon Auth / better-auth-ui default paths → our locale routes (no /auth prefix). */
+const AUTH_PAGE_REDIRECTS: Record<string, string> = {
+  "/auth/sign-in": "/sign-in",
+  "/auth/sign-up": "/sign-up",
+  "/auth/forgot-password": "/forgot-password",
+  "/auth/reset-password": "/reset-password",
+  "/auth/magic-link": "/sign-in",
+  "/auth/email-otp": "/sign-in",
+};
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Neon Auth defaults to /auth/*; our UI lives at /sign-in and /sign-up.
+  // Must run before intl — otherwise /auth/sign-up becomes /de/auth/sign-up (404).
+  const authPageRedirect = AUTH_PAGE_REDIRECTS[pathname];
+  if (authPageRedirect) {
+    const url = request.nextUrl.clone();
+    url.pathname = authPageRedirect;
+    return NextResponse.redirect(url);
+  }
 
   // /api/* (other than /api/auth, which the matcher already excludes) must
   // bypass intl rewriting — locale prefixes would turn /api/health into
@@ -15,21 +36,30 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next({ request });
   }
 
-  // Gate /admin: must be signed in AND have admin role. Payload still owns
-  // editor auth after this gate.
+  // Gate /admin: Neon Auth is the only login. Payload admin trusts the same session
+  // via the `neon` custom auth strategy (no separate CMS password).
   if (pathname.startsWith("/admin")) {
-    const { data: session } = await auth.getSession();
+    let { data: session } = await auth.getSession();
     if (!session?.user) {
       const url = request.nextUrl.clone();
       url.pathname = "/sign-in";
       url.searchParams.set("next", pathname);
       return NextResponse.redirect(url);
     }
-    if (session.user.role !== "admin") {
+
+    if (session.user.role !== "admin" && isAdminEmail(session.user.email)) {
+      await promoteNeonAdminByEmail(session.user.email);
+      ({ data: session } = await auth.getSession());
+    }
+
+    if (session?.user?.role !== "admin") {
       const url = request.nextUrl.clone();
-      url.pathname = "/";
+      url.pathname = "/sign-in";
+      url.searchParams.set("next", pathname);
+      url.searchParams.set("error", "admin_required");
       return NextResponse.redirect(url);
     }
+
     return NextResponse.next({ request });
   }
 

@@ -18,5 +18,15 @@ export const config: VercelConfig = {
       destination: "/admin",
       permanent: true,
     },
+    {
+      source: "/auth/sign-in",
+      destination: "/sign-in",
+      permanent: false,
+    },
+    {
+      source: "/auth/sign-up",
+      destination: "/sign-up",
+      permanent: false,
+    },
   ],
 };

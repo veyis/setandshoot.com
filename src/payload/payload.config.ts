@@ -1,4 +1,5 @@
 import { buildConfig } from "payload";
+import { resendAdapter } from "@payloadcms/email-resend";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import sharp from "sharp";
@@ -23,6 +24,13 @@ export default buildConfig({
   admin: {
     user: Users.slug,
   },
+  email: process.env.RESEND_API_KEY
+    ? resendAdapter({
+        apiKey: process.env.RESEND_API_KEY,
+        defaultFromAddress: process.env.EMAIL_FROM_ADDRESS ?? "noreply@setandshoot.com",
+        defaultFromName: process.env.EMAIL_FROM_NAME ?? "Set and Shoot",
+      })
+    : undefined,
   collections: [Users, Stories, Photos, Teams, Competitions, Tags, Bookings],
   globals: [Impressum, Datenschutz, Settings],
   editor: lexicalEditor({}),

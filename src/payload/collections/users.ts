@@ -1,9 +1,15 @@
 import type { CollectionConfig } from "payload";
 import { isAdmin } from "@/payload/access/is-admin";
+import { neonAuthStrategy } from "@/payload/auth/neon-strategy";
 
 export const Users: CollectionConfig = {
   slug: "users",
   auth: {
+    disableLocalStrategy: {
+      enableFields: true,
+      optionalPassword: true,
+    },
+    strategies: [neonAuthStrategy],
     tokenExpiration: 60 * 60 * 24 * 30,
     cookies: {
       sameSite: "Lax",

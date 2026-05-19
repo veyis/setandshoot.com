@@ -2,13 +2,17 @@
 
 import { AuthView } from "@neondatabase/auth-ui";
 
-type Props = { view: "sign-in" | "sign-up"; nextPath?: string };
+export type AuthPageView = "sign-in" | "sign-up" | "forgot-password" | "reset-password";
+
+const AUTH_VIEWS = {
+  "sign-in": "SIGN_IN",
+  "sign-up": "SIGN_UP",
+  "forgot-password": "FORGOT_PASSWORD",
+  "reset-password": "RESET_PASSWORD",
+} as const;
+
+type Props = { view: AuthPageView; nextPath?: string };
 
 export function AuthViewClient({ view, nextPath }: Props) {
-  return (
-    <AuthView
-      view={view === "sign-in" ? "SIGN_IN" : "SIGN_UP"}
-      redirectTo={nextPath ?? "/account"}
-    />
-  );
+  return <AuthView view={AUTH_VIEWS[view]} redirectTo={nextPath ?? "/account"} />;
 }

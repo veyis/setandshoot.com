@@ -105,6 +105,14 @@ Verify in the new deployment:
 ## 5. After production deploy
 
 - Sign in as the admin account once to seed the session.
+- Reset a forgotten password (Neon Auth — one account for site + CMS):
+
+  ```bash
+  pnpm neon:reset-password you@example.com 'YourNewPassword123!'
+  ```
+
+  Or use `/forgot-password` in the browser. Payload `/admin` trusts the Neon session; no separate CMS password.
+
 - Spot-check that booking submission still writes a row to `payload.bookings`
   with `customer_id` set when signed in, null otherwise.
 - Remove `.env.preview` from your machine if you pulled it (it contains
