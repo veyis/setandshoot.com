@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { HeroScene } from "@/components/landing/hero-scene";
+import { HeroScene } from "@/components/landing/hero";
 import { getHeroPhotos } from "@/lib/landing/photos";
 
 /** Real landing config — all 7 generated hero frames. */

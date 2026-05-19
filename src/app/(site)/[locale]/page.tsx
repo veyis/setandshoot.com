@@ -4,7 +4,7 @@ import config from "@payload-config";
 import { type Locale } from "@/lib/i18n/config";
 import { getAboutFallbackPhoto, getHeroPhotos, getHighlightPhotos } from "@/lib/landing/photos";
 import type { Story } from "@/payload-types";
-import { HeroScene } from "@/components/landing/hero-scene";
+import { HeroScene } from "@/components/landing/hero";
 import { FeaturedStoryScene } from "@/components/landing/featured-story-scene";
 import { WorkMosaicScene } from "@/components/landing/work-mosaic-scene";
 import { AboutScene } from "@/components/landing/about-scene";
