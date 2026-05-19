@@ -9,6 +9,7 @@ import { usePinnedScene } from "@/components/motion/use-pinned-scene";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import type { ResolvedLandingPhoto } from "@/lib/landing/photos";
 import { HeroPhotoStack } from "./HeroPhotoStack";
+import { HeroSlateFrame } from "./HeroSlateFrame";
 
 type Props = {
   photos: ResolvedLandingPhoto[];
@@ -20,6 +21,8 @@ type Props = {
   ctaSecondaryLabel: string;
   ctaSecondaryHref: string;
   scrollCueLabel: string;
+  mastheadLeft: string;
+  mastheadCounter: string;
   /** Hold per photo in ms; default 6500. */
   intervalMs?: number;
 };
@@ -41,6 +44,8 @@ export function HeroScene({
   ctaSecondaryLabel,
   ctaSecondaryHref,
   scrollCueLabel,
+  mastheadLeft,
+  mastheadCounter,
   intervalMs = DEFAULT_INTERVAL_MS,
 }: Props) {
   const reducedMotion = useReducedMotion();
@@ -101,6 +106,15 @@ export function HeroScene({
         }}
       />
 
+      <HeroSlateFrame
+        current={activeIndex + 1}
+        total={photos.length}
+        mastheadLeft={mastheadLeft}
+        mastheadCounterTemplate={mastheadCounter}
+        intervalMs={intervalMs}
+        reducedMotion={reducedMotion}
+      />
+
       <div className="relative z-10 flex w-full flex-col gap-5 p-6 pb-28 md:gap-6 md:p-12 md:pb-24">
         <h1 className="hero-name font-display text-[clamp(3rem,11vw,11rem)] leading-[0.92] tracking-tight">
           {name}
@@ -128,46 +142,6 @@ export function HeroScene({
           </Link>
         </div>
       </div>
-
-      {/* Dot indicators — only when more than one photo */}
-      {hasMultiple && (
-        <div className="hero-dots absolute right-4 bottom-6 z-10 flex items-center gap-1 md:right-12 md:bottom-12 md:gap-2">
-          {photos.map((photo, index) => {
-            const active = index === activeIndex;
-            return (
-              <button
-                key={photo.id}
-                type="button"
-                aria-label={`Show photo ${index + 1} of ${photos.length}`}
-                aria-current={active}
-                onClick={() => setActiveIndex(index)}
-                className="group relative flex h-11 w-11 items-center justify-center"
-              >
-                <span
-                  aria-hidden
-                  className={[
-                    "block rounded-full border transition-all duration-300",
-                    active
-                      ? "border-accent bg-accent h-2 w-8"
-                      : "border-ink/40 bg-ink/20 group-hover:bg-ink/40 h-1.5 w-1.5",
-                  ].join(" ")}
-                />
-              </button>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Progress bar pinned to the very bottom edge */}
-      {hasMultiple && !reducedMotion && (
-        <div className="hero-progress bg-ink/10 pointer-events-none absolute inset-x-0 bottom-0 z-10 h-px">
-          <div
-            key={`${activeIndex}-${intervalMs}`}
-            className="hero-progress-fill bg-accent h-full"
-            style={{ animationDuration: `${intervalMs}ms` }}
-          />
-        </div>
-      )}
 
       <ScrollCue label={scrollCueLabel} />
     </section>

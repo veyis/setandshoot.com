@@ -47,6 +47,11 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         ctaSecondaryLabel={t("home.ctaBooking")}
         ctaSecondaryHref="/contact"
         scrollCueLabel={t("home.hero.scrollCue")}
+        mastheadLeft={t("home.hero.masthead.left")}
+        mastheadCounter={t("home.hero.masthead.counter", {
+          current: "{current}",
+          total: "{total}",
+        })}
       />
       <FeaturedStoryScene story={featuredStory} />
       <WorkMosaicScene photos={highlightPhotos} />

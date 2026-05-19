@@ -107,3 +107,43 @@
   opacity: 1;
   transform: none;
 }
+
+/* ------- Letterbox bars + hairline ------- */
+
+@media (min-width: 768px) {
+  .hero-scene .hero-bar-top,
+  .hero-scene .hero-bar-bot {
+    height: 4.5%;
+  }
+}
+
+.hero-scene .hero-hairline {
+  background: rgba(244, 241, 234, 0.12);
+}
+
+/* ------- Masthead position ------- */
+
+.hero-scene .hero-masthead {
+  top: 6%;
+}
+@media (min-width: 768px) {
+  .hero-scene .hero-masthead {
+    top: 7%;
+  }
+}
+
+/* ------- Progress strip position ------- */
+
+/* Desktop: sit on top edge of bottom letterbox bar */
+@media (min-width: 768px) {
+  .hero-scene .hero-progress {
+    bottom: 4.5%;
+  }
+}
+
+/* Mobile: just above sticky CTA bar via CSS var written by HeroStickyCTA */
+@media (max-width: 767px) {
+  .hero-scene .hero-progress {
+    bottom: var(--hero-cta-h, 0px);
+  }
+}
