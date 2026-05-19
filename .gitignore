@@ -18,3 +18,4 @@ public/images/*
 !public/images/landing/
 public/videos/*
 .claude
+.superpowers/
