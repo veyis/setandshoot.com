@@ -1,5 +1,7 @@
 "use client";
 
+import "./hero-motion.css";
+
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { LandingImage } from "@/components/landing/landing-image";
