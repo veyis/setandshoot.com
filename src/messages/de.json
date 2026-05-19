@@ -5,26 +5,41 @@
   "home": {
     "ctaStories": "Stories entdecken",
     "ctaBooking": "Anfrage stellen",
-    "highlights": {
-      "title": "Highlights",
-      "subtitle": "Einzelmomente",
-      "viewAll": "Alle ansehen"
+    "hero": {
+      "cameraSpec": "f/2.8 · 1/2000s · ISO 6400",
+      "scrollCue": "scroll"
     },
-    "stories": {
-      "title": "Stories",
-      "subtitle": "Spiele als Bildserie",
-      "comingSoon": "Bald verfügbar"
+    "featuredStory": {
+      "eyebrow": "STORY",
+      "blurb": "Drei Sätze, fünf Wendepunkte. Ein Heim-Auftakt, der zeigt, was diese Saison rhythmisch werden kann.",
+      "readStory": "Story lesen"
+    },
+    "workMosaic": {
+      "title": "WORK",
+      "seasons": "2024–26 SEASONS",
+      "framesSuffix": "PUBLISHED FRAMES",
+      "viewIndex": "VIEW WORK INDEX"
     },
     "about": {
-      "title": "Über mich",
+      "eyebrow": "ÜBER MICH",
+      "title": "Volleyball ist ein Spiel der Augenblicke. / Ich fotografiere die Augenblicke.",
       "body1": "Ich fotografiere Volleyball in Bremen und Norddeutschland — Spieltag, Saisonbegleitung, Porträts. Mein Fokus liegt auf cinematischen Einzelmomenten, die das Spiel als visuelle Erzählung lesbar machen.",
       "body2": "Wenn du Halle, Team oder Verband bildlich begleitet sehen möchtest, schreib mir. Ich plane Saisons im Voraus und arbeite gern wiederkehrend.",
+      "pullQuote": "Ein Match ist 100 Bilder. Drei davon zählen.",
+      "cameraCaption": "BELIN AKGUEL · BREMEN · CANON R5 + RF 70-200 F/2.8",
+      "publications": "PUBLICATIONS · VOLLEYBALL.DE · NORDDEUTSCHE · SPORTBILD",
+      "clients": "CLIENTS · VC WIESBADEN · SSC PALMBERG SCHWERIN · SC POTSDAM",
+      "availability": "AVAILABILITY · BUNDESLIGA-SAISON 2026/27 · ANFRAGEN WILLKOMMEN",
       "cta": "Mehr über mich"
     },
     "cta": {
-      "title": "Halle gebucht?",
-      "subtitle": "Spiel, Saison, Porträt — ich begleite es bildlich.",
-      "button": "Anfrage stellen"
+      "eyebrow": "ANFRAGE",
+      "title": "Halle gebucht? / Ich auch.",
+      "body": "Spiel, Saison, Porträt. Ich begleite Volleyball-Teams in Norddeutschland mit cinematischer Bildsprache und planbarer Liefertreue.",
+      "detail": "RESPONSE WITHIN 24H · DE / EN · BREMEN-BASED, AVAILABLE BUNDESWEIT",
+      "primary": "ANFRAGE STELLEN",
+      "secondaryPrefix": "oder:",
+      "secondaryEmail": "hallo@setandshoot.com"
     }
   },
   "nav": {

@@ -5,26 +5,41 @@
   "home": {
     "ctaStories": "Browse stories",
     "ctaBooking": "Get in touch",
-    "highlights": {
-      "title": "Highlights",
-      "subtitle": "Single moments",
-      "viewAll": "View all"
+    "hero": {
+      "cameraSpec": "f/2.8 · 1/2000s · ISO 6400",
+      "scrollCue": "scroll"
     },
-    "stories": {
-      "title": "Stories",
-      "subtitle": "Matches as photo series",
-      "comingSoon": "Coming soon"
+    "featuredStory": {
+      "eyebrow": "STORY",
+      "blurb": "Three sets, five turning points. A home opener that hints at what this season can become.",
+      "readStory": "Read story"
+    },
+    "workMosaic": {
+      "title": "WORK",
+      "seasons": "2024–26 SEASONS",
+      "framesSuffix": "PUBLISHED FRAMES",
+      "viewIndex": "VIEW WORK INDEX"
     },
     "about": {
-      "title": "About",
+      "eyebrow": "ABOUT",
+      "title": "Volleyball is a game of moments. / I photograph the moments.",
       "body1": "I photograph volleyball in Bremen and northern Germany — match days, season-long coverage, portraits. My focus is on cinematic single moments that make the game readable as a visual narrative.",
       "body2": "If you'd like a court, a team, or a federation covered photographically, drop me a line. I plan seasons ahead and like recurring work.",
+      "pullQuote": "A match is 100 frames. Three of them matter.",
+      "cameraCaption": "BELIN AKGUEL · BREMEN · CANON R5 + RF 70-200 F/2.8",
+      "publications": "PUBLICATIONS · VOLLEYBALL.DE · NORDDEUTSCHE · SPORTBILD",
+      "clients": "CLIENTS · VC WIESBADEN · SSC PALMBERG SCHWERIN · SC POTSDAM",
+      "availability": "AVAILABILITY · BUNDESLIGA-SEASON 2026/27 · COMMISSIONS OPEN",
       "cta": "More about me"
     },
     "cta": {
-      "title": "Got a court date?",
-      "subtitle": "Match, season, portrait — I'll cover it photographically.",
-      "button": "Get a quote"
+      "eyebrow": "COMMISSION",
+      "title": "Got a court date? / So do I.",
+      "body": "Match, season, portrait. I cover volleyball teams across northern Germany — cinematic frames, dependable delivery.",
+      "detail": "RESPONSE WITHIN 24H · DE / EN · BREMEN-BASED, AVAILABLE NATIONWIDE",
+      "primary": "START A COMMISSION",
+      "secondaryPrefix": "or:",
+      "secondaryEmail": "hallo@setandshoot.com"
     }
   },
   "nav": {
