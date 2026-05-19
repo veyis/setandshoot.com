@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "tsx scripts/sync-public-media.ts && next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -21,7 +21,8 @@
     "payload:generate-types": "bash scripts/payload-cli.sh generate:types",
     "payload:reset-password": "bash scripts/payload-cli.sh run scripts/reset-payload-password.ts",
     "neon:reset-password": "bash scripts/payload-cli.sh run scripts/reset-neon-auth-password.ts",
-    "seed:photos": "tsx --env-file=.env.local scripts/seed/photos.ts"
+    "seed:photos": "tsx --env-file=.env.local scripts/seed/photos.ts",
+    "media:sync": "tsx scripts/sync-public-media.ts"
   },
   "pnpm": {
     "ignoredBuiltDependencies": [

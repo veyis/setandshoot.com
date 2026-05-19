@@ -3,6 +3,7 @@ import { isLocale, type Locale } from "@/lib/i18n/config";
 import { notFound } from "next/navigation";
 import { getPublishedStories } from "@/lib/payload/queries/stories";
 import { StoryCard } from "@/components/story/story-card";
+import { PageShell } from "@/components/site/page-shell";
 
 export default async function StoriesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -14,7 +15,7 @@ export default async function StoriesPage({ params }: { params: Promise<{ locale
   const stories = await getPublishedStories(locale as Locale);
 
   return (
-    <main className="mx-auto flex max-w-6xl flex-col gap-12 px-6 py-16 md:px-12">
+    <PageShell width="wide">
       <header className="flex max-w-3xl flex-col gap-4">
         <p className="text-ink-muted font-mono text-xs tracking-widest uppercase">
           {tCommon("label")}
@@ -34,6 +35,6 @@ export default async function StoriesPage({ params }: { params: Promise<{ locale
           ))}
         </div>
       )}
-    </main>
+    </PageShell>
   );
 }

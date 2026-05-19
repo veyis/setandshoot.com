@@ -63,7 +63,21 @@
   "services": {
     "title": "Leistungen",
     "intro": "Volleyball-Fotografie für Vereine, Verbände und Medien — von Spieltag bis Saisonreportage.",
-    "bookingHeading": "Anfrage senden"
+    "bookingHeading": "Anfrage senden",
+    "offers": [
+      {
+        "title": "Spieltag",
+        "body": "Live-Coverage eines Heim- oder Auswärtsspiels — Angriff, Block, Emotion, Ergebnis."
+      },
+      {
+        "title": "Saisonbegleitung",
+        "body": "Wiederkehrende Reportage über die Saison — Training, Pokal, Playoffs, Team-Porträts."
+      },
+      {
+        "title": "Porträt & Presse",
+        "body": "Einzelporträts, Pressebilder und kuratierte Highlights für Social Media und Print."
+      }
+    ]
   },
   "pages": {
     "common": {
@@ -84,7 +98,8 @@
     "athletes": {
       "title": "Athletinnen",
       "intro": "Porträts und Profile der Spielerinnen, die ich begleite.",
-      "comingSoon": "Athletinnen-Profile folgen in Kürze."
+      "comingSoon": "Ausführliche Athletinnen-Profile folgen in Kürze — hier ein erster Blick auf die Bildsprache.",
+      "profileLabel": "Profil in Arbeit"
     },
     "about": {
       "title": "Über mich",
@@ -94,7 +109,9 @@
     "journal": {
       "title": "Journal",
       "intro": "Notizen aus der Halle, Ausrüstung und Arbeit hinter den Kulissen.",
-      "comingSoon": "Journal-Beiträge erscheinen demnächst."
+      "comingSoon": "Vollständige Journal-Beiträge erscheinen demnächst.",
+      "entryLabel": "Notiz {number}",
+      "entryTeaser": "Ein Blick hinter die Linse — Licht, Timing und Entscheidungen am Spielfeldrand."
     }
   },
   "contact": {

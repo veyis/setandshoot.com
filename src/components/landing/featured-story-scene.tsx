@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
-import { PhotoImage } from "./photo-image";
-import { PinnedCover } from "./pinned-cover";
+import { getLocale, getTranslations } from "next-intl/server";
+import { LandingImage } from "./landing-image";
 import { Reveal } from "@/components/motion/reveal";
-import type { Story, Photo } from "@/payload-types";
+import { getLandingPhotos, type ResolvedLandingPhoto } from "@/lib/landing/photos";
+import type { Story } from "@/payload-types";
+import type { Locale } from "@/lib/i18n/config";
 
 type Props = { story: Story | null };
 
@@ -12,40 +13,40 @@ function formatDate(iso: string | null | undefined): string {
   return new Date(iso).toISOString().slice(0, 10).replace(/-/g, ".");
 }
 
+/** Curated landing frames for the featured-story visuals (CMS story drives copy only). */
+function featuredStoryPhotos(locale: Locale): {
+  cover: ResolvedLandingPhoto;
+  gallery: ResolvedLandingPhoto[];
+} {
+  const photos = getLandingPhotos(locale);
+  const byId = (id: ResolvedLandingPhoto["id"]) => photos.find((p) => p.id === id);
+  const cover = byId("joust") ?? photos[0]!;
+  const gallery = (["spike", "set", "dig"] as const)
+    .map((id) => byId(id))
+    .filter((p): p is ResolvedLandingPhoto => Boolean(p));
+  return { cover, gallery };
+}
+
 export async function FeaturedStoryScene({ story }: Props) {
   const t = await getTranslations("home.featuredStory");
   if (!story) return null;
 
-  const cover = typeof story.coverPhoto === "object" ? (story.coverPhoto as Photo) : null;
+  const locale = (await getLocale()) as Locale;
+  const { cover, gallery } = featuredStoryPhotos(locale);
   const date = formatDate(story.playedAt);
-
-  // The 3 photos in Beat 2 come from the first `sequence` layout block.
-  const sequencePhotos: Photo[] = [];
-  for (const block of story.layout ?? []) {
-    if (block.blockType === "sequence" && Array.isArray(block.photos)) {
-      for (const p of block.photos) {
-        if (typeof p === "object" && p !== null) sequencePhotos.push(p as Photo);
-      }
-      break;
-    }
-  }
-  const galleryPhotos = sequencePhotos.slice(0, 3);
 
   return (
     <section className="featured-story relative">
       <div className="grid px-6 md:px-12 lg:grid-cols-12 lg:gap-12">
-        {/* Left column — pinned cover */}
         <div className="lg:col-span-5">
-          <PinnedCover end="+=300%">
-            <div className="story-cover bg-elevated relative aspect-[3/4] w-full overflow-hidden lg:aspect-auto lg:h-screen">
-              {cover ? (
-                <PhotoImage
-                  photo={cover}
-                  sizes="(min-width: 1024px) 42vw, 90vw"
-                  className="size-full object-cover"
-                  priority
-                />
-              ) : null}
+          <div className="lg:sticky lg:top-20 lg:self-start">
+            <div className="story-cover bg-elevated relative aspect-[3/4] w-full overflow-hidden lg:max-h-[calc(100dvh-5rem)]">
+              <LandingImage
+                photo={cover}
+                sizes="(min-width: 1024px) 42vw, 90vw"
+                className="size-full object-cover"
+                priority
+              />
               <div
                 className="pointer-events-none absolute inset-x-0 top-0 h-20"
                 style={{
@@ -61,12 +62,10 @@ export async function FeaturedStoryScene({ story }: Props) {
                 }}
               />
             </div>
-          </PinnedCover>
+          </div>
         </div>
 
-        {/* Right column — scrolling beats */}
-        <div className="flex flex-col gap-32 py-24 lg:col-span-7 lg:min-h-[300vh]">
-          {/* Beat 1: meta */}
+        <div className="flex flex-col gap-32 py-24 lg:col-span-7">
           <Reveal>
             <div className="flex flex-col gap-4">
               <p className="text-ink-faint font-mono text-xs tracking-[0.2em] uppercase">
@@ -86,12 +85,11 @@ export async function FeaturedStoryScene({ story }: Props) {
             </div>
           </Reveal>
 
-          {/* Beat 2: gallery */}
           <div className="flex flex-col gap-12">
-            {galleryPhotos.map((photo, i) => (
+            {gallery.map((photo, i) => (
               <Reveal key={photo.id} delay={i * 100}>
                 <figure className="bg-elevated relative aspect-[4/5] w-full overflow-hidden">
-                  <PhotoImage
+                  <LandingImage
                     photo={photo}
                     sizes="(min-width: 1024px) 50vw, 90vw"
                     className="size-full object-cover"
@@ -101,7 +99,6 @@ export async function FeaturedStoryScene({ story }: Props) {
             ))}
           </div>
 
-          {/* Beat 3: close */}
           <Reveal>
             <div className="flex flex-col gap-6">
               <Link

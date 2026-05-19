@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { LandingImage } from "./landing-image";
-import { PinnedCover } from "./pinned-cover";
 import { Reveal } from "@/components/motion/reveal";
 import type { ResolvedLandingPhoto } from "@/lib/landing/photos";
 
@@ -15,22 +14,22 @@ export async function AboutScene({ portrait }: Props) {
       <div className="grid lg:grid-cols-12 lg:gap-12">
         {/* Left — pinned portrait */}
         <figure className="lg:col-span-5">
-          <PinnedCover end="+=150%">
-            <div className="about-portrait bg-elevated relative aspect-[3/4] w-full overflow-hidden lg:aspect-[3/4]">
+          <div className="lg:sticky lg:top-20 lg:self-start">
+            <div className="about-portrait bg-elevated relative aspect-[3/4] w-full overflow-hidden">
               <LandingImage
                 photo={portrait}
                 sizes="(min-width: 1024px) 42vw, 90vw"
                 className="size-full object-cover saturate-[0.92]"
               />
             </div>
-          </PinnedCover>
+          </div>
           <figcaption className="text-ink-faint mt-3 font-mono text-[10px] tracking-[0.15em] uppercase">
             {t("cameraCaption")}
           </figcaption>
         </figure>
 
         {/* Right — scrolling body */}
-        <div className="flex flex-col justify-center gap-8 pt-12 lg:col-span-7 lg:min-h-[150vh] lg:pt-0">
+        <div className="flex flex-col justify-center gap-8 pt-12 lg:col-span-7 lg:pt-0">
           <Reveal>
             <p className="text-ink-faint font-mono text-xs tracking-[0.2em] uppercase">
               {t("eyebrow")}

@@ -1,6 +1,12 @@
 import Image from "next/image";
 import type { Photo } from "@/payload-types";
-import { photoAlt, photoSrc, resolvePhoto, type PhotoSize } from "@/lib/payload/media";
+import {
+  photoAlt,
+  photoDimensions,
+  photoSrc,
+  resolvePhoto,
+  type PhotoSize,
+} from "@/lib/payload/media";
 
 type PayloadPhotoProps = {
   photo: Photo | number | null | undefined;
@@ -21,8 +27,7 @@ export function PayloadPhoto({
   const src = photoSrc(photo, size);
   if (!src || !photo) return null;
 
-  const width = photo.sizes?.[size]?.width ?? photo.width ?? 1400;
-  const height = photo.sizes?.[size]?.height ?? photo.height ?? 900;
+  const { width, height } = photoDimensions(photo, size);
 
   return (
     <Image

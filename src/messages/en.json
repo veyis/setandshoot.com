@@ -63,7 +63,21 @@
   "services": {
     "title": "Services",
     "intro": "Volleyball photography for clubs, federations, and media — from match day to season coverage.",
-    "bookingHeading": "Send an inquiry"
+    "bookingHeading": "Send an inquiry",
+    "offers": [
+      {
+        "title": "Match day",
+        "body": "Live coverage of a home or away match — attack, block, emotion, result."
+      },
+      {
+        "title": "Season coverage",
+        "body": "Recurring reportage across the season — training, cup, playoffs, team portraits."
+      },
+      {
+        "title": "Portrait & press",
+        "body": "Individual portraits, press images, and curated highlights for social and print."
+      }
+    ]
   },
   "pages": {
     "common": {
@@ -84,7 +98,8 @@
     "athletes": {
       "title": "Athletes",
       "intro": "Portraits and profiles of the athletes I cover.",
-      "comingSoon": "Athlete profiles are coming soon."
+      "comingSoon": "Full athlete profiles are coming soon — a first look at the visual language below.",
+      "profileLabel": "Profile in progress"
     },
     "about": {
       "title": "About",
@@ -94,7 +109,9 @@
     "journal": {
       "title": "Journal",
       "intro": "Notes from the court, gear, and work behind the scenes.",
-      "comingSoon": "Journal posts are on the way."
+      "comingSoon": "Full journal posts are on the way.",
+      "entryLabel": "Note {number}",
+      "entryTeaser": "Behind the lens — light, timing, and decisions at the sideline."
     }
   },
   "contact": {
