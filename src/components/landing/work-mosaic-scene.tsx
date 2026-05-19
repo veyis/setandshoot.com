@@ -67,6 +67,21 @@ export async function WorkMosaicScene({ photos }: Props) {
               </figure>
             </Reveal>
           </div>
+          {photos.length > 4 ? (
+            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:mt-4 lg:grid-cols-3 lg:gap-4">
+              {photos.slice(4).map((p) => (
+                <Reveal key={p.id}>
+                  <figure className="bg-elevated relative aspect-[16/10] w-full overflow-hidden">
+                    <LandingImage
+                      photo={p}
+                      sizes="(min-width: 1024px) 33vw, 100vw"
+                      className="size-full object-cover"
+                    />
+                  </figure>
+                </Reveal>
+              ))}
+            </div>
+          ) : null}
         </>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

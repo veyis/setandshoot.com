@@ -1,7 +1,18 @@
 import type { Locale } from "@/lib/i18n/config";
 
-/** Optimized JPEGs under /images/landing — editorial stock + Gemini block frames. */
-export type LandingPhotoRole = "spike" | "block" | "serve" | "block-alt";
+/** Every custom hero JPEG under /public/images/landing — audit checklist. */
+export const HERO_IMAGE_FILES = [
+  "hero-cover.jpg",
+  "hero-joust.jpg",
+  "hero-spike.jpg",
+  "hero-set.jpg",
+  "hero-block.jpg",
+  "hero-serve.jpg",
+  "hero-dig.jpg",
+] as const;
+
+/** Custom-generated landing frames under /images/landing. */
+export type LandingPhotoRole = "cover" | "joust" | "spike" | "set" | "block" | "serve" | "dig";
 
 export type LandingPhoto = {
   id: LandingPhotoRole;
@@ -15,56 +26,88 @@ export type LandingPhoto = {
   isHighlight: boolean;
 };
 
+/** Shared output dimensions — 3:2, generated at 1536×1024 then JPEG-compressed. */
+const FRAME = { width: 1536, height: 1024 } as const;
+
 /**
- * Narrative order: spike → block → serve → block (alt angle).
- * Spike and serve use real editorial stock; block frames use Gemini assets.
+ * Narrative hero order — each frame a distinct peak moment.
+ * All rotate in the landing hero crossfade and feed the work mosaic.
  */
 export const LANDING_PHOTOS: LandingPhoto[] = [
   {
-    id: "spike",
-    src: "/images/landing/editorial-spike-real.jpg",
-    width: 1588,
-    height: 1131,
-    objectPosition: "50% 35%",
+    id: "cover",
+    src: "/images/landing/hero-cover.jpg",
+    ...FRAME,
+    objectPosition: "58% 40%",
     alt: {
-      de: "Spike im Rauch — dramatische Hallenbeleuchtung",
-      en: "Spike through arena smoke — dramatic stadium lighting",
+      de: "Angriff im absoluten Peak — goldenes Randlicht, Cover-Moment des Jahres",
+      en: "Attack at absolute peak — golden rim light, photo-of-the-year cover moment",
+    },
+    isHighlight: true,
+  },
+  {
+    id: "joust",
+    src: "/images/landing/hero-joust.jpg",
+    ...FRAME,
+    objectPosition: "52% 42%",
+    alt: {
+      de: "Netz-Duell — Angriff trifft Block in der Luft, Ball im letzten Millimeter",
+      en: "Net joust — spike meets block mid-air, ball frozen between their hands",
+    },
+    isHighlight: true,
+  },
+  {
+    id: "spike",
+    src: "/images/landing/hero-spike.jpg",
+    ...FRAME,
+    objectPosition: "62% 40%",
+    alt: {
+      de: "Angreiferin schlägt am Netz — eingefrorener Peak-Moment, Hallenlicht von der Seite",
+      en: "Outside hitter spiking at the net — frozen peak moment, sidelight from the arena",
+    },
+    isHighlight: true,
+  },
+  {
+    id: "set",
+    src: "/images/landing/hero-set.jpg",
+    ...FRAME,
+    objectPosition: "55% 38%",
+    alt: {
+      de: "Zuspielerin im Sprung — Ball an den Fingerspitzen, Cover-Moment",
+      en: "Setter at full extension — ball on fingertips, magazine-cover moment",
     },
     isHighlight: true,
   },
   {
     id: "block",
     src: "/images/landing/hero-block.jpg",
-    width: 2560,
-    height: 1429,
+    ...FRAME,
     objectPosition: "50% 38%",
     alt: {
-      de: "Doppelblock am Netz unter blauem Hallenlicht",
-      en: "Double block at the net under blue arena light",
+      de: "Doppelblock am Netz — Froschperspektive, blaues Hallenlicht von oben",
+      en: "Double block at the net — low angle, cool overhead arena light",
     },
     isHighlight: true,
   },
   {
     id: "serve",
-    src: "/images/landing/editorial-serve-real.jpg",
-    width: 2200,
-    height: 1467,
-    objectPosition: "55% 40%",
+    src: "/images/landing/hero-serve.jpg",
+    ...FRAME,
+    objectPosition: "58% 45%",
     alt: {
-      de: "Sprungaufschlag — Peak-Moment vor schwarzem Hintergrund",
-      en: "Jump serve — peak moment against a dark backdrop",
+      de: "Sprungaufschlag — volle Streckung, langer Schatten auf dem Parkett",
+      en: "Jump serve — full extension, long shadow across the court floor",
     },
     isHighlight: true,
   },
   {
-    id: "block-alt",
-    src: "/images/landing/hero-block-alt.jpg",
-    width: 2560,
-    height: 1429,
-    objectPosition: "50% 40%",
+    id: "dig",
+    src: "/images/landing/hero-dig.jpg",
+    ...FRAME,
+    objectPosition: "52% 55%",
     alt: {
-      de: "Block am Netz — symmetrische Action aus der Froschperspektive",
-      en: "Net block — symmetrical action from a low angle",
+      de: "Hechtverteidigung über dem Parkett — Bodenperspektive, Ball im letzten Moment",
+      en: "Floor dig — courtside worm's-eye view, ball inches from the wood",
     },
     isHighlight: true,
   },
@@ -98,5 +141,5 @@ export function getBookingBackgroundPhoto(locale: Locale): ResolvedLandingPhoto 
 export function getAboutFallbackPhoto(locale: Locale): ResolvedLandingPhoto {
   const serve = getLandingPhotos(locale).find((p) => p.id === "serve");
   if (!serve) throw new Error("landing: serve photo missing");
-  return { ...serve, objectPosition: "50% 22%" };
+  return { ...serve, objectPosition: "58% 30%" };
 }

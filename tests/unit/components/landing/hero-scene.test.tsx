@@ -1,26 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { HeroScene } from "@/components/landing/hero-scene";
-import type { ResolvedLandingPhoto } from "@/lib/landing/photos";
+import { getHeroPhotos } from "@/lib/landing/photos";
 
-function makePhoto(id: string, alt: string): ResolvedLandingPhoto {
-  return {
-    id: id as ResolvedLandingPhoto["id"],
-    src: `/images/landing/${id}.jpg`,
-    width: 1588,
-    height: 1131,
-    objectPosition: "50% 50%",
-    alt,
-    isHighlight: true,
-  };
-}
-
-const photos: ResolvedLandingPhoto[] = [
-  makePhoto("spike", "Photo 1"),
-  makePhoto("block", "Photo 2"),
-  makePhoto("serve", "Photo 3"),
-  makePhoto("block-alt", "Photo 4"),
-];
+/** Real landing config — all 7 generated hero frames. */
+const photos = getHeroPhotos("en");
 
 // Reduce-motion → true so usePinnedScene (GSAP ScrollTrigger) no-ops in jsdom.
 // ScrollTrigger's pin mutates the DOM (wraps in pin-spacer), which breaks
@@ -54,12 +38,21 @@ const baseProps = {
 };
 
 describe("HeroScene", () => {
+  it("renders all 7 generated hero photos in the stack", () => {
+    expect(photos).toHaveLength(7);
+    const { container } = render(<HeroScene {...baseProps} photos={photos} />);
+    const slides = container.querySelectorAll(".hero-photo[data-photo-id]");
+    expect(slides).toHaveLength(7);
+    for (const photo of photos) {
+      expect(container.querySelector(`[data-photo-id="${photo.id}"]`)).not.toBeNull();
+      expect(screen.getByAltText(photo.alt)).toBeInTheDocument();
+    }
+  });
+
   it("renders every photo (all stacked, only one visually active at a time)", () => {
     render(<HeroScene {...baseProps} photos={photos} />);
-    expect(screen.getByAltText("Photo 1")).toBeInTheDocument();
-    expect(screen.getByAltText("Photo 2")).toBeInTheDocument();
-    expect(screen.getByAltText("Photo 3")).toBeInTheDocument();
-    expect(screen.getByAltText("Photo 4")).toBeInTheDocument();
+    expect(screen.getByAltText(photos[0]!.alt)).toBeInTheDocument();
+    expect(screen.getByAltText(photos[6]!.alt)).toBeInTheDocument();
   });
 
   it("marks the first photo as active on mount", () => {
@@ -92,8 +85,8 @@ describe("HeroScene", () => {
 
   it("renders one dot indicator per photo when there are 2+ photos", () => {
     render(<HeroScene {...baseProps} photos={photos} />);
-    const dots = screen.getAllByRole("button", { name: /Show photo \d+ of 4/ });
-    expect(dots.length).toBe(4);
+    const dots = screen.getAllByRole("button", { name: /Show photo \d+ of 7/ });
+    expect(dots.length).toBe(7);
   });
 
   it("does not render dot indicators with a single photo", () => {
@@ -104,10 +97,22 @@ describe("HeroScene", () => {
 
   it("jumping to a dot updates the active index", () => {
     const { container } = render(<HeroScene {...baseProps} photos={photos} />);
-    const thirdDot = screen.getByRole("button", { name: "Show photo 3 of 4" });
+    const thirdDot = screen.getByRole("button", { name: "Show photo 3 of 7" });
     fireEvent.click(thirdDot);
     const section = container.querySelector(".hero-scene");
     expect(section?.getAttribute("data-active-index")).toBe("2");
+  });
+
+  it("cycles through all photo ids via dot navigation", () => {
+    render(<HeroScene {...baseProps} photos={photos} />);
+    for (let i = 0; i < photos.length; i++) {
+      fireEvent.click(screen.getByRole("button", { name: `Show photo ${i + 1} of 7` }));
+    }
+    // Last click selects index 6 (dig)
+    expect(screen.getByRole("button", { name: "Show photo 7 of 7" })).toHaveAttribute(
+      "aria-current",
+      "true",
+    );
   });
 
   it("renders only the overlay when photos is empty", () => {

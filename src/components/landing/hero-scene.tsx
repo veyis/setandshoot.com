@@ -87,6 +87,7 @@ export function HeroScene({
             <div
               key={photo.id}
               className="hero-photo absolute inset-0"
+              data-photo-id={photo.id}
               data-active={index === activeIndex ? "true" : "false"}
               data-variant={(index % 4) + 1}
               aria-hidden={index !== activeIndex}
