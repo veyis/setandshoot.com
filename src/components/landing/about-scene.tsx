@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { LandingImage } from "./landing-image";
+import { PinnedCover } from "./pinned-cover";
 import { Reveal } from "@/components/motion/reveal";
 import type { ResolvedLandingPhoto } from "@/lib/landing/photos";
 
@@ -12,15 +13,17 @@ export async function AboutScene({ portrait }: Props) {
   return (
     <section className="about-scene border-hairline border-t px-6 py-20 md:px-12">
       <div className="grid lg:grid-cols-12 lg:gap-12">
-        {/* Left — sticky portrait */}
+        {/* Left — pinned portrait */}
         <figure className="lg:col-span-5">
-          <div className="about-portrait bg-elevated relative aspect-[3/4] w-full overflow-hidden lg:sticky lg:top-12 lg:aspect-[3/4]">
-            <LandingImage
-              photo={portrait}
-              sizes="(min-width: 1024px) 42vw, 90vw"
-              className="size-full object-cover saturate-[0.92]"
-            />
-          </div>
+          <PinnedCover end="+=150%">
+            <div className="about-portrait bg-elevated relative aspect-[3/4] w-full overflow-hidden lg:aspect-[3/4]">
+              <LandingImage
+                photo={portrait}
+                sizes="(min-width: 1024px) 42vw, 90vw"
+                className="size-full object-cover saturate-[0.92]"
+              />
+            </div>
+          </PinnedCover>
           <figcaption className="text-ink-faint mt-3 font-mono text-[10px] tracking-[0.15em] uppercase">
             {t("cameraCaption")}
           </figcaption>

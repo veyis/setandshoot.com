@@ -1,8 +1,10 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import { LandingImage } from "@/components/landing/landing-image";
 import { ScrollCue } from "@/components/landing/scroll-cue";
+import { usePinnedScene } from "@/components/motion/use-pinned-scene";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import type { ResolvedLandingPhoto } from "@/lib/landing/photos";
 
@@ -30,8 +32,11 @@ export function HeroScene({
   scrollCueLabel,
 }: Props) {
   const reducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  usePinnedScene({ pin: sectionRef, end: "+=100%" });
   return (
     <section
+      ref={sectionRef}
       className="hero-scene bg-canvas relative flex h-screen min-h-[80vh] w-full items-end overflow-hidden"
       data-reduced-motion={reducedMotion ? "true" : "false"}
     >

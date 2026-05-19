@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { PhotoImage } from "./photo-image";
+import { PinnedCover } from "./pinned-cover";
 import { Reveal } from "@/components/motion/reveal";
 import type { Story, Photo } from "@/payload-types";
 
@@ -33,31 +34,34 @@ export async function FeaturedStoryScene({ story }: Props) {
   return (
     <section className="featured-story relative">
       <div className="grid px-6 md:px-12 lg:grid-cols-12 lg:gap-12">
-        {/* Left column — sticky cover */}
+        {/* Left column — pinned cover */}
         <div className="lg:col-span-5">
-          <div className="story-cover bg-elevated relative aspect-[3/4] w-full overflow-hidden lg:sticky lg:top-0 lg:aspect-auto lg:h-screen">
-            {cover ? (
-              <PhotoImage
-                photo={cover}
-                sizes="(min-width: 1024px) 42vw, 90vw"
-                className="size-full object-cover"
-                priority
+          <PinnedCover end="+=300%">
+            <div className="story-cover bg-elevated relative aspect-[3/4] w-full overflow-hidden lg:aspect-auto lg:h-screen">
+              {cover ? (
+                <PhotoImage
+                  photo={cover}
+                  sizes="(min-width: 1024px) 42vw, 90vw"
+                  className="size-full object-cover"
+                  priority
+                />
+              ) : null}
+              <div
+                className="pointer-events-none absolute inset-x-0 top-0 h-20"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to bottom, rgba(11,14,19,0.5) 0%, transparent 100%)",
+                }}
               />
-            ) : null}
-            <div
-              className="pointer-events-none absolute inset-x-0 top-0 h-20"
-              style={{
-                backgroundImage:
-                  "linear-gradient(to bottom, rgba(11,14,19,0.5) 0%, transparent 100%)",
-              }}
-            />
-            <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-20"
-              style={{
-                backgroundImage: "linear-gradient(to top, rgba(11,14,19,0.5) 0%, transparent 100%)",
-              }}
-            />
-          </div>
+              <div
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-20"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to top, rgba(11,14,19,0.5) 0%, transparent 100%)",
+                }}
+              />
+            </div>
+          </PinnedCover>
         </div>
 
         {/* Right column — scrolling beats */}

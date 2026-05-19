@@ -13,8 +13,12 @@ const heroPhoto: ResolvedLandingPhoto = {
   isHighlight: true,
 };
 
+// Reduce-motion → true so usePinnedScene (GSAP ScrollTrigger) no-ops in jsdom.
+// ScrollTrigger's pin mutates the DOM (wraps in pin-spacer), which breaks
+// React Testing Library cleanup. The render-output assertions below are
+// independent of motion state.
 const matchMediaMock = vi.fn((q: string) => ({
-  matches: false,
+  matches: q === "(prefers-reduced-motion: reduce)",
   media: q,
   onchange: null,
   addListener: vi.fn(),
