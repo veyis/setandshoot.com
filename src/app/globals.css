@@ -77,20 +77,78 @@
   }
 }
 
+/* ------- Hero rotation: crossfade + per-variant Ken Burns ------- */
+
 .hero-scene .hero-photo {
-  animation: hero-ken-burns 12s linear infinite alternate;
-  transform-origin: center center;
+  opacity: 0;
+  transition:
+    opacity 1200ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 8500ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
 }
-@keyframes hero-ken-burns {
+.hero-scene .hero-photo[data-active="true"] {
+  opacity: 1;
+}
+
+/* Ken Burns: each photo gets its own zoom origin so the rotation breathes
+   asymmetrically. The active photo holds its "end" state; non-active reset. */
+.hero-scene .hero-photo[data-variant="1"] {
+  transform: scale(1.06) translate(0.4%, -0.4%);
+  transform-origin: 30% 70%;
+}
+.hero-scene .hero-photo[data-variant="1"][data-active="true"] {
+  transform: scale(1) translate(0, 0);
+}
+.hero-scene .hero-photo[data-variant="2"] {
+  transform: scale(1.06) translate(-0.4%, 0.4%);
+  transform-origin: 70% 30%;
+}
+.hero-scene .hero-photo[data-variant="2"][data-active="true"] {
+  transform: scale(1) translate(0, 0);
+}
+.hero-scene .hero-photo[data-variant="3"] {
+  transform: scale(1.06) translate(0.5%, 0.3%);
+  transform-origin: 50% 50%;
+}
+.hero-scene .hero-photo[data-variant="3"][data-active="true"] {
+  transform: scale(1) translate(0, 0);
+}
+.hero-scene .hero-photo[data-variant="4"] {
+  transform: scale(1.06) translate(-0.3%, -0.3%);
+  transform-origin: 20% 30%;
+}
+.hero-scene .hero-photo[data-variant="4"][data-active="true"] {
+  transform: scale(1) translate(0, 0);
+}
+
+.hero-scene[data-reduced-motion="true"] .hero-photo {
+  transform: none;
+  transition: opacity 200ms linear;
+}
+.hero-scene[data-reduced-motion="true"] .hero-photo[data-active="false"] {
+  display: none;
+}
+
+/* ------- Progress bar (resets per active photo via React key remount) ------- */
+.hero-progress-fill {
+  width: 0%;
+  animation-name: hero-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes hero-progress {
   from {
-    transform: scale(1.04) translate(0.5%, 0.5%);
+    width: 0%;
   }
   to {
-    transform: scale(1) translate(0, 0);
+    width: 100%;
   }
 }
-.hero-scene[data-reduced-motion="true"] .hero-photo {
-  animation: none;
+@media (prefers-reduced-motion: reduce) {
+  .hero-progress-fill {
+    animation: none;
+    width: 0%;
+  }
 }
 
 .hero-scene .hero-name,

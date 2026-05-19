@@ -20,8 +20,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 
   // Static landing photos
   const heroPhotos = getHeroPhotos(typedLocale);
-  // Prefer the "block" composition (index 1) for the static hero; fall back to first.
-  const heroPhoto = heroPhotos[1] ?? heroPhotos[0] ?? null;
   const highlightPhotos = getHighlightPhotos(typedLocale);
   const aboutPortrait = getAboutFallbackPhoto(typedLocale);
 
@@ -40,7 +38,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   return (
     <>
       <HeroScene
-        photo={heroPhoto}
+        photos={heroPhotos}
         name="belin akguel"
         tagline={t("site.tagline")}
         cameraSpec={t("home.hero.cameraSpec")}
