@@ -7,7 +7,11 @@
     "ctaBooking": "Get in touch",
     "hero": {
       "cameraSpec": "f/2.8 · 1/2000s · ISO 6400",
-      "scrollCue": "scroll"
+      "scrollCue": "scroll",
+      "masthead": {
+        "left": "belin akguel · sports photography",
+        "counter": "Reel · {current} ⁄ {total}"
+      }
     },
     "featuredStory": {
       "eyebrow": "STORY",
