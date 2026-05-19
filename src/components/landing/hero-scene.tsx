@@ -118,7 +118,7 @@ export function HeroScene({
         }}
       />
 
-      <div className="relative z-10 flex w-full flex-col gap-5 p-6 pb-20 md:gap-6 md:p-12 md:pb-24">
+      <div className="relative z-10 flex w-full flex-col gap-5 p-6 pb-28 md:gap-6 md:p-12 md:pb-24">
         <h1 className="hero-name font-display text-[clamp(3rem,11vw,11rem)] leading-[0.92] tracking-tight">
           {name}
         </h1>
