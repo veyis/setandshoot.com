@@ -24,6 +24,12 @@ const matchMediaMock = vi.fn((q: string) => ({
 beforeEach(() => {
   matchMediaMock.mockClear();
   window.matchMedia = matchMediaMock as unknown as typeof window.matchMedia;
+  class ResizeObserverMock {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+  global.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
 });
 
 const baseProps = {
@@ -65,7 +71,9 @@ describe("HeroScene", () => {
 
   it("renders the name as an h1", () => {
     render(<HeroScene {...baseProps} photos={photos} />);
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("belin akguel");
+    const h1 = screen.getByRole("heading", { level: 1 });
+    expect(h1.textContent).toMatch(/belin/);
+    expect(h1.textContent).toMatch(/akguel/);
   });
 
   it("renders both CTAs with correct href", () => {
@@ -88,7 +96,9 @@ describe("HeroScene", () => {
   it("renders only the overlay when photos is empty", () => {
     render(<HeroScene {...baseProps} photos={[]} />);
     expect(screen.queryAllByRole("img").length).toBe(0);
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("belin akguel");
+    const h1 = screen.getByRole("heading", { level: 1 });
+    expect(h1.textContent).toMatch(/belin/);
+    expect(h1.textContent).toMatch(/akguel/);
   });
 
   it("marks the active photo via data-active='true' and others 'false'", () => {
@@ -127,5 +137,40 @@ describe("HeroScene", () => {
   it("does not render the progress strip with a single photo", () => {
     const { container } = render(<HeroScene {...baseProps} photos={[photos[0]!]} />);
     expect(container.querySelector(".hero-progress-fill")).toBeNull();
+  });
+
+  it("renders the active photo's kicker in the cover title block", () => {
+    const { container } = render(<HeroScene {...baseProps} photos={photos} />);
+    const kicker = container.querySelector('[data-test="hero-kicker"]')?.textContent ?? "";
+    expect(kicker.length).toBeGreaterThan(0);
+    expect(kicker).toContain(photos[0]!.kicker);
+  });
+
+  it("renders the active photo's camera spec, not the static i18n prop", () => {
+    const { container } = render(<HeroScene {...baseProps} photos={photos} />);
+    const spec = container.querySelector('[data-test="hero-camera"]')?.textContent ?? "";
+    expect(spec).toBe(photos[0]!.cameraSpec);
+  });
+
+  it("renders the cover title with two lines (belin / akguel.)", () => {
+    render(<HeroScene {...baseProps} photos={photos} />);
+    const h1 = screen.getByRole("heading", { level: 1 });
+    expect(h1.textContent).toMatch(/belin/);
+    expect(h1.textContent).toMatch(/akguel\./);
+  });
+
+  it("renders both CTAs once with correct hrefs (sticky bar carries them)", () => {
+    render(<HeroScene {...baseProps} photos={photos} />);
+    const stories = screen.getAllByRole("link", { name: baseProps.ctaPrimaryLabel });
+    const book = screen.getAllByRole("link", { name: baseProps.ctaSecondaryLabel });
+    expect(stories.length).toBe(1);
+    expect(book.length).toBe(1);
+    expect(stories[0]).toHaveAttribute("href", baseProps.ctaPrimaryHref);
+    expect(book[0]).toHaveAttribute("href", baseProps.ctaSecondaryHref);
+  });
+
+  it("renders the CTA bar element (visibility is CSS-driven by breakpoint)", () => {
+    const { container } = render(<HeroScene {...baseProps} photos={photos} />);
+    expect(container.querySelector('[data-test="hero-cta-bar"]')).toBeInTheDocument();
   });
 });

@@ -3,13 +3,14 @@
 import "./hero-motion.css";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { ScrollCue } from "@/components/landing/scroll-cue";
 import { usePinnedScene } from "@/components/motion/use-pinned-scene";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import type { ResolvedLandingPhoto } from "@/lib/landing/photos";
+import { HeroCoverTitle } from "./HeroCoverTitle";
 import { HeroPhotoStack } from "./HeroPhotoStack";
 import { HeroSlateFrame } from "./HeroSlateFrame";
+import { HeroStickyCTA } from "./HeroStickyCTA";
 
 type Props = {
   photos: ResolvedLandingPhoto[];
@@ -37,7 +38,6 @@ const DEFAULT_INTERVAL_MS = 6500;
 export function HeroScene({
   photos,
   name,
-  tagline,
   cameraSpec,
   ctaPrimaryLabel,
   ctaPrimaryHref,
@@ -53,6 +53,11 @@ export function HeroScene({
   const [activeIndex, setActiveIndex] = useState(0);
   const [inView, setInView] = useState(true);
   usePinnedScene({ pin: sectionRef, end: "+=100%" });
+
+  const activePhoto = photos[activeIndex];
+  const activeKicker = activePhoto?.kicker ?? "";
+  const activeCamera = activePhoto?.cameraSpec ?? cameraSpec;
+  const activeLocation = activePhoto?.location ?? "";
 
   const hasMultiple = photos.length > 1;
 
@@ -115,33 +120,19 @@ export function HeroScene({
         reducedMotion={reducedMotion}
       />
 
-      <div className="relative z-10 flex w-full flex-col gap-5 p-6 pb-28 md:gap-6 md:p-12 md:pb-24">
-        <h1 className="hero-name font-display text-[clamp(3rem,11vw,11rem)] leading-[0.92] tracking-tight">
-          {name}
-        </h1>
-        <p className="hero-tagline text-ink max-w-prose font-sans text-base md:text-lg">
-          {tagline}
-        </p>
-        <p className="hero-camera text-ink-faint font-mono text-[11px] tracking-[0.18em] uppercase">
-          {cameraSpec}
-        </p>
-        <div className="hero-ctas flex flex-wrap gap-3 pt-2 md:gap-4">
-          <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            href={ctaPrimaryHref as any}
-            className="bg-accent text-canvas hover:bg-accent/90 rounded-sm px-5 py-2.5 text-sm font-medium transition-colors"
-          >
-            {ctaPrimaryLabel}
-          </Link>
-          <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            href={ctaSecondaryHref as any}
-            className="border-hairline hover:text-accent rounded-sm border px-5 py-2.5 text-sm transition-colors"
-          >
-            {ctaSecondaryLabel}
-          </Link>
-        </div>
-      </div>
+      <HeroCoverTitle
+        kicker={activeKicker}
+        cameraSpec={activeCamera}
+        location={activeLocation}
+        name={name}
+        rotationKey={activeIndex}
+      />
+      <HeroStickyCTA
+        primaryLabel={ctaPrimaryLabel}
+        primaryHref={ctaPrimaryHref}
+        secondaryLabel={ctaSecondaryLabel}
+        secondaryHref={ctaSecondaryHref}
+      />
 
       <ScrollCue label={scrollCueLabel} />
     </section>
