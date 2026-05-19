@@ -69,3 +69,32 @@ describe("landing photos — hero asset integrity", () => {
     expect(getHeroPhotos("en")[0]?.src).toBe("/images/landing/hero-cover.jpg");
   });
 });
+
+describe("landing photos — hero display metadata", () => {
+  it("resolves a per-photo kicker, cameraSpec, and location for every hero photo (en)", () => {
+    const photos = getHeroPhotos("en");
+    expect(photos.length).toBe(7);
+    for (const p of photos) {
+      expect(typeof p.kicker).toBe("string");
+      expect(typeof p.cameraSpec).toBe("string");
+      expect(typeof p.location).toBe("string");
+      expect(p.kicker.length).toBeGreaterThan(0);
+      expect(p.cameraSpec.length).toBeGreaterThan(0);
+      expect(p.location.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("returns localized German kicker strings when locale is 'de'", () => {
+    const en = getHeroPhotos("en");
+    const de = getHeroPhotos("de");
+    expect(en.length).toBe(de.length);
+    const enCover = en.find((p) => p.id === "cover");
+    const deCover = de.find((p) => p.id === "cover");
+    expect(enCover!.kicker).not.toBe(deCover!.kicker);
+  });
+
+  it("leads the rotation with cover (photo-of-the-year frame)", () => {
+    const photos = getHeroPhotos("en");
+    expect(photos[0]?.id).toBe("cover");
+  });
+});
