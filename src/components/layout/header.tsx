@@ -31,7 +31,7 @@ export async function Header() {
       >
         belin akguel
       </Link>
-      <nav className="hidden gap-6 text-sm lg:flex">
+      <nav className="flex gap-6 text-sm max-lg:hidden">
         {items.map((item) => (
           <Link
             key={item.href}

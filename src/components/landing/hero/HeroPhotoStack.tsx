@@ -30,7 +30,7 @@ export function HeroPhotoStack({ photos, activeIndex }: Props) {
     link.href = next.src;
     document.head.appendChild(link);
     return () => {
-      document.head.removeChild(link);
+      link.remove();
     };
   }, [activeIndex, photos]);
 

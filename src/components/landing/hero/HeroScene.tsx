@@ -4,7 +4,6 @@ import "./hero-motion.css";
 
 import { useEffect, useRef, useState } from "react";
 import { ScrollCue } from "@/components/landing/scroll-cue";
-import { usePinnedScene } from "@/components/motion/use-pinned-scene";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import type { ResolvedLandingPhoto } from "@/lib/landing/photos";
 import { HeroCoverTitle } from "./HeroCoverTitle";
@@ -56,7 +55,6 @@ export function HeroScene({
     typeof document === "undefined" ? true : document.visibilityState !== "hidden",
   );
   const [firstLoad, setFirstLoad] = useState(true);
-  usePinnedScene({ pin: sectionRef, end: "+=100%" });
 
   const activePhoto = photos[activeIndex];
   const activeKicker = activePhoto?.kicker ?? "";
