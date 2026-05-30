@@ -53,7 +53,8 @@
     "about": "About",
     "services": "Services",
     "journal": "Journal",
-    "contact": "Contact"
+    "contact": "Contact",
+    "signIn": "Sign in"
   },
   "footer": {
     "impressum": "Imprint",

@@ -86,3 +86,17 @@
 .header-shell[data-hidden="true"] {
   transform: translateY(-100%);
 }
+
+/*
+ * @neondatabase/auth-ui/css (imported above) ships its own *unlayered* copy of
+ * Tailwind's base utilities (.flex, .hidden, ...). Unlayered rules beat
+ * Tailwind's layered responsive variants, so `max-lg:hidden` on the primary nav
+ * never takes effect and the links overflow on mobile. This unlayered rule is
+ * emitted last, so it wins — collapsing the nav below `lg` (64rem) and leaving
+ * room for the logo, sign-in button, and locale switcher on phones.
+ */
+@media (width < 64rem) {
+  .header-shell > nav {
+    display: none;
+  }
+}
