@@ -1,8 +1,10 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { isLocale } from "@/lib/i18n/config";
+import type { Locale } from "@/lib/i18n/config";
 import { notFound } from "next/navigation";
 import { BookingForm } from "@/components/booking/booking-form";
 import { PageShell } from "@/components/site/page-shell";
+import { EditablePageHeader } from "@/components/site/editable-page-header";
 
 export default async function ServicesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -18,10 +20,16 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
 
   return (
     <PageShell>
-      <header className="flex flex-col gap-4">
-        <h1 className="font-display text-5xl tracking-tight md:text-6xl">{t("title")}</h1>
-        <p className="text-ink-muted max-w-prose text-base leading-relaxed">{t("intro")}</p>
-      </header>
+      <EditablePageHeader
+        slug="servicesPage"
+        locale={locale as Locale}
+        fallback={
+          <header className="flex flex-col gap-4">
+            <h1 className="font-display text-5xl tracking-tight md:text-6xl">{t("title")}</h1>
+            <p className="text-ink-muted max-w-prose text-base leading-relaxed">{t("intro")}</p>
+          </header>
+        }
+      />
 
       <section className="grid gap-4">
         {offers.map((offer) => (

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { LandingImage } from "@/components/landing/landing-image";
 import { PageShell } from "@/components/site/page-shell";
 import { getHighlightPhotos } from "@/lib/landing/photos";
+import { EditablePageHeader } from "@/components/site/editable-page-header";
 
 export default async function HighlightsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -16,13 +17,19 @@ export default async function HighlightsPage({ params }: { params: Promise<{ loc
 
   return (
     <PageShell width="wide">
-      <header className="flex max-w-3xl flex-col gap-4">
-        <p className="text-ink-muted font-mono text-xs tracking-widest uppercase">
-          {tCommon("label")}
-        </p>
-        <h1 className="font-display text-5xl tracking-tight md:text-6xl">{t("title")}</h1>
-        <p className="text-ink-muted max-w-prose text-base leading-relaxed">{t("intro")}</p>
-      </header>
+      <EditablePageHeader
+        slug="highlightsPage"
+        locale={locale as Locale}
+        fallback={
+          <header className="flex max-w-3xl flex-col gap-4">
+            <p className="text-ink-muted font-mono text-xs tracking-widest uppercase">
+              {tCommon("label")}
+            </p>
+            <h1 className="font-display text-5xl tracking-tight md:text-6xl">{t("title")}</h1>
+            <p className="text-ink-muted max-w-prose text-base leading-relaxed">{t("intro")}</p>
+          </header>
+        }
+      />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {photos.map((photo) => (
