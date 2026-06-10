@@ -54,7 +54,9 @@
     "services": "Services",
     "journal": "Journal",
     "contact": "Contact",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "menu": "Open menu",
+    "close": "Close menu"
   },
   "footer": {
     "impressum": "Imprint",

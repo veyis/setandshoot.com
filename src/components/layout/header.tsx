@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { HeaderShell } from "./header-shell";
 import { LocaleSwitcher } from "./locale-switcher";
+import { MobileNav } from "./mobile-nav";
 
 type NavItem = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -65,6 +66,12 @@ export async function Header() {
           </svg>
         </Link>
         <LocaleSwitcher />
+        <MobileNav
+          items={items}
+          signInLabel={t("signIn")}
+          menuLabel={t("menu")}
+          closeLabel={t("close")}
+        />
       </div>
     </HeaderShell>
   );

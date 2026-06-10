@@ -54,7 +54,9 @@
     "services": "Leistungen",
     "journal": "Journal",
     "contact": "Kontakt",
-    "signIn": "Anmelden"
+    "signIn": "Anmelden",
+    "menu": "Menü öffnen",
+    "close": "Menü schließen"
   },
   "footer": {
     "impressum": "Impressum",
