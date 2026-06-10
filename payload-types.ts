@@ -101,11 +101,13 @@ export interface Config {
     impressum: Impressum;
     datenschutz: Datenschutz;
     settings: Setting;
+    aboutPage: AboutPage;
   };
   globalsSelect: {
     impressum: ImpressumSelect<false> | ImpressumSelect<true>;
     datenschutz: DatenschutzSelect<false> | DatenschutzSelect<true>;
     settings: SettingsSelect<false> | SettingsSelect<true>;
+    aboutPage: AboutPageSelect<false> | AboutPageSelect<true>;
   };
   locale: 'de' | 'en';
   widgets: {
@@ -889,6 +891,93 @@ export interface Setting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "aboutPage".
+ */
+export interface AboutPage {
+  id: number;
+  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PageHeaderBlock".
+ */
+export interface PageHeaderBlock {
+  label?: string | null;
+  title: string;
+  intro?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pageHeader';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PortraitFigureBlock".
+ */
+export interface PortraitFigureBlock {
+  photo?: (number | null) | Photo;
+  caption?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'portraitFigure';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EditorialProseBlock".
+ */
+export interface EditorialProseBlock {
+  eyebrow?: string | null;
+  title?: string | null;
+  body1?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  pullQuote?: string | null;
+  body2?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  credits?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'editorialProse';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaLinkBlock".
+ */
+export interface CtaLinkBlock {
+  label: string;
+  target: '/contact' | '/about' | '/athletes' | '/services' | '/highlights' | '/stories' | '/';
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'ctaLink';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "impressum_select".
  */
 export interface ImpressumSelect<T extends boolean = true> {
@@ -931,6 +1020,68 @@ export interface SettingsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "aboutPage_select".
+ */
+export interface AboutPageSelect<T extends boolean = true> {
+  sections?:
+    | T
+    | {
+        pageHeader?: T | PageHeaderBlockSelect<T>;
+        portraitFigure?: T | PortraitFigureBlockSelect<T>;
+        editorialProse?: T | EditorialProseBlockSelect<T>;
+        ctaLink?: T | CtaLinkBlockSelect<T>;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PageHeaderBlock_select".
+ */
+export interface PageHeaderBlockSelect<T extends boolean = true> {
+  label?: T;
+  title?: T;
+  intro?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PortraitFigureBlock_select".
+ */
+export interface PortraitFigureBlockSelect<T extends boolean = true> {
+  photo?: T;
+  caption?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EditorialProseBlock_select".
+ */
+export interface EditorialProseBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  body1?: T;
+  pullQuote?: T;
+  body2?: T;
+  credits?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaLinkBlock_select".
+ */
+export interface CtaLinkBlockSelect<T extends boolean = true> {
+  label?: T;
+  target?: T;
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

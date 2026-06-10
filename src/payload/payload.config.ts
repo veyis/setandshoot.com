@@ -13,6 +13,7 @@ import { Stories } from "./collections/stories";
 import { Tags } from "./collections/tags";
 import { Teams } from "./collections/teams";
 import { Users } from "./collections/users";
+import { AboutPage } from "./globals/about-page";
 import { Datenschutz } from "./globals/datenschutz";
 import { Impressum } from "./globals/impressum";
 import { Settings } from "./globals/settings";
@@ -71,7 +72,7 @@ export default buildConfig({
       })
     : undefined,
   collections: [Users, Stories, Photos, Teams, Competitions, Tags, Bookings],
-  globals: [Impressum, Datenschutz, Settings],
+  globals: [Impressum, Datenschutz, Settings, AboutPage],
   editor: lexicalEditor({}),
   localization: {
     locales: [
