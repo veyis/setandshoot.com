@@ -18,7 +18,6 @@ export async function Footer() {
   const legal = [
     { href: "/impressum", label: t("footer.impressum") },
     { href: "/datenschutz", label: t("footer.datenschutz") },
-    { href: "/bildrechte", label: t("footer.bildrechte") },
   ];
 
   return (
