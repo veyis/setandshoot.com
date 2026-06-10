@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AuthViewClient } from "@/components/auth/auth-view-client";
 
 export const dynamic = "force-dynamic";
@@ -12,9 +13,9 @@ export default async function SignInPage({ searchParams }: Props) {
         <p className="text-accent mb-6 text-sm">
           This account does not have CMS admin access yet. Sign in with an admin email, or sign up
           first at{" "}
-          <a href="/sign-up" className="underline">
+          <Link href="/sign-up" className="underline">
             /sign-up
-          </a>
+          </Link>
           .
         </p>
       ) : null}
@@ -25,9 +26,9 @@ export default async function SignInPage({ searchParams }: Props) {
         </p>
       ) : null}
       <p className="text-ink-muted mb-6 text-sm">
-        <a href="/forgot-password" className="text-accent hover:underline">
+        <Link href="/forgot-password" className="text-accent hover:underline">
           Forgot password?
-        </a>
+        </Link>
       </p>
       <AuthViewClient view="sign-in" nextPath={next} />
     </main>
