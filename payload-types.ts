@@ -102,12 +102,20 @@ export interface Config {
     datenschutz: Datenschutz;
     settings: Setting;
     aboutPage: AboutPage;
+    contactPage: ContactPage;
+    servicesPage: ServicesPage;
+    athletesPage: AthletesPage;
+    highlightsPage: HighlightsPage;
   };
   globalsSelect: {
     impressum: ImpressumSelect<false> | ImpressumSelect<true>;
     datenschutz: DatenschutzSelect<false> | DatenschutzSelect<true>;
     settings: SettingsSelect<false> | SettingsSelect<true>;
     aboutPage: AboutPageSelect<false> | AboutPageSelect<true>;
+    contactPage: ContactPageSelect<false> | ContactPageSelect<true>;
+    servicesPage: ServicesPageSelect<false> | ServicesPageSelect<true>;
+    athletesPage: AthletesPageSelect<false> | AthletesPageSelect<true>;
+    highlightsPage: HighlightsPageSelect<false> | HighlightsPageSelect<true>;
   };
   locale: 'de' | 'en';
   widgets: {
@@ -978,6 +986,46 @@ export interface CtaLinkBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contactPage".
+ */
+export interface ContactPage {
+  id: number;
+  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "servicesPage".
+ */
+export interface ServicesPage {
+  id: number;
+  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "athletesPage".
+ */
+export interface AthletesPage {
+  id: number;
+  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "highlightsPage".
+ */
+export interface HighlightsPage {
+  id: number;
+  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "impressum_select".
  */
 export interface ImpressumSelect<T extends boolean = true> {
@@ -1082,6 +1130,74 @@ export interface CtaLinkBlockSelect<T extends boolean = true> {
   target?: T;
   id?: T;
   blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contactPage_select".
+ */
+export interface ContactPageSelect<T extends boolean = true> {
+  sections?:
+    | T
+    | {
+        pageHeader?: T | PageHeaderBlockSelect<T>;
+        portraitFigure?: T | PortraitFigureBlockSelect<T>;
+        editorialProse?: T | EditorialProseBlockSelect<T>;
+        ctaLink?: T | CtaLinkBlockSelect<T>;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "servicesPage_select".
+ */
+export interface ServicesPageSelect<T extends boolean = true> {
+  sections?:
+    | T
+    | {
+        pageHeader?: T | PageHeaderBlockSelect<T>;
+        portraitFigure?: T | PortraitFigureBlockSelect<T>;
+        editorialProse?: T | EditorialProseBlockSelect<T>;
+        ctaLink?: T | CtaLinkBlockSelect<T>;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "athletesPage_select".
+ */
+export interface AthletesPageSelect<T extends boolean = true> {
+  sections?:
+    | T
+    | {
+        pageHeader?: T | PageHeaderBlockSelect<T>;
+        portraitFigure?: T | PortraitFigureBlockSelect<T>;
+        editorialProse?: T | EditorialProseBlockSelect<T>;
+        ctaLink?: T | CtaLinkBlockSelect<T>;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "highlightsPage_select".
+ */
+export interface HighlightsPageSelect<T extends boolean = true> {
+  sections?:
+    | T
+    | {
+        pageHeader?: T | PageHeaderBlockSelect<T>;
+        portraitFigure?: T | PortraitFigureBlockSelect<T>;
+        editorialProse?: T | EditorialProseBlockSelect<T>;
+        ctaLink?: T | CtaLinkBlockSelect<T>;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

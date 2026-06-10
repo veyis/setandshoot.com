@@ -14,8 +14,12 @@ import { Tags } from "./collections/tags";
 import { Teams } from "./collections/teams";
 import { Users } from "./collections/users";
 import { AboutPage } from "./globals/about-page";
+import { AthletesPage } from "./globals/athletes-page";
+import { ContactPage } from "./globals/contact-page";
 import { Datenschutz } from "./globals/datenschutz";
+import { HighlightsPage } from "./globals/highlights-page";
 import { Impressum } from "./globals/impressum";
+import { ServicesPage } from "./globals/services-page";
 import { Settings } from "./globals/settings";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -72,7 +76,16 @@ export default buildConfig({
       })
     : undefined,
   collections: [Users, Stories, Photos, Teams, Competitions, Tags, Bookings],
-  globals: [Impressum, Datenschutz, Settings, AboutPage],
+  globals: [
+    Impressum,
+    Datenschutz,
+    Settings,
+    AboutPage,
+    ContactPage,
+    ServicesPage,
+    AthletesPage,
+    HighlightsPage,
+  ],
   editor: lexicalEditor({}),
   localization: {
     locales: [
