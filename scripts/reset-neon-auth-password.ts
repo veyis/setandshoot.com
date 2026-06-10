@@ -9,14 +9,47 @@ import { sql } from "@payloadcms/db-postgres";
 import { getPayload } from "payload";
 import config from "@payload-config";
 
+/**
+ * The reset flow calls the app's own /api/auth routes, so it needs the dev
+ * server's real origin. Next picks the next free port (3000 → 3001 → …) when
+ * 3000 is taken, so probe candidate localhost ports and use the first that
+ * answers /api/health. Non-localhost origins (e.g. production) are used as-is.
+ */
+async function resolveSiteUrl(): Promise<string> {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const url = new URL(configured);
+  const isLocal = url.hostname === "localhost" || url.hostname === "127.0.0.1";
+  if (!isLocal) return configured;
+
+  const startPort = Number(url.port) || 3000;
+  const ports = Array.from({ length: 11 }, (_, i) => startPort + i);
+  for (const port of ports) {
+    const base = `${url.protocol}//${url.hostname}:${port}`;
+    try {
+      const res = await fetch(`${base}/api/health`, { signal: AbortSignal.timeout(1000) });
+      if (res.ok) {
+        if (port !== startPort) console.log(`Detected dev server on port ${port}`);
+        return base;
+      }
+    } catch {
+      // nothing listening on this port — try the next one
+    }
+  }
+  throw new Error(
+    `No running dev server found on ${url.hostname}:${ports[0]}-${ports[ports.length - 1]}. ` +
+      "Start it with `pnpm dev` first.",
+  );
+}
+
 const email = process.argv[2]?.trim().toLowerCase();
 const newPassword = process.argv[3];
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 if (!email || !newPassword) {
   console.error("Usage: pnpm neon:reset-password <email> <new-password>");
   process.exit(1);
 }
+
+const siteUrl = await resolveSiteUrl();
 
 const payload = await getPayload({ config });
 

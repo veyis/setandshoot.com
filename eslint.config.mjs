@@ -33,6 +33,8 @@ export default tseslint.config(
       "coverage/",
       "src/migrations/",
       "payload-types.ts",
+      "public/",
+      ".agents/",
     ],
   },
 );
