@@ -106,11 +106,11 @@ plus at most 1–2 new blocks:
 - Contact → `pageHeader` + copy blocks around the existing (code) form.
 - Home → deferred / copy-only (see below).
 
-## Open questions
+## Resolved decisions
 
-1. **Home page**: the hero is heavily animated (GSAP). Full block-editing is risky;
-   propose copy-only there, or defer entirely. Decide at rollout time.
-2. **richText vs plain text** for `body1`/`body2`: spec assumes richText for editor
-   formatting; confirm that's wanted vs plain textarea (parity with today).
-3. **Seed re-runs**: seed is create-if-empty only; it will not overwrite editor
-   changes on later deploys. Confirm that's the desired safety behavior.
+1. **Home page**: deferred. The animated hero (GSAP) is out of scope for this pilot
+   and the rollout; revisit separately.
+2. **`body1`/`body2` field type**: `richText` (lexical), so the editor can format
+   paragraphs/bold/links. Short fields stay plain `text`.
+3. **Seed behavior**: create-if-empty only. Re-running the seed (e.g. on later
+   deploys) never overwrites the editor's live edits.
