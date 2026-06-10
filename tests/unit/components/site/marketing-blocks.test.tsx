@@ -35,4 +35,40 @@ describe("MarketingBlocks", () => {
     const { container } = render(<MarketingBlocks sections={[unknown]} locale="de" />);
     expect(container).toBeEmptyDOMElement();
   });
+
+  it("portraitFigure falls back to built-in portrait when no photo is set", () => {
+    const portrait = {
+      id: "3",
+      blockType: "portraitFigure" as const,
+      caption: "Belin Akguel",
+    };
+    render(<MarketingBlocks sections={[portrait]} locale="de" />);
+    expect(screen.getByRole("img")).toBeInTheDocument();
+    expect(screen.getByText("Belin Akguel")).toBeInTheDocument();
+  });
+
+  it("editorialProse splits credits on newlines into separate spans", () => {
+    const prose = {
+      id: "4",
+      blockType: "editorialProse" as const,
+      credits: "LINE A\nLINE B\nLINE C",
+    };
+    render(<MarketingBlocks sections={[prose]} locale="de" />);
+    expect(screen.getByText("LINE A")).toBeInTheDocument();
+    expect(screen.getByText("LINE B")).toBeInTheDocument();
+    expect(screen.getByText("LINE C")).toBeInTheDocument();
+  });
+
+  it("editorialProse drops blank lines from credits", () => {
+    const prose = {
+      id: "5",
+      blockType: "editorialProse" as const,
+      credits: "X\n\nY",
+    };
+    const { container } = render(<MarketingBlocks sections={[prose]} locale="de" />);
+    const spans = container.querySelectorAll("span");
+    expect(spans).toHaveLength(2);
+    expect(spans[0]!.textContent).toBe("X");
+    expect(spans[1]!.textContent).toBe("Y");
+  });
 });
