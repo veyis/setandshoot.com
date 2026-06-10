@@ -60,6 +60,11 @@
     "impressum": "Imprint",
     "datenschutz": "Privacy"
   },
+  "notFound": {
+    "title": "Page not found",
+    "body": "This page doesn’t exist — or no longer does. Back to the court.",
+    "home": "Back to home"
+  },
   "services": {
     "title": "Services",
     "intro": "Volleyball photography for clubs, federations, and media — from match day to season coverage.",

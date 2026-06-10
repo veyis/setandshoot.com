@@ -60,6 +60,11 @@
     "impressum": "Impressum",
     "datenschutz": "Datenschutz"
   },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "body": "Diese Seite existiert nicht — oder nicht mehr. Zurück ins Spielfeld.",
+    "home": "Zur Startseite"
+  },
   "services": {
     "title": "Leistungen",
     "intro": "Volleyball-Fotografie für Vereine, Verbände und Medien — von Spieltag bis Saisonreportage.",
