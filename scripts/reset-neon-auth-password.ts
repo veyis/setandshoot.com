@@ -67,7 +67,7 @@ const token = identifier.slice("reset-password:".length);
 const resetResponse = await fetch(`${siteUrl}/api/auth/reset-password`, {
   method: "POST",
   headers: { "Content-Type": "application/json", Origin: siteUrl },
-  body: JSON.stringify({ token, newPassword }),
+  body: JSON.stringify({ token, newPassword: String(newPassword) }),
 });
 
 if (!resetResponse.ok) {
