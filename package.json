@@ -40,6 +40,7 @@
     "@payloadcms/email-resend": "3.84.1",
     "@payloadcms/next": "3.84.1",
     "@payloadcms/richtext-lexical": "3.84.1",
+    "@payloadcms/storage-s3": "3.84.1",
     "@sentry/nextjs": "^10.53.1",
     "@tailwindcss/postcss": "^4.3.0",
     "@vercel/analytics": "^2.0.1",
