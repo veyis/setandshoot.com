@@ -39,16 +39,6 @@ export async function proxy(request: NextRequest) {
   // Gate /admin: Neon Auth is the only login. Payload admin trusts the same session
   // via the `neon` custom auth strategy (no separate CMS password).
   if (pathname.startsWith("/admin")) {
-    // Native Payload login is disabled (Neon-only auth), so the legacy
-    // /admin/login route can only render an empty Payload splash. Funnel it
-    // back through the gate → dashboard if signed in, → /sign-in if not.
-    if (pathname === "/admin/login" || pathname.startsWith("/admin/login/")) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/admin";
-      url.search = "";
-      return NextResponse.redirect(url);
-    }
-
     let { data: session } = await auth.getSession();
     if (!session?.user) {
       const url = request.nextUrl.clone();
@@ -67,6 +57,16 @@ export async function proxy(request: NextRequest) {
       url.pathname = "/sign-in";
       url.searchParams.set("next", pathname);
       url.searchParams.set("error", "admin_required");
+      return NextResponse.redirect(url);
+    }
+
+    // Native Payload login is disabled (Neon-only auth), so the legacy
+    // /admin/login route can only render an empty Payload splash. Funnel it
+    // back through the gate → dashboard if signed in, → /sign-in if not.
+    if (pathname === "/admin/login" || pathname.startsWith("/admin/login/")) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/admin";
+      url.search = "";
       return NextResponse.redirect(url);
     }
 
