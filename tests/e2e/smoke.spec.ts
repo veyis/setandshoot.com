@@ -16,8 +16,8 @@ test("Landing renders all five elevation scenes (DE)", async ({ page }) => {
   // Hero h1
   await expect(page.getByRole("heading", { name: /belin akguel/i, level: 1 })).toBeVisible();
 
-  // Featured story title (depends on seeded story)
-  await expect(page.getByText(/Pre-Saison/i).first()).toBeVisible();
+  // Featured story "read" CTA (stable i18n copy, not the seeded story title)
+  await expect(page.getByText("Story lesen").first()).toBeVisible();
 
   // Work Mosaic eyebrow contains WORK (use .first() in case "WORK" appears in nav too)
   await expect(page.getByText(/^WORK$/).first()).toBeVisible();
@@ -45,7 +45,7 @@ test("Landing renders under prefers-reduced-motion", async ({ page }) => {
   await page.goto("/");
   await page.waitForLoadState("networkidle");
   await expect(page.getByRole("heading", { name: /belin akguel/i, level: 1 })).toBeVisible();
-  await expect(page.getByText(/Pre-Saison/i).first()).toBeVisible();
+  await expect(page.getByText("Story lesen").first()).toBeVisible();
   await expect(page.getByText("ÜBER MICH").first()).toBeVisible();
   // Booking CTA primary link — scoped to the booking-cta section to avoid colliding
   // with the hero sticky-CTA which uses a near-identical label ("Anfrage stellen").
