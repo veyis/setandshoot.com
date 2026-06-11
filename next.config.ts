@@ -15,11 +15,10 @@ const config: NextConfig = {
     deviceSizes: [640, 768, 1024, 1280, 1536, 1920, 2880],
     imageSizes: [16, 32, 64, 96, 128, 256, 384, 512],
     remotePatterns: [
-      { protocol: "https", hostname: "api.setandshoot.com", pathname: "/storage/**" },
       { protocol: "https", hostname: "*.setandshoot.com", pathname: "/**" },
-      // Payload's local upload adapter returns absolute URLs against the dev
-      // server (e.g. http://localhost:3000/api/photos/file/<name>).
-      { protocol: "http", hostname: "localhost", pathname: "/api/**" },
+      // Cloudflare R2 public serving (cdn.setandshoot.com covered above; r2.dev
+      // is the interim public URL until the custom domain is bound).
+      { protocol: "https", hostname: "*.r2.dev", pathname: "/**" },
     ],
   },
 };

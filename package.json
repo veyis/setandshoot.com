@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "tsx scripts/sync-public-media.ts && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -23,8 +23,7 @@
     "neon:reset-password": "bash scripts/payload-cli.sh run scripts/reset-neon-auth-password.ts",
     "seed:photos": "tsx --env-file=.env.local scripts/seed/photos.ts",
     "seed:about-page": "bash scripts/payload-cli.sh run scripts/seed/about-page.ts",
-    "seed:marketing-pages": "bash scripts/payload-cli.sh run scripts/seed/marketing-pages.ts",
-    "media:sync": "tsx scripts/sync-public-media.ts"
+    "seed:marketing-pages": "bash scripts/payload-cli.sh run scripts/seed/marketing-pages.ts"
   },
   "pnpm": {
     "ignoredBuiltDependencies": [
