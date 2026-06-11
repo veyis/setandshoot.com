@@ -71,4 +71,28 @@ describe("MarketingBlocks", () => {
     expect(spans[0]!.textContent).toBe("X");
     expect(spans[1]!.textContent).toBe("Y");
   });
+
+  it("serviceOffers renders all offer titles", () => {
+    const offers = {
+      id: "6",
+      blockType: "serviceOffers" as const,
+      items: [
+        { id: "a", title: "Spieltag", body: "Fotos vom Spieltag." },
+        { id: "b", title: "Saison", body: "Saisonbegleitung." },
+      ],
+    };
+    render(<MarketingBlocks sections={[offers]} locale="de" />);
+    expect(screen.getByText("Spieltag")).toBeInTheDocument();
+    expect(screen.getByText("Saison")).toBeInTheDocument();
+  });
+
+  it("serviceOffers with empty items renders nothing", () => {
+    const offers = {
+      id: "7",
+      blockType: "serviceOffers" as const,
+      items: [],
+    };
+    const { container } = render(<MarketingBlocks sections={[offers]} locale="de" />);
+    expect(container).toBeEmptyDOMElement();
+  });
 });

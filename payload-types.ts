@@ -903,7 +903,7 @@ export interface Setting {
  */
 export interface AboutPage {
   id: number;
-  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock)[] | null;
+  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock | ServiceOffersBlock)[] | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -986,11 +986,27 @@ export interface CtaLinkBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServiceOffersBlock".
+ */
+export interface ServiceOffersBlock {
+  items?:
+    | {
+        title: string;
+        body: string;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'serviceOffers';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contactPage".
  */
 export interface ContactPage {
   id: number;
-  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock)[] | null;
+  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock | ServiceOffersBlock)[] | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1000,7 +1016,7 @@ export interface ContactPage {
  */
 export interface ServicesPage {
   id: number;
-  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock)[] | null;
+  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock | ServiceOffersBlock)[] | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1010,7 +1026,7 @@ export interface ServicesPage {
  */
 export interface AthletesPage {
   id: number;
-  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock)[] | null;
+  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock | ServiceOffersBlock)[] | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1020,7 +1036,7 @@ export interface AthletesPage {
  */
 export interface HighlightsPage {
   id: number;
-  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock)[] | null;
+  sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock | ServiceOffersBlock)[] | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1081,6 +1097,7 @@ export interface AboutPageSelect<T extends boolean = true> {
         portraitFigure?: T | PortraitFigureBlockSelect<T>;
         editorialProse?: T | EditorialProseBlockSelect<T>;
         ctaLink?: T | CtaLinkBlockSelect<T>;
+        serviceOffers?: T | ServiceOffersBlockSelect<T>;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1133,6 +1150,21 @@ export interface CtaLinkBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServiceOffersBlock_select".
+ */
+export interface ServiceOffersBlockSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        title?: T;
+        body?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contactPage_select".
  */
 export interface ContactPageSelect<T extends boolean = true> {
@@ -1143,6 +1175,7 @@ export interface ContactPageSelect<T extends boolean = true> {
         portraitFigure?: T | PortraitFigureBlockSelect<T>;
         editorialProse?: T | EditorialProseBlockSelect<T>;
         ctaLink?: T | CtaLinkBlockSelect<T>;
+        serviceOffers?: T | ServiceOffersBlockSelect<T>;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1160,6 +1193,7 @@ export interface ServicesPageSelect<T extends boolean = true> {
         portraitFigure?: T | PortraitFigureBlockSelect<T>;
         editorialProse?: T | EditorialProseBlockSelect<T>;
         ctaLink?: T | CtaLinkBlockSelect<T>;
+        serviceOffers?: T | ServiceOffersBlockSelect<T>;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1177,6 +1211,7 @@ export interface AthletesPageSelect<T extends boolean = true> {
         portraitFigure?: T | PortraitFigureBlockSelect<T>;
         editorialProse?: T | EditorialProseBlockSelect<T>;
         ctaLink?: T | CtaLinkBlockSelect<T>;
+        serviceOffers?: T | ServiceOffersBlockSelect<T>;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1194,6 +1229,7 @@ export interface HighlightsPageSelect<T extends boolean = true> {
         portraitFigure?: T | PortraitFigureBlockSelect<T>;
         editorialProse?: T | EditorialProseBlockSelect<T>;
         ctaLink?: T | CtaLinkBlockSelect<T>;
+        serviceOffers?: T | ServiceOffersBlockSelect<T>;
       };
   updatedAt?: T;
   createdAt?: T;
