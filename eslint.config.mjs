@@ -32,6 +32,7 @@ export default tseslint.config(
       "test-results/",
       "coverage/",
       "src/migrations/",
+      "src/app/(payload)/admin/importMap.js",
       "payload-types.ts",
       "public/",
       ".agents/",

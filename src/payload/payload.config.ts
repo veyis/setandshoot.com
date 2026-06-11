@@ -67,6 +67,10 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET ?? "",
   admin: {
     user: Users.slug,
+    importMap: { baseDir: dirname },
+    components: {
+      beforeNavLinks: ["/components/back-to-site#BackToSite"],
+    },
   },
   email: process.env.RESEND_API_KEY
     ? resendAdapter({
