@@ -1,6 +1,16 @@
+/*
+ * Layer order must be declared before the Tailwind import, or `neon-auth`
+ * would be appended after `utilities`. auth-ui's stylesheet ships an
+ * *unlayered* universal reset (`* { margin: 0; padding: 0 }`) plus copies of
+ * Tailwind utilities. Unlayered rules beat all layered ones, so importing it
+ * bare silently zeroes every site margin/padding utility (py-16, mt-8, …) on
+ * every page. Importing it into a layer that sits before `utilities` keeps
+ * auth-ui's component styling while letting the site's utilities win.
+ */
+@layer theme, base, neon-auth, components, utilities;
 @import "tailwindcss";
 @import "../styles/tokens.css";
-@import "@neondatabase/auth-ui/css";
+@import "@neondatabase/auth-ui/css" layer(neon-auth);
 
 @theme {
   --color-canvas: var(--bg-canvas);
@@ -85,18 +95,4 @@
 }
 .header-shell[data-hidden="true"] {
   transform: translateY(-100%);
-}
-
-/*
- * @neondatabase/auth-ui/css (imported above) ships its own *unlayered* copy of
- * Tailwind's base utilities (.flex, .hidden, ...). Unlayered rules beat
- * Tailwind's layered responsive variants, so `max-lg:hidden` on the primary nav
- * never takes effect and the links overflow on mobile. This unlayered rule is
- * emitted last, so it wins — collapsing the nav below `lg` (64rem) and leaving
- * room for the logo, sign-in button, and locale switcher on phones.
- */
-@media (width < 64rem) {
-  .header-shell > nav {
-    display: none;
-  }
 }
