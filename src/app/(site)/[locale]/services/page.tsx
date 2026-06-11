@@ -24,24 +24,25 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
         slug="servicesPage"
         locale={locale as Locale}
         fallback={
-          <header className="flex flex-col gap-4">
-            <h1 className="font-display text-5xl tracking-tight md:text-6xl">{t("title")}</h1>
-            <p className="text-ink-muted max-w-prose text-base leading-relaxed">{t("intro")}</p>
-          </header>
+          <>
+            <header className="flex flex-col gap-4">
+              <h1 className="font-display text-5xl tracking-tight md:text-6xl">{t("title")}</h1>
+              <p className="text-ink-muted max-w-prose text-base leading-relaxed">{t("intro")}</p>
+            </header>
+            <section className="grid gap-4">
+              {offers.map((offer) => (
+                <article
+                  key={offer.title}
+                  className="border-hairline flex flex-col gap-2 rounded-sm border px-4 py-4"
+                >
+                  <h2 className="font-display text-xl tracking-tight">{offer.title}</h2>
+                  <p className="text-ink-muted text-sm leading-relaxed">{offer.body}</p>
+                </article>
+              ))}
+            </section>
+          </>
         }
       />
-
-      <section className="grid gap-4">
-        {offers.map((offer) => (
-          <article
-            key={offer.title}
-            className="border-hairline flex flex-col gap-2 rounded-sm border px-4 py-4"
-          >
-            <h2 className="font-display text-xl tracking-tight">{offer.title}</h2>
-            <p className="text-ink-muted text-sm leading-relaxed">{offer.body}</p>
-          </article>
-        ))}
-      </section>
 
       <section className="flex flex-col gap-6">
         <h2 className="font-display text-2xl">{t("bookingHeading")}</h2>

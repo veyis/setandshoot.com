@@ -13,9 +13,11 @@ import path from "node:path";
 import { getPayload } from "payload";
 import config from "@payload-config";
 
+type Offer = { title: string; body: string };
+
 type Messages = {
   contact: { title: string; intro: string };
-  services: { title: string; intro: string };
+  services: { title: string; intro: string; offers: Offer[] };
   pages: {
     common: { label: string };
     athletes: { title: string; intro: string };
@@ -62,6 +64,13 @@ function blockFor({ label, title, intro }: Header) {
   return { blockType: "pageHeader" as const, ...(label ? { label } : {}), title, intro };
 }
 
+function offersBlockFor(m: Messages) {
+  return {
+    blockType: "serviceOffers" as const,
+    items: m.services.offers.map(({ title, body }) => ({ title, body })),
+  };
+}
+
 const payload = await getPayload({ config });
 
 const de = await loadMessages("de");
@@ -69,6 +78,47 @@ const en = await loadMessages("en");
 
 for (const { slug, header } of PAGES) {
   const existing = await payload.findGlobal({ slug, locale: "de", depth: 0 });
+
+  // servicesPage seeds [pageHeader, serviceOffers]; skip only if it already has a
+  // serviceOffers block (so an existing pageHeader-only global still gets offers).
+  if (slug === "servicesPage") {
+    const hasOffers = (existing.sections ?? []).some((b) => b.blockType === "serviceOffers");
+    if (hasOffers) {
+      console.log(`${slug} already has a serviceOffers block — skipping (no overwrite).`);
+      continue;
+    }
+
+    // Pass 1: write the German content (creates block rows + ids).
+    await payload.updateGlobal({
+      slug,
+      locale: "de",
+      data: { sections: [blockFor(header(de)), offersBlockFor(de)] },
+      context: { disableRevalidate: true },
+    });
+
+    // Pass 2: re-read to get the generated block ids, then write the English localized
+    // values onto the SAME rows. `items` is a localized array, so the whole array is
+    // written per-locale against the serviceOffers block id (no per-item id matching).
+    const seeded = await payload.findGlobal({ slug, locale: "de", depth: 0 });
+    const seededSections = seeded.sections ?? [];
+    const headerId = seededSections.find((b) => b.blockType === "pageHeader")?.id;
+    const offersId = seededSections.find((b) => b.blockType === "serviceOffers")?.id;
+    await payload.updateGlobal({
+      slug,
+      locale: "en",
+      data: {
+        sections: [
+          { ...blockFor(header(en)), id: headerId },
+          { ...offersBlockFor(en), id: offersId },
+        ],
+      },
+      context: { disableRevalidate: true },
+    });
+
+    console.log(`Seeded ${slug} (pageHeader + serviceOffers, de + en).`);
+    continue;
+  }
+
   if (existing.sections?.length) {
     console.log(`${slug} already has sections — skipping (no overwrite).`);
     continue;

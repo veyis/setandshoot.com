@@ -6,3 +6,8 @@ for (const path of ["contact", "services", "athletes", "highlights"]) {
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   });
 }
+
+test("/services renders an editable offer card", async ({ page }) => {
+  await page.goto("/services");
+  await expect(page.getByText("Spieltag").first()).toBeVisible();
+});
