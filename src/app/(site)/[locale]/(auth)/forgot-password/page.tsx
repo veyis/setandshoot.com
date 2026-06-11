@@ -8,7 +8,7 @@ export default async function ForgotPasswordPage() {
   const t = await getTranslations("auth");
 
   return (
-    <main className="mx-auto max-w-md px-4 py-16">
+    <main className="mx-auto max-w-md px-4 pt-32 pb-16">
       <p className="text-ink-muted mb-6 text-sm">
         <Link href="/sign-in" className="hover:text-accent transition-colors">
           ← {t("backToSignIn")}

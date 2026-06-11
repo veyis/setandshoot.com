@@ -55,6 +55,7 @@
     "journal": "Journal",
     "contact": "Contact",
     "signIn": "Sign in",
+    "account": "Account",
     "menu": "Open menu",
     "close": "Close menu"
   },
@@ -139,6 +140,17 @@
     "errorGeneric": "Could not send your inquiry. Please try again later."
   },
   "auth": {
-    "backToSignIn": "Back to sign in"
+    "backToSignIn": "Back to sign in",
+    "adminRequired": "This account does not have CMS access yet. Sign in with an admin email, or create an account first.",
+    "adminNext": "One account for the site and the CMS — sign in once and you go straight to the admin panel."
+  },
+  "account": {
+    "title": "Account",
+    "signedInAs": "Signed in as {email}",
+    "bookings": "Your bookings",
+    "openCms": "Open CMS",
+    "bookingsTitle": "Your bookings",
+    "bookingsEmpty": "You haven't submitted any bookings yet.",
+    "backToAccount": "Back to account"
   }
 }

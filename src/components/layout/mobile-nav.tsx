@@ -3,19 +3,23 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { authClient } from "@/lib/auth/client";
 
 type Item = { href: string; label: string };
 
 type Props = {
   items: Item[];
   signInLabel: string;
+  accountLabel: string;
   menuLabel: string;
   closeLabel: string;
 };
 
-export function MobileNav({ items, signInLabel, menuLabel, closeLabel }: Props) {
+export function MobileNav({ items, signInLabel, accountLabel, menuLabel, closeLabel }: Props) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
+  const { data: session } = authClient.useSession();
+  const signedIn = Boolean(session?.user);
 
   // While open: close on Escape and lock background scroll. The drawer only
   // renders after a client click, so document is always available here.
@@ -98,11 +102,11 @@ export function MobileNav({ items, signInLabel, menuLabel, closeLabel }: Props) 
 
               <Link
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                href={"/sign-in" as any}
+                href={(signedIn ? "/account" : "/sign-in") as any}
                 onClick={close}
                 className="border-hairline text-ink hover:bg-ink hover:text-canvas mt-auto inline-flex w-fit rounded-sm border px-5 py-2.5 font-mono text-xs tracking-[0.15em] uppercase transition-colors"
               >
-                {signInLabel}
+                {signedIn ? accountLabel : signInLabel}
               </Link>
             </div>,
             document.body,

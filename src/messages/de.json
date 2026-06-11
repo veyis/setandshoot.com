@@ -55,6 +55,7 @@
     "journal": "Journal",
     "contact": "Kontakt",
     "signIn": "Anmelden",
+    "account": "Konto",
     "menu": "Menü öffnen",
     "close": "Menü schließen"
   },
@@ -139,6 +140,17 @@
     "errorGeneric": "Die Anfrage konnte nicht gesendet werden. Bitte versuche es später erneut."
   },
   "auth": {
-    "backToSignIn": "Zurück zur Anmeldung"
+    "backToSignIn": "Zurück zur Anmeldung",
+    "adminRequired": "Dieses Konto hat noch keinen CMS-Zugang. Melde dich mit einer Admin-E-Mail an oder erstelle zuerst ein Konto.",
+    "adminNext": "Ein Konto für Website und CMS — einmal anmelden, und du landest direkt im Admin-Bereich."
+  },
+  "account": {
+    "title": "Konto",
+    "signedInAs": "Angemeldet als {email}",
+    "bookings": "Deine Buchungen",
+    "openCms": "CMS öffnen",
+    "bookingsTitle": "Deine Buchungen",
+    "bookingsEmpty": "Du hast noch keine Buchungsanfragen gesendet.",
+    "backToAccount": "Zurück zum Konto"
   }
 }
