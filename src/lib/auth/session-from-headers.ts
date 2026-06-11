@@ -19,10 +19,25 @@ export async function getNeonSessionFromHeaders(
   const cookie = headers.get("cookie");
   if (!cookie) return null;
 
-  const response = await fetch(`${env.NEXT_PUBLIC_SITE_URL}/api/auth/get-session`, {
-    headers: { cookie },
-    cache: "no-store",
-  });
+  // redirect:"error" — if NEXT_PUBLIC_SITE_URL is not the canonical origin, the
+  // redirect hop would silently strip the cookie (Node fetch drops cookies on
+  // cross-origin redirects) and every CMS login would bounce-loop. Fail loudly
+  // instead so the misconfiguration shows up in runtime logs.
+  let response: Response;
+  try {
+    response = await fetch(`${env.NEXT_PUBLIC_SITE_URL}/api/auth/get-session`, {
+      headers: { cookie },
+      cache: "no-store",
+      redirect: "error",
+    });
+  } catch (error) {
+    console.error(
+      `[neon-auth] get-session fetch failed for ${env.NEXT_PUBLIC_SITE_URL} — ` +
+        `is NEXT_PUBLIC_SITE_URL the canonical origin (no redirect)?`,
+      error,
+    );
+    return null;
+  }
 
   if (!response.ok) return null;
 
