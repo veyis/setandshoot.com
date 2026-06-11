@@ -2,9 +2,15 @@ import { describe, expect, it } from "vitest";
 import { marketingBlocks } from "@/payload/blocks/marketing";
 
 describe("marketingBlocks", () => {
-  it("exposes the four pilot block types", () => {
+  it("exposes the pilot block types", () => {
     const slugs = marketingBlocks.map((b) => b.slug).sort();
-    expect(slugs).toEqual(["ctaLink", "editorialProse", "pageHeader", "portraitFigure"]);
+    expect(slugs).toEqual([
+      "ctaLink",
+      "editorialProse",
+      "pageHeader",
+      "portraitFigure",
+      "serviceOffers",
+    ]);
   });
 
   it("requires a title on the header and a label on the cta", () => {
