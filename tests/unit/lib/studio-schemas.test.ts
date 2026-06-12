@@ -129,3 +129,136 @@ describe("storyContentSchema", () => {
     ).toThrow();
   });
 });
+
+import {
+  settingsSchema,
+  impressumSchema,
+  datenschutzSchema,
+  teamSchema,
+  competitionSchema,
+  tagSchema,
+  taxonomyDeleteSchema,
+  marketingPageSchema,
+} from "@/lib/studio/schemas";
+
+describe("settingsSchema", () => {
+  const valid = { defaultWatermark: false, accentColor: "#E63946", homeFeaturedCount: 3 };
+  it("accepts valid input", () => {
+    expect(settingsSchema.parse(valid)).toEqual(valid);
+  });
+  it("rejects malformed hex colors", () => {
+    for (const accentColor of ["E63946", "#E639", "#GGGGGG", "#E6394655"]) {
+      expect(() => settingsSchema.parse({ ...valid, accentColor })).toThrow();
+    }
+  });
+  it("rejects homeFeaturedCount outside 1-6 or non-integer", () => {
+    for (const homeFeaturedCount of [0, 7, 2.5]) {
+      expect(() => settingsSchema.parse({ ...valid, homeFeaturedCount })).toThrow();
+    }
+  });
+});
+
+describe("impressumSchema", () => {
+  const valid = {
+    legalName: "Belin Akgül Fotografie",
+    addressLine1: "Straße 1",
+    postalCode: "28195",
+    city: "Bremen",
+    country: "Deutschland",
+    email: "mail@example.com",
+  };
+  it("accepts required fields; optionals default undefined", () => {
+    const r = impressumSchema.parse(valid);
+    expect(r.additionalNotesDe).toBeUndefined();
+    expect(r.additionalNotesEn).toBeUndefined();
+  });
+  it("rejects a bad email and missing required fields", () => {
+    expect(() => impressumSchema.parse({ ...valid, email: "not-an-email" })).toThrow();
+    expect(() => impressumSchema.parse({ ...valid, legalName: " " })).toThrow();
+  });
+});
+
+describe("datenschutzSchema", () => {
+  const valid = { titleDe: "Datenschutzerklärung", lastUpdated: "2026-06-01" };
+  it("accepts minimal input and optional rich text", () => {
+    const r = datenschutzSchema.parse({ ...valid, introDe: para, bodyEn: para });
+    expect(r.titleEn).toBeUndefined();
+  });
+  it("rejects empty titleDe and non-ISO lastUpdated", () => {
+    expect(() => datenschutzSchema.parse({ ...valid, titleDe: " " })).toThrow();
+    expect(() => datenschutzSchema.parse({ ...valid, lastUpdated: "01.06.2026" })).toThrow();
+  });
+});
+
+describe("taxonomy schemas", () => {
+  it("team/competition: id absent means create; tier enum enforced", () => {
+    expect(teamSchema.parse({ name: "VCW", published: true }).id).toBeUndefined();
+    expect(
+      competitionSchema.parse({ id: 3, name: "Pokal", season: "2025/26", published: true }).id,
+    ).toBe(3);
+    expect(() => teamSchema.parse({ name: "VCW", tier: "oberliga", published: true })).toThrow();
+    expect(teamSchema.parse({ name: "VCW", tier: "2-bundesliga", published: true }).tier).toBe(
+      "2-bundesliga",
+    );
+  });
+  it("competition requires season", () => {
+    expect(() => competitionSchema.parse({ name: "Pokal", published: true })).toThrow();
+  });
+  it("tag: nameDe required, slug follows SLUG_PATTERN", () => {
+    const r = tagSchema.parse({ nameDe: "Jubel", slug: "jubel", published: true });
+    expect(r.nameEn).toBeUndefined();
+    expect(() => tagSchema.parse({ nameDe: " ", slug: "jubel", published: true })).toThrow();
+    for (const slug of ["Jubel", "jubel raus", "jubel_raus"]) {
+      expect(() => tagSchema.parse({ nameDe: "Jubel", slug, published: true })).toThrow();
+    }
+  });
+  it("taxonomyDeleteSchema whitelists the three collections", () => {
+    expect(taxonomyDeleteSchema.parse({ collection: "tags", id: 1 }).collection).toBe("tags");
+    expect(() => taxonomyDeleteSchema.parse({ collection: "stories", id: 1 })).toThrow();
+  });
+});
+
+describe("marketingPageSchema", () => {
+  it("accepts the five page slugs with a full section set", () => {
+    const r = marketingPageSchema.parse({
+      slug: "aboutPage",
+      sections: [
+        { id: "a", blockType: "pageHeader", titleDe: "Titel", labelDe: "L", introDe: "I" },
+        { blockType: "portraitFigure", photoId: null, captionDe: "C" },
+        { blockType: "editorialProse", body1De: para, titleDe: "T" },
+        { blockType: "ctaLink", labelDe: "Kontakt", target: "/contact" },
+        { blockType: "serviceOffers", itemsDe: [{ title: "T", body: "B" }] },
+      ],
+    });
+    expect(r.sections).toHaveLength(5);
+  });
+  it("rejects unknown slugs and unknown block types", () => {
+    expect(() => marketingPageSchema.parse({ slug: "settings", sections: [] })).toThrow();
+    expect(() =>
+      marketingPageSchema.parse({
+        slug: "aboutPage",
+        sections: [{ blockType: "fullBleedPhoto", photoId: 1 }],
+      }),
+    ).toThrow();
+  });
+  it("enforces required DE fields per block", () => {
+    expect(() =>
+      marketingPageSchema.parse({
+        slug: "contactPage",
+        sections: [{ blockType: "pageHeader", titleDe: " " }],
+      }),
+    ).toThrow();
+    expect(() =>
+      marketingPageSchema.parse({
+        slug: "contactPage",
+        sections: [{ blockType: "ctaLink", labelDe: "Los", target: "/nope" }],
+      }),
+    ).toThrow();
+    expect(() =>
+      marketingPageSchema.parse({
+        slug: "servicesPage",
+        sections: [{ blockType: "serviceOffers", itemsDe: [{ title: "T", body: " " }] }],
+      }),
+    ).toThrow();
+  });
+});
