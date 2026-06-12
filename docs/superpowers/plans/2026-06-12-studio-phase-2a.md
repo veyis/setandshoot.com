@@ -486,3 +486,15 @@ export async function setStoryPublishedAction(input: {
 5. If the spike fails (version conflicts, hydration issues, JSON drift): 2b falls back to "rich text links out to `/admin`" (spec's sanctioned alternative) and ships the block builder without inline rich text.
 
 Block-builder notes for the 2b plan: `layout` blocks at depth 0 carry photo ids + stable block `id`s; updates must send the complete `layout` array (structure is shared across locales; localized subfields like `text`/`caption`/`quote` need per-locale updates keyed by block `id` — verify Payload 3.84 semantics with a manual Local API experiment BEFORE writing the plan). Reordering UI: up/down buttons, not drag-drop (simpler, accessible, beginner-friendly).
+
+---
+
+## Phase 2b spike — RESULT (2026-06-12): ✅ PASS
+
+Executed on branch `studio-phase-2b`. The mini Lexical editor approach is viable; Phase 2b proceeds WITH inline rich text (no /admin link-out fallback needed).
+
+- Deps pinned exact to match `@payloadcms/richtext-lexical@3.84.1`: `lexical@0.41.0`, `@lexical/react@0.41.0`, `@lexical/link@0.41.0`, `@lexical/headless@0.41.0`, `@lexical/utils@0.41.0`.
+- **Round-trip fidelity proven headlessly** (`tests/unit/lib/studio-lexical.test.ts`, 7 tests): Payload-stored JSON (the `scripts/seed/about-page.ts` shape) parses via `parseEditorState` and re-serializes via `toJSON()` preserving text, bold/italic format bitmasks (1/2/3), link nodes with urls, and the Payload envelope fields (`root.type/version/direction/format/indent`).
+- **Safety lock implemented** (`src/lib/studio/lexical.ts`): `collectNodeTypes` walker + `isSupportedRichText` with allowed set `{root, paragraph, text, linebreak, link, autolink}`; nullish values count as supported (empty editor).
+- **Component built and mount-tested** (`src/components/studio/rich-text-mini.tsx` + jsdom test): `LexicalComposer` + `RichTextPlugin` + bold/italic/link toolbar; loads a Payload value, renders its text, emits `toJSON()` on change. Production build passes with the packages in the client bundle.
+- Known rough edge for the 2b plan: the Link toolbar uses `window.prompt` for the URL — replace with a small popover in 2b. Callers must gate on `isSupportedRichText` and render the locked `/admin` link themselves.
