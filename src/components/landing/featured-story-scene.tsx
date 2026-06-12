@@ -106,7 +106,7 @@ export async function FeaturedStoryScene({ story }: Props) {
                 href={`/stories/${story.slug}` as any}
                 className="font-display hover:text-accent w-fit text-2xl italic underline-offset-4 transition-colors hover:underline"
               >
-                {t("readStory")} →
+                {t("readStory")} <span aria-hidden="true">→</span>
               </Link>
               <p className="text-ink-faint font-mono text-xs">
                 © Belin Akguel · {new Date().getUTCFullYear()}

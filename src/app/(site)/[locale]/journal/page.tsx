@@ -6,6 +6,9 @@ import { LandingImage } from "@/components/landing/landing-image";
 import { PageShell } from "@/components/site/page-shell";
 import { getLandingPhotos } from "@/lib/landing/photos";
 
+// Static content (translations + bundled photos); revalidate hourly.
+export const revalidate = 3600;
+
 export default async function JournalPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
@@ -60,7 +63,7 @@ export default async function JournalPage({ params }: { params: Promise<{ locale
         href="/contact"
         className="text-accent hover:text-accent/90 w-fit text-sm font-medium transition-colors"
       >
-        {tCommon("cta")} →
+        {tCommon("cta")} <span aria-hidden="true">→</span>
       </Link>
     </PageShell>
   );

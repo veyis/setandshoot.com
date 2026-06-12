@@ -88,6 +88,7 @@ export const Photos: CollectionConfig = {
       name: "published",
       type: "checkbox",
       defaultValue: false,
+      index: true,
       admin: { position: "sidebar" },
     },
   ],

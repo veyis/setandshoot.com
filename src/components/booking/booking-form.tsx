@@ -6,8 +6,9 @@ import type { Locale } from "@/lib/i18n/config";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
+// text-base keeps inputs at 16px so iOS Safari doesn't auto-zoom on focus.
 const fieldClass =
-  "border-hairline bg-canvas focus:ring-accent w-full rounded-sm border px-3 py-2 text-sm outline-none focus:ring-2";
+  "border-hairline bg-canvas focus:ring-accent w-full rounded-sm border px-3 py-2 text-base outline-none focus:ring-2";
 
 export function BookingForm() {
   const t = useTranslations("booking");
@@ -17,6 +18,7 @@ export function BookingForm() {
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (state === "submitting") return;
     setState("submitting");
     setErrorMessage(null);
 
@@ -28,6 +30,7 @@ export function BookingForm() {
       email: String(data.get("email") ?? ""),
       organization: String(data.get("organization") ?? "") || undefined,
       message: String(data.get("message") ?? ""),
+      company: String(data.get("company") ?? ""),
       locale,
     };
 
@@ -38,7 +41,13 @@ export function BookingForm() {
         body: JSON.stringify(payload),
       });
 
-      const body = (await response.json()) as { error?: string };
+      let body: { error?: string } = {};
+      try {
+        body = (await response.json()) as { error?: string };
+      } catch {
+        // Non-JSON response (proxy timeout, 502, etc.) — fall through to the
+        // generic error below.
+      }
 
       if (!response.ok) {
         setState("error");
@@ -74,6 +83,12 @@ export function BookingForm() {
       data-testid="booking-form"
       noValidate
     >
+      {/* Honeypot: hidden from users, only bots fill it. */}
+      <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+        <label htmlFor="booking-company">Company</label>
+        <input id="booking-company" name="company" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+
       <div className="flex flex-col gap-2">
         <label htmlFor="booking-name" className="text-sm">
           {t("name")}
@@ -83,6 +98,7 @@ export function BookingForm() {
           name="name"
           type="text"
           required
+          aria-required="true"
           autoComplete="name"
           disabled={state === "submitting"}
           className={fieldClass}
@@ -98,6 +114,7 @@ export function BookingForm() {
           name="email"
           type="email"
           required
+          aria-required="true"
           autoComplete="email"
           disabled={state === "submitting"}
           className={fieldClass}
@@ -126,17 +143,24 @@ export function BookingForm() {
           id="booking-message"
           name="message"
           required
+          aria-required="true"
           rows={5}
           disabled={state === "submitting"}
           className={`${fieldClass} resize-y`}
         />
       </div>
 
-      {state === "error" && errorMessage && (
-        <p className="text-accent text-sm" role="alert" data-testid="booking-error">
-          {errorMessage}
-        </p>
-      )}
+      {/* Persistent live region so screen readers reliably announce errors
+          injected after submit. */}
+      <p
+        className="text-accent text-sm empty:sr-only"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-testid="booking-error"
+      >
+        {state === "error" ? errorMessage : ""}
+      </p>
 
       <button
         type="submit"

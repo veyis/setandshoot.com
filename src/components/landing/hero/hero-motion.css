@@ -228,3 +228,24 @@
   opacity: 1;
   transform: none;
 }
+
+/* Belt-and-suspenders: suppress the first-load burst from pure CSS so it never
+   plays during the pre-hydration window, before the JS-set
+   data-reduced-motion attribute exists. !important overrides the more-specific
+   [data-first-load="true"] animation rules above. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-scene .hero-kicker,
+  .hero-scene .hero-kicker-rule,
+  .hero-scene .hero-kicker-text,
+  .hero-scene .hero-cover-line-1,
+  .hero-scene .hero-cover-line-2,
+  .hero-scene .hero-camera,
+  .hero-scene .hero-cta-bar > *,
+  .hero-scene .hero-masthead,
+  .hero-scene .hero-progress {
+    animation: none !important;
+    clip-path: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

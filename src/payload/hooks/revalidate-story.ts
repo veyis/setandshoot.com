@@ -2,7 +2,11 @@ import type { CollectionAfterChangeHook } from "payload";
 import { revalidatePath } from "next/cache";
 
 /** Bust story list + detail when a story is saved */
-export const revalidateStory: CollectionAfterChangeHook = ({ doc, previousDoc }) => {
+export const revalidateStory: CollectionAfterChangeHook = ({ doc, previousDoc, context }) => {
+  // Skip when there's no Next request context (e.g. CLI seed sets
+  // context.disableRevalidate), where revalidatePath throws.
+  if (context?.disableRevalidate) return doc;
+
   revalidatePath("/stories");
   revalidatePath("/en/stories");
 

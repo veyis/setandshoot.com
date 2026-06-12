@@ -57,11 +57,16 @@
     "signIn": "Anmelden",
     "account": "Konto",
     "menu": "Menü öffnen",
-    "close": "Menü schließen"
+    "close": "Menü schließen",
+    "skipToContent": "Zum Inhalt springen",
+    "primary": "Hauptnavigation",
+    "language": "Sprache umschalten"
   },
   "footer": {
     "impressum": "Impressum",
-    "datenschutz": "Datenschutz"
+    "datenschutz": "Datenschutz",
+    "navLabel": "Navigation",
+    "legalLabel": "Rechtliches"
   },
   "notFound": {
     "title": "Seite nicht gefunden",
@@ -213,5 +218,10 @@
     "publish": "Veröffentlichen",
     "unpublish": "Verbergen",
     "viewLive": "Live ansehen"
+  },
+  "error": {
+    "title": "Etwas ist schiefgelaufen",
+    "body": "Beim Laden dieser Seite ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+    "retry": "Erneut versuchen"
   }
 }

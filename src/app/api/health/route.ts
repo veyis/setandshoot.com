@@ -18,7 +18,10 @@ export async function GET() {
     await payload.find({ collection: "users", limit: 1, depth: 0 });
     postgres.ok = true;
   } catch (cause) {
-    postgres.message = cause instanceof Error ? cause.message : "Unknown error";
+    // Log the real error server-side; never leak driver/connection details
+    // (which can include the connection string or host) to a public response.
+    console.error("[health] postgres check failed", cause);
+    postgres.message = "check failed";
   }
 
   try {
@@ -33,7 +36,8 @@ export async function GET() {
       neonAuth.message = `JWKS endpoint returned HTTP ${response.status}`;
     }
   } catch (cause) {
-    neonAuth.message = cause instanceof Error ? cause.message : "Unknown error";
+    console.error("[health] neon auth check failed", cause);
+    neonAuth.message = "check failed";
   }
 
   const ok = postgres.ok && neonAuth.ok;
