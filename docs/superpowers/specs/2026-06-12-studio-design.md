@@ -33,7 +33,7 @@ A beginner-friendly editing interface at `/studio`, built with the site's existi
 Rules:
 
 - Zod-validated inputs; typed from `payload-types.ts`.
-- Call Payload Local API with `overrideAccess: false` so Payload's existing access rules (`src/payload/access/`) still apply.
+- Verify the Neon Auth admin session at every entry point (route handler, server action, page), then call the Payload Local API with `overrideAccess: true` — the same pattern as `src/app/api/booking/route.ts`. (Payload's own access rules expect a Payload `req.user`, which these session-checked server modules don't carry.)
 - Existing `afterChange` revalidation hooks fire automatically on writes — no new cache-busting code.
 - Typed `{ ok, error }` results; no thrown errors crossing the action boundary.
 
