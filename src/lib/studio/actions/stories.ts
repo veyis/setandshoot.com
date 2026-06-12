@@ -13,8 +13,6 @@ import {
 } from "@/lib/studio/stories";
 import { updateStudioStoryContent } from "@/lib/studio/story-content";
 
-export type { StoryActionResult };
-
 export async function createStoryAction(input: unknown): Promise<StoryActionResult> {
   if (!(await requireAdminSession())) return { ok: false, error: "forbidden" };
   const parsed = storyCreateSchema.safeParse(input);
