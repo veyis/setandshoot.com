@@ -4,7 +4,7 @@
  * account page, closing the open-redirect / phishing vector on `?next=`.
  */
 export function safeRedirectPath(next: string | undefined, fallback = "/account"): string {
-  if (typeof next === "string" && next.startsWith("/") && !next.startsWith("//")) {
+  if (typeof next === "string" && /^\/(?![/\\])/.test(next)) {
     return next;
   }
   return fallback;

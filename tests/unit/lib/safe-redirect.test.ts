@@ -22,6 +22,12 @@ describe("safeRedirectPath", () => {
     expect(safeRedirectPath("javascript:alert(1)")).toBe("/account");
   });
 
+  it("rejects backslash-normalized open redirects", () => {
+    // Browsers normalize /\evil.com → //evil.com (protocol-relative)
+    expect(safeRedirectPath("/\\evil.com")).toBe("/account");
+    expect(safeRedirectPath("/\\\\evil.com")).toBe("/account");
+  });
+
   it("honors a custom fallback", () => {
     expect(safeRedirectPath(undefined, "/")).toBe("/");
   });
