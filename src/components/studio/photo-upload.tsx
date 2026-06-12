@@ -53,7 +53,10 @@ export function PhotoUpload() {
         tabIndex={0}
         onClick={() => inputRef.current?.click()}
         onKeyDown={(event) => {
-          if (event.key === "Enter" || event.key === " ") inputRef.current?.click();
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            inputRef.current?.click();
+          }
         }}
         onDragOver={(event) => event.preventDefault()}
         onDrop={onDrop}
