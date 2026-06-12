@@ -27,7 +27,7 @@ fi
 export PAYLOAD_MIGRATION_NAME="$NAME"
 
 node --input-type=module -e "
-import pg from './node_modules/.pnpm/pg@8.20.0/node_modules/pg/lib/index.js';
+import pg from 'pg';
 
 const name = process.env.PAYLOAD_MIGRATION_NAME;
 const c = new pg.Client({

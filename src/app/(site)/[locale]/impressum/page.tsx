@@ -3,7 +3,8 @@ import { isLocale } from "@/lib/i18n/config";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-dynamic";
+// ISR: rebuilt hourly; the impressum global revalidate hook busts on save.
+export const revalidate = 3600;
 
 export default async function ImpressumPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

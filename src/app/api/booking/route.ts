@@ -1,17 +1,31 @@
 import { NextResponse } from "next/server";
-import { getPayload } from "payload";
-import config from "@/payload/payload.config";
+import { getPayload } from "@/lib/payload/get-payload";
 import { bookingInquirySchema } from "@/lib/booking/schema";
 import { auth } from "@/lib/auth/server";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  if (!rateLimit(`booking:${clientIp(request)}`, 5, 60_000)) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again in a moment." },
+      { status: 429 },
+    );
+  }
+
   let body: unknown;
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+  }
+
+  // Honeypot: real users never see or fill `company`. Pretend success so bots
+  // get no signal, but never persist the submission.
+  const honeypot = (body as { company?: unknown })?.company;
+  if (typeof honeypot === "string" && honeypot.trim() !== "") {
+    return NextResponse.json({ ok: true }, { status: 201 });
   }
 
   const parsed = bookingInquirySchema.safeParse(body);
@@ -26,7 +40,7 @@ export async function POST(request: Request) {
   const customerId = session?.user?.id ?? null;
 
   try {
-    const payload = await getPayload({ config });
+    const payload = await getPayload();
     const doc = await payload.create({
       collection: "bookings",
       data: {

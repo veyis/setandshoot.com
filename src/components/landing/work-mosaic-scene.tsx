@@ -105,7 +105,7 @@ export async function WorkMosaicScene({ photos }: Props) {
           href={"/highlights" as any}
           className="hover:text-accent mt-10 inline-block font-mono text-xs tracking-[0.2em] uppercase transition-colors"
         >
-          {t("viewIndex")} →
+          {t("viewIndex")} <span aria-hidden="true">→</span>
         </Link>
       </Reveal>
     </section>

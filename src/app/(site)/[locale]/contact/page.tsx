@@ -6,6 +6,9 @@ import { BookingForm } from "@/components/booking/booking-form";
 import { PageShell } from "@/components/site/page-shell";
 import { EditablePageHeader } from "@/components/site/editable-page-header";
 
+// ISR: rebuilt hourly; the contactPage global revalidate hook busts on save.
+export const revalidate = 3600;
+
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();

@@ -103,7 +103,14 @@ export default buildConfig({
     outputFile: path.resolve(dirname, "../../payload-types.ts"),
   },
   db: postgresAdapter({
-    pool: { connectionString: process.env.DATABASE_URL ?? "" },
+    // Keep each serverless instance's pool small so concurrent cold starts
+    // don't exhaust Neon's pooler connection ceiling.
+    pool: {
+      connectionString: process.env.DATABASE_URL ?? "",
+      max: 3,
+      idleTimeoutMillis: 30_000,
+      connectionTimeoutMillis: 10_000,
+    },
     schemaName: "payload",
   }),
   plugins: storagePlugins,

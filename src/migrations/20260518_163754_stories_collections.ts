@@ -475,46 +475,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE UNIQUE INDEX "datenschutz_locales_locale_parent_id_unique" ON "payload"."datenschutz_locales" USING btree ("_locale","_parent_id");`)
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
-  await db.execute(sql`
-   DROP TABLE "payload"."users_sessions" CASCADE;
-  DROP TABLE "payload"."users" CASCADE;
-  DROP TABLE "payload"."stories_blocks_full_bleed_photo" CASCADE;
-  DROP TABLE "payload"."stories_blocks_diptych" CASCADE;
-  DROP TABLE "payload"."stories_blocks_triptych" CASCADE;
-  DROP TABLE "payload"."stories_blocks_inset_portrait" CASCADE;
-  DROP TABLE "payload"."stories_blocks_inset_portrait_locales" CASCADE;
-  DROP TABLE "payload"."stories_blocks_sequence" CASCADE;
-  DROP TABLE "payload"."stories_blocks_sequence_locales" CASCADE;
-  DROP TABLE "payload"."stories_blocks_pull_quote" CASCADE;
-  DROP TABLE "payload"."stories_blocks_pull_quote_locales" CASCADE;
-  DROP TABLE "payload"."stories_blocks_text_paragraph" CASCADE;
-  DROP TABLE "payload"."stories_blocks_text_paragraph_locales" CASCADE;
-  DROP TABLE "payload"."stories" CASCADE;
-  DROP TABLE "payload"."stories_locales" CASCADE;
-  DROP TABLE "payload"."stories_rels" CASCADE;
-  DROP TABLE "payload"."photos" CASCADE;
-  DROP TABLE "payload"."photos_locales" CASCADE;
-  DROP TABLE "payload"."photos_rels" CASCADE;
-  DROP TABLE "payload"."teams" CASCADE;
-  DROP TABLE "payload"."competitions" CASCADE;
-  DROP TABLE "payload"."tags" CASCADE;
-  DROP TABLE "payload"."tags_locales" CASCADE;
-  DROP TABLE "payload"."payload_kv" CASCADE;
-  DROP TABLE "payload"."payload_locked_documents" CASCADE;
-  DROP TABLE "payload"."payload_locked_documents_rels" CASCADE;
-  DROP TABLE "payload"."payload_preferences" CASCADE;
-  DROP TABLE "payload"."payload_preferences_rels" CASCADE;
-  DROP TABLE "payload"."payload_migrations" CASCADE;
-  DROP TABLE "payload"."impressum" CASCADE;
-  DROP TABLE "payload"."impressum_locales" CASCADE;
-  DROP TABLE "payload"."datenschutz" CASCADE;
-  DROP TABLE "payload"."datenschutz_locales" CASCADE;
-  DROP TABLE "payload"."settings" CASCADE;
-  DROP TYPE "payload"."_locales";
-  DROP TYPE "payload"."enum_users_role";
-  DROP TYPE "payload"."enum_stories_blocks_diptych_ratio";
-  DROP TYPE "payload"."enum_photos_watermark";
-  DROP TYPE "payload"."enum_teams_tier";
-  DROP TYPE "payload"."enum_competitions_tier";`)
+export async function down(_args: MigrateDownArgs): Promise<void> {
+  // The auto-generated teardown for this migration drops the entire `payload`
+  // schema — every table (including `payload_migrations`) and all data — which
+  // is effectively `DROP SCHEMA payload CASCADE` with no recovery path. Refuse
+  // to run it so an accidental `migrate:down` can't destroy production.
+  // To intentionally tear down, restore from a Neon branch/snapshot instead.
+  throw new Error(
+    "Refusing to roll back the initial migration: down() would drop the whole payload schema and all data. Restore from a Neon branch/snapshot instead.",
+  );
 }
