@@ -33,7 +33,6 @@ export const storyMetaSchema = z.object({
   venue: z.string().trim().max(200).optional(),
   playedAt: z.iso.date().optional(),
   result: z.string().trim().max(50).optional(),
-  published: z.boolean(),
 });
 
 export type StoryCreateInput = z.infer<typeof storyCreateSchema>;

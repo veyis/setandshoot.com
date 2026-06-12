@@ -82,7 +82,6 @@ export function StoryMetaForm({
       venue: venue.trim() === "" ? undefined : venue.trim(),
       playedAt: playedAt === "" ? undefined : playedAt,
       result: result.trim() === "" ? undefined : result.trim(),
-      published: story.published,
     });
     setSaving(false);
     if (actionResult.ok) {

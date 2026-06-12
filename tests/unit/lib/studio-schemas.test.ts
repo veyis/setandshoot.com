@@ -48,7 +48,7 @@ describe("storyCreateSchema", () => {
 });
 
 describe("storyMetaSchema", () => {
-  const base = { id: 1, titleDe: "Titel", published: false };
+  const base = { id: 1, titleDe: "Titel" };
   it("accepts minimal input; optional fields default undefined", () => {
     const r = storyMetaSchema.parse(base);
     expect(r.competitionId).toBeUndefined();

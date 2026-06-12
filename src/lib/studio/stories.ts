@@ -129,7 +129,6 @@ export async function updateStudioStoryMeta(input: StoryMetaInput): Promise<void
       venue: input.venue ?? null,
       playedAt: input.playedAt ?? null,
       result: input.result ?? null,
-      published: input.published,
     },
     locale: "de",
     overrideAccess: true,
