@@ -66,7 +66,7 @@ export async function AboutScene({ portrait }: Props) {
               href={"/about" as any}
               className="hover:text-accent inline-flex w-fit items-center text-sm transition-colors"
             >
-              {t("cta")} →
+              {t("cta")} <span aria-hidden="true">→</span>
             </Link>
           </Reveal>
         </div>

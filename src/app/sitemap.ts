@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getPayload } from "payload";
-import config from "@/payload/payload.config";
+import { getPayload } from "@/lib/payload/get-payload";
 import { env } from "@/env";
 
 // Refresh hourly so newly published stories appear without a redeploy.
@@ -33,7 +32,7 @@ function localized(base: string, path: string, lastModified?: Date): MetadataRou
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = env.NEXT_PUBLIC_SITE_URL;
 
-  const payload = await getPayload({ config });
+  const payload = await getPayload();
   // The local API bypasses access control, so filter to published explicitly.
   const { docs: stories } = await payload.find({
     collection: "stories",

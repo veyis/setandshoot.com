@@ -1,0 +1,6 @@
+SECTIONS 4 pageHeader,portraitFigure,editorialProse,ctaLink
+PASS: editor mapping covers every section
+PASS: section count unchanged
+PASS: section ids unchanged
+PASS: sections deep-equal after no-op write (serviceOffers item ids stripped)
+RESULT: ALL PASS

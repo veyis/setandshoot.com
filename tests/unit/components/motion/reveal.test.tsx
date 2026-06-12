@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import { Reveal } from "@/components/motion/reveal";
 
 let observers: { callback: IntersectionObserverCallback; el: Element }[] = [];
@@ -56,20 +56,22 @@ describe("Reveal", () => {
     );
     const wrapper = screen.getByText("hello").parentElement!;
     const o = observers[0]!;
-    o.callback(
-      [
-        {
-          isIntersecting: true,
-          target: o.el,
-          intersectionRatio: 1,
-          boundingClientRect: {} as DOMRectReadOnly,
-          intersectionRect: {} as DOMRectReadOnly,
-          rootBounds: null,
-          time: 0,
-        },
-      ],
-      {} as IntersectionObserver,
-    );
+    act(() => {
+      o.callback(
+        [
+          {
+            isIntersecting: true,
+            target: o.el,
+            intersectionRatio: 1,
+            boundingClientRect: {} as DOMRectReadOnly,
+            intersectionRect: {} as DOMRectReadOnly,
+            rootBounds: null,
+            time: 0,
+          },
+        ],
+        {} as IntersectionObserver,
+      );
+    });
     expect(wrapper.getAttribute("data-revealed")).toBe("true");
   });
 });

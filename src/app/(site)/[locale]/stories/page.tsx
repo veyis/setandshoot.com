@@ -5,6 +5,9 @@ import { getPublishedStories } from "@/lib/payload/queries/stories";
 import { StoryCard } from "@/components/story/story-card";
 import { PageShell } from "@/components/site/page-shell";
 
+// ISR: rebuilt hourly; the story revalidate hook busts this on publish.
+export const revalidate = 3600;
+
 export default async function StoriesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();

@@ -1,11 +1,13 @@
 import type { GlobalConfig } from "payload";
 import { isAdmin } from "@/payload/access/is-admin";
+import { revalidateMarketingPage } from "@/payload/hooks/revalidate-marketing-page";
 
 export const Impressum: GlobalConfig = {
   slug: "impressum",
   label: "Impressum",
   admin: { group: "Rechtliches" },
   access: { read: () => true, update: isAdmin },
+  hooks: { afterChange: [revalidateMarketingPage(["/impressum", "/en/impressum"])] },
   fields: [
     { name: "legalName", type: "text", required: true },
     { name: "addressLine1", type: "text", required: true },
