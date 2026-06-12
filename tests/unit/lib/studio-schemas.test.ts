@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { photoMetaSchema } from "@/lib/studio/schemas";
+import { storyCreateSchema, storyMetaSchema } from "@/lib/studio/schemas";
 
 const base = { id: 7, altDe: "Torjubel", published: false, isHighlight: false, isCover: false };
 
@@ -31,5 +32,42 @@ describe("photoMetaSchema", () => {
 
   it("rejects non-integer tagIds", () => {
     expect(() => photoMetaSchema.parse({ ...base, tagIds: ["a"] })).toThrow();
+  });
+});
+
+describe("storyCreateSchema", () => {
+  it("accepts slug + German title", () => {
+    const r = storyCreateSchema.parse({ slug: "vcw-potsdam-2026", titleDe: "VCW – Potsdam" });
+    expect(r.slug).toBe("vcw-potsdam-2026");
+  });
+  it("rejects uppercase/space/umlaut slugs", () => {
+    for (const slug of ["VCW-2026", "vcw 2026", "vcw_2026", "spül"]) {
+      expect(() => storyCreateSchema.parse({ slug, titleDe: "ok" })).toThrow();
+    }
+  });
+});
+
+describe("storyMetaSchema", () => {
+  const base = { id: 1, titleDe: "Titel", published: false };
+  it("accepts minimal input; optional fields default undefined", () => {
+    const r = storyMetaSchema.parse(base);
+    expect(r.competitionId).toBeUndefined();
+    expect(r.playedAt).toBeUndefined();
+  });
+  it("accepts full input with nullable relation clears", () => {
+    const r = storyMetaSchema.parse({
+      ...base,
+      titleEn: "Title",
+      competitionId: 2,
+      homeTeamId: null,
+      awayTeamId: 4,
+      venue: "Halle",
+      playedAt: "2026-05-01",
+      result: "3:1",
+    });
+    expect(r.homeTeamId).toBeNull();
+  });
+  it("rejects bad playedAt", () => {
+    expect(() => storyMetaSchema.parse({ ...base, playedAt: "01.05.2026" })).toThrow();
   });
 });

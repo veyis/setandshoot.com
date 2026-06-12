@@ -15,3 +15,29 @@ export const photoMetaSchema = z.object({
 });
 
 export type PhotoMetaInput = z.infer<typeof photoMetaSchema>;
+
+export const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+export const storyCreateSchema = z.object({
+  slug: z.string().trim().min(3).max(120).regex(SLUG_PATTERN),
+  titleDe: z.string().trim().min(1).max(200),
+});
+
+export const storyMetaSchema = z.object({
+  id: z.number().int().positive(),
+  titleDe: z.string().trim().min(1).max(200),
+  titleEn: z.string().trim().max(200).optional(),
+  competitionId: z.number().int().positive().nullable().optional(),
+  homeTeamId: z.number().int().positive().nullable().optional(),
+  awayTeamId: z.number().int().positive().nullable().optional(),
+  venue: z.string().trim().max(200).optional(),
+  playedAt: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  result: z.string().trim().max(50).optional(),
+  published: z.boolean(),
+});
+
+export type StoryCreateInput = z.infer<typeof storyCreateSchema>;
+export type StoryMetaInput = z.infer<typeof storyMetaSchema>;
