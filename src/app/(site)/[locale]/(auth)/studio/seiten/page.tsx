@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { requireAdmin } from "@/lib/auth/guards";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,8 @@ const PAGES = [
 ] as const;
 
 export default async function StudioPagesPage() {
+  // Layouts render in parallel with pages — re-check here, not just in the layout.
+  await requireAdmin("/studio");
   const t = await getTranslations("studio");
 
   return (

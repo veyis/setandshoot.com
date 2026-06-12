@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { MarketingPageForm } from "@/components/studio/marketing-page-form";
 import { getMarketingPage, type MarketingPageSlug } from "@/lib/studio/marketing-pages";
 import { listStudioPhotos } from "@/lib/studio/photos";
+import { requireAdmin } from "@/lib/auth/guards";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,8 @@ export default async function StudioMarketingPageEditor({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  // Layouts render in parallel with pages — re-check here, not just in the layout.
+  await requireAdmin("/studio");
   const { slug } = await params;
   const entry = PAGE_MAP[slug];
   if (!entry) notFound();

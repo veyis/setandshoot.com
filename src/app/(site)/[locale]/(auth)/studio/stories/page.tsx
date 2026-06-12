@@ -3,10 +3,13 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { listStudioStories } from "@/lib/studio/stories";
 import { StoryCreateForm } from "@/components/studio/story-create-form";
+import { requireAdmin } from "@/lib/auth/guards";
 
 export const dynamic = "force-dynamic";
 
 export default async function StudioStoriesPage() {
+  // Layouts render in parallel with pages — re-check here, not just in the layout.
+  await requireAdmin("/studio");
   const t = await getTranslations("studio");
   const stories = await listStudioStories();
 

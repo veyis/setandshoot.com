@@ -5,7 +5,12 @@ import { useRef, useState, type DragEvent } from "react";
 import { useTranslations } from "next-intl";
 import { MAX_UPLOAD_BYTES } from "@/lib/studio/schemas";
 
-type QueueItem = { name: string; status: "pending" | "uploading" | "done" | "error" | "tooLarge" };
+const ALLOWED_MIME = ["image/jpeg", "image/png", "image/webp", "image/avif"];
+
+type QueueItem = {
+  name: string;
+  status: "pending" | "uploading" | "done" | "error" | "tooLarge" | "unsupported";
+};
 
 export function PhotoUpload() {
   const t = useTranslations("studio");
@@ -22,6 +27,12 @@ export function PhotoUpload() {
     // One file per request: large originals + Sharp processing can approach
     // serverless time limits, so never batch.
     for (let i = 0; i < files.length; i += 1) {
+      if (!ALLOWED_MIME.includes(files[i]!.type)) {
+        setQueue((q) =>
+          q.map((item, idx) => (idx === i ? { ...item, status: "unsupported" } : item)),
+        );
+        continue;
+      }
       if (files[i]!.size > MAX_UPLOAD_BYTES) {
         setQueue((q) => q.map((item, idx) => (idx === i ? { ...item, status: "tooLarge" } : item)));
         continue;
@@ -29,16 +40,20 @@ export function PhotoUpload() {
       setQueue((q) => q.map((item, idx) => (idx === i ? { ...item, status: "uploading" } : item)));
       const form = new FormData();
       form.append("file", files[i]!);
-      let ok = false;
+      let newStatus: QueueItem["status"] = "error";
       try {
         const response = await fetch("/api/studio/upload", { method: "POST", body: form });
-        ok = response.ok;
+        if (response.ok) {
+          newStatus = "done";
+        } else if (response.status === 413) {
+          newStatus = "tooLarge";
+        } else if (response.status === 415) {
+          newStatus = "unsupported";
+        }
       } catch {
-        ok = false;
+        newStatus = "error";
       }
-      setQueue((q) =>
-        q.map((item, idx) => (idx === i ? { ...item, status: ok ? "done" : "error" } : item)),
-      );
+      setQueue((q) => q.map((item, idx) => (idx === i ? { ...item, status: newStatus } : item)));
     }
 
     setBusy(false);
@@ -92,9 +107,11 @@ export function PhotoUpload() {
                     ? t("uploadError")
                     : item.status === "tooLarge"
                       ? t("uploadTooLarge")
-                      : item.status === "uploading"
-                        ? t("uploading")
-                        : "…"}
+                      : item.status === "unsupported"
+                        ? t("uploadUnsupported")
+                        : item.status === "uploading"
+                          ? t("uploading")
+                          : "…"}
               </span>
             </li>
           ))}

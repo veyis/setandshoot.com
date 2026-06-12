@@ -7,6 +7,7 @@ import {
   saveTeamAction,
 } from "@/lib/studio/actions/taxonomies";
 import { listStudioCompetitions, listStudioTags, listStudioTeams } from "@/lib/studio/taxonomies";
+import { requireAdmin } from "@/lib/auth/guards";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +20,8 @@ const TIER_OPTIONS = [
 ];
 
 export default async function StudioTaxonomiesPage() {
+  // Layouts render in parallel with pages — re-check here, not just in the layout.
+  await requireAdmin("/studio");
   const [t, teams, competitions, tags] = await Promise.all([
     getTranslations("studio"),
     listStudioTeams(),

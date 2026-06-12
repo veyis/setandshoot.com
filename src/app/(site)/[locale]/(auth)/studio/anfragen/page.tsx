@@ -1,9 +1,12 @@
 import { getTranslations } from "next-intl/server";
 import { listStudioBookings } from "@/lib/studio/bookings";
+import { requireAdmin } from "@/lib/auth/guards";
 
 export const dynamic = "force-dynamic";
 
 export default async function StudioBookingsPage() {
+  // Layouts render in parallel with pages — re-check here, not just in the layout.
+  await requireAdmin("/studio");
   const t = await getTranslations("studio");
   const bookings = await listStudioBookings();
 
@@ -17,7 +20,7 @@ export default async function StudioBookingsPage() {
           {bookings.map((booking) => (
             <li key={booking.id} className="border-hairline rounded-md border p-4">
               <div className="text-ink-muted flex flex-wrap justify-between gap-2 text-sm">
-                <span>{new Date(booking.createdAt).toLocaleString()}</span>
+                <span>{new Date(booking.createdAt).toLocaleString("de-DE")}</span>
                 <span className="font-mono text-xs uppercase">{booking.locale}</span>
               </div>
               <div className="mt-1 font-medium">

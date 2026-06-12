@@ -5,6 +5,7 @@ import { getStudioStoryContent } from "@/lib/studio/story-content";
 import { listStudioPhotos } from "@/lib/studio/photos";
 import { StoryMetaForm } from "@/components/studio/story-meta-form";
 import { StoryContentForm } from "@/components/studio/story-content-form";
+import { requireAdmin } from "@/lib/auth/guards";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,8 @@ export default async function StudioStoryEditorPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  // Layouts render in parallel with pages — re-check here, not just in the layout.
+  await requireAdmin("/studio");
   const { id: rawId } = await params;
   const id = Number(rawId);
   if (!Number.isInteger(id) || id <= 0) notFound();

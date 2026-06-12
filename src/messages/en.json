@@ -179,6 +179,7 @@
     "uploadDone": "Uploaded",
     "uploadError": "Failed",
     "uploadTooLarge": "Too large (max 4 MB)",
+    "uploadUnsupported": "Unsupported format",
     "uploading": "Uploading …",
     "photosTitle": "Photos",
     "photosEmpty": "No photos yet.",

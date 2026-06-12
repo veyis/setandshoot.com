@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { requireAdmin } from "@/lib/auth/guards";
 
 export const dynamic = "force-dynamic";
 
@@ -7,6 +8,8 @@ const cardClass =
   "border-hairline hover:bg-ink hover:text-canvas group block rounded-md border p-6 transition-colors";
 
 export default async function StudioDashboardPage() {
+  // Layouts render in parallel with pages — re-check here, not just in the layout.
+  await requireAdmin("/studio");
   const t = await getTranslations("studio");
 
   return (
