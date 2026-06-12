@@ -13,6 +13,7 @@ import {
 import { PhotoPickerSingle } from "@/components/studio/photo-picker";
 import type { RichTextValue } from "@/components/studio/rich-text-mini";
 import { updateStoryContentAction } from "@/lib/studio/actions/stories";
+import { isSupportedRichText } from "@/lib/studio/lexical";
 import type { StudioPhoto } from "@/lib/studio/photos";
 import type { StoryBlockInput } from "@/lib/studio/schemas";
 import type { StudioStoryContent } from "@/lib/studio/story-content";
@@ -31,8 +32,13 @@ function hasTextContent(node: unknown): boolean {
   return false;
 }
 
-/** Empty documents (e.g. a lone empty paragraph) count as "no value". */
+/**
+ * Empty documents (e.g. a lone empty paragraph) count as "no value".
+ * Locked docs (unsupported in the mini editor, read-only in the UI) must
+ * round-trip verbatim — never drop admin-authored content.
+ */
 function richTextOrUndefined(value: RichTextValue | undefined): RichTextValue | undefined {
+  if (value && !isSupportedRichText(value)) return value;
   if (!value || !hasTextContent(value.root)) return undefined;
   return value;
 }
@@ -153,6 +159,8 @@ function textComplete(block: DraftBlock): boolean {
     case "pullQuote":
       return block.quoteDe.trim() !== "";
     case "textParagraph":
+      // A locked doc counts as complete: it has content, just not editable here.
+      if (block.textDe && !isSupportedRichText(block.textDe)) return true;
       return richTextOrUndefined(block.textDe) !== undefined;
     default:
       return true;
@@ -343,6 +351,7 @@ export function StoryContentForm({
           {saving ? t("saving") : t("save")}
         </button>
         {!allPhotosComplete ? <p className="text-ink-muted text-sm">{t("photoMissing")}</p> : null}
+        {!allTextComplete ? <p className="text-ink-muted text-sm">{t("textMissing")}</p> : null}
       </div>
     </div>
   );

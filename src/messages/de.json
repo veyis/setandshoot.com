@@ -242,6 +242,7 @@
     "lockedRichText": "Dieser Text enthält Formate, die hier nicht bearbeitet werden können.",
     "openInAdmin": "Im erweiterten Editor bearbeiten",
     "blocksEmpty": "Noch keine Blöcke. Füge den ersten hinzu.",
-    "photoMissing": "Bitte wähle alle Fotos aus, bevor du speicherst."
+    "photoMissing": "Bitte wähle alle Fotos aus, bevor du speicherst.",
+    "textMissing": "Bitte fülle alle Pflichttexte aus (Text/Zitat auf Deutsch)."
   }
 }

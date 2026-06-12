@@ -242,6 +242,7 @@
     "lockedRichText": "This text contains formatting that can't be edited here.",
     "openInAdmin": "Edit in the advanced editor",
     "blocksEmpty": "No blocks yet. Add the first one.",
-    "photoMissing": "Please choose all photos before saving."
+    "photoMissing": "Please choose all photos before saving.",
+    "textMissing": "Please fill in all required texts (German text/quote)."
   }
 }
