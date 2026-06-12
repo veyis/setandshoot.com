@@ -20,3 +20,4 @@ public/videos/*
 .claude
 .superpowers/
 .gstack/
+scripts/experiments/*.out
