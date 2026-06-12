@@ -14,6 +14,12 @@ test("unauthenticated /studio/fotos redirects to sign-in", async ({ page }) => {
   expect(page.url()).toContain("next=%2Fstudio%2Ffotos");
 });
 
+test("unauthenticated /studio/stories redirects to sign-in", async ({ page }) => {
+  await page.goto("/studio/stories");
+  await expect(page).toHaveURL(/\/sign-in/);
+  expect(page.url()).toContain("next=%2Fstudio%2Fstories");
+});
+
 test("unauthenticated /en/studio redirects to sign-in", async ({ page }) => {
   await page.goto("/en/studio");
   await expect(page).toHaveURL(/\/sign-in/);
