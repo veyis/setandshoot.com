@@ -294,6 +294,15 @@
     "settingsTitle": "Einstellungen",
     "watermarkLabel": "Wasserzeichen standardmäßig",
     "accentColorLabel": "Akzentfarbe",
-    "featuredCountLabel": "Featured Stories auf der Startseite"
+    "featuredCountLabel": "Featured Stories auf der Startseite",
+    "legalNameLabel": "Name / Firma",
+    "addressLine1Label": "Adresszeile 1",
+    "addressLine2Label": "Adresszeile 2",
+    "postalCodeLabel": "PLZ",
+    "countryLabel": "Land",
+    "emailLabel": "E-Mail",
+    "phoneLabel": "Telefon",
+    "ustIdNrLabel": "USt-IdNr.",
+    "responsibleLabel": "Verantwortlich für den Inhalt"
   }
 }

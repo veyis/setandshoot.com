@@ -294,6 +294,15 @@
     "settingsTitle": "Settings",
     "watermarkLabel": "Watermark by default",
     "accentColorLabel": "Accent color",
-    "featuredCountLabel": "Featured stories on home"
+    "featuredCountLabel": "Featured stories on home",
+    "legalNameLabel": "Legal name",
+    "addressLine1Label": "Address line 1",
+    "addressLine2Label": "Address line 2",
+    "postalCodeLabel": "Postal code",
+    "countryLabel": "Country",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "ustIdNrLabel": "VAT ID",
+    "responsibleLabel": "Responsible for content"
   }
 }
