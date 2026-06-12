@@ -28,6 +28,13 @@ export default async function StudioLayout({ children }: { children: React.React
           </Link>
           <Link
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            href={"/studio/stories" as any}
+            className={navLinkClass}
+          >
+            {t("navStories")}
+          </Link>
+          <Link
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             href={"/studio/fotos" as any}
             className={navLinkClass}
           >
