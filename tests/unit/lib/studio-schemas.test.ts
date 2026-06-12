@@ -69,5 +69,7 @@ describe("storyMetaSchema", () => {
   });
   it("rejects bad playedAt", () => {
     expect(() => storyMetaSchema.parse({ ...base, playedAt: "01.05.2026" })).toThrow();
+    expect(() => storyMetaSchema.parse({ ...base, playedAt: "2026-13-99" })).toThrow();
+    expect(storyMetaSchema.parse({ ...base, playedAt: "2026-05-01" }).playedAt).toBe("2026-05-01");
   });
 });

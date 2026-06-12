@@ -31,10 +31,7 @@ export const storyMetaSchema = z.object({
   homeTeamId: z.number().int().positive().nullable().optional(),
   awayTeamId: z.number().int().positive().nullable().optional(),
   venue: z.string().trim().max(200).optional(),
-  playedAt: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/)
-    .optional(),
+  playedAt: z.iso.date().optional(),
   result: z.string().trim().max(50).optional(),
   published: z.boolean(),
 });
