@@ -1,12 +1,13 @@
 "use server";
 
 import { auth } from "@/lib/auth/server";
-import { storyCreateSchema, storyMetaSchema } from "@/lib/studio/schemas";
+import { storyContentSchema, storyCreateSchema, storyMetaSchema } from "@/lib/studio/schemas";
 import {
   createStudioStory,
   setStudioStoryPublished,
   updateStudioStoryMeta,
 } from "@/lib/studio/stories";
+import { updateStudioStoryContent } from "@/lib/studio/story-content";
 
 type Err = "forbidden" | "validation" | "server" | "slug_taken";
 export type StoryActionResult = { ok: true; id?: number } | { ok: false; error: Err };
@@ -39,6 +40,18 @@ export async function updateStoryMetaAction(input: unknown): Promise<StoryAction
   if (!parsed.success) return { ok: false, error: "validation" };
   try {
     await updateStudioStoryMeta(parsed.data);
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "server" };
+  }
+}
+
+export async function updateStoryContentAction(input: unknown): Promise<StoryActionResult> {
+  if (!(await requireAdminSession())) return { ok: false, error: "forbidden" };
+  const parsed = storyContentSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "validation" };
+  try {
+    await updateStudioStoryContent(parsed.data);
     return { ok: true };
   } catch {
     return { ok: false, error: "server" };

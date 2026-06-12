@@ -73,3 +73,59 @@ describe("storyMetaSchema", () => {
     expect(storyMetaSchema.parse({ ...base, playedAt: "2026-05-01" }).playedAt).toBe("2026-05-01");
   });
 });
+
+import { storyContentSchema } from "@/lib/studio/schemas";
+
+const para = { root: { type: "root", children: [] } };
+
+describe("storyContentSchema", () => {
+  it("accepts a full block set", () => {
+    const r = storyContentSchema.parse({
+      id: 1,
+      coverPhotoId: 5,
+      summaryDe: para,
+      blocks: [
+        { blockType: "fullBleedPhoto", photoId: 1 },
+        { id: "abc", blockType: "diptych", photoLeftId: 1, photoRightId: 2, ratio: "60-40" },
+        { blockType: "triptych", photoIds: [1, 2, 3] },
+        { blockType: "insetPortrait", photoId: 4, textDe: para },
+        { blockType: "sequence", photoIds: [1, 2], captionDe: "Serie" },
+        { blockType: "pullQuote", quoteDe: "Zitat", attributionDe: "Autor" },
+        { blockType: "textParagraph", textDe: para, textEn: para },
+      ],
+    });
+    expect(r.blocks).toHaveLength(7);
+  });
+  it("rejects triptych without exactly 3 photos and sequence outside 2-6", () => {
+    expect(() =>
+      storyContentSchema.parse({
+        id: 1,
+        coverPhotoId: null,
+        blocks: [{ blockType: "triptych", photoIds: [1, 2] }],
+      }),
+    ).toThrow();
+    expect(() =>
+      storyContentSchema.parse({
+        id: 1,
+        coverPhotoId: null,
+        blocks: [{ blockType: "sequence", photoIds: [1] }],
+      }),
+    ).toThrow();
+  });
+  it("rejects textParagraph without DE text and pullQuote without DE quote", () => {
+    expect(() =>
+      storyContentSchema.parse({
+        id: 1,
+        coverPhotoId: null,
+        blocks: [{ blockType: "textParagraph" }],
+      }),
+    ).toThrow();
+    expect(() =>
+      storyContentSchema.parse({
+        id: 1,
+        coverPhotoId: null,
+        blocks: [{ blockType: "pullQuote", quoteDe: " " }],
+      }),
+    ).toThrow();
+  });
+});

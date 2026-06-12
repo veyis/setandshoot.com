@@ -19,3 +19,20 @@ describe("altFor", () => {
     expect(altFor({ de: "nur deutsch" }, "en")).toBe("");
   });
 });
+
+import { richTextFor } from "@/lib/studio/localized";
+
+describe("richTextFor", () => {
+  const doc = { root: { type: "root", children: [] } };
+  it("returns a plain rich-text doc as-is (has root)", () => {
+    expect(richTextFor(doc, "en")).toBe(doc);
+  });
+  it("unwraps locale-all objects", () => {
+    expect(richTextFor({ de: doc, en: null }, "de")).toBe(doc);
+    expect(richTextFor({ de: doc, en: null }, "en")).toBeNull();
+  });
+  it("returns null for nullish", () => {
+    expect(richTextFor(null, "de")).toBeNull();
+    expect(richTextFor(undefined, "en")).toBeNull();
+  });
+});

@@ -37,3 +37,60 @@ export const storyMetaSchema = z.object({
 
 export type StoryCreateInput = z.infer<typeof storyCreateSchema>;
 export type StoryMetaInput = z.infer<typeof storyMetaSchema>;
+
+/** Minimal Lexical envelope check; deep validation is the editor's job. */
+export const richTextValueSchema = z.looseObject({ root: z.unknown() });
+
+const photoId = z.number().int().positive();
+const blockId = z.string().min(1).optional();
+
+export const storyBlockSchema = z.discriminatedUnion("blockType", [
+  z.object({ id: blockId, blockType: z.literal("fullBleedPhoto"), photoId }),
+  z.object({
+    id: blockId,
+    blockType: z.literal("diptych"),
+    photoLeftId: photoId,
+    photoRightId: photoId,
+    ratio: z.enum(["50-50", "60-40"]),
+  }),
+  z.object({ id: blockId, blockType: z.literal("triptych"), photoIds: z.array(photoId).length(3) }),
+  z.object({
+    id: blockId,
+    blockType: z.literal("insetPortrait"),
+    photoId,
+    textDe: richTextValueSchema.optional(),
+    textEn: richTextValueSchema.optional(),
+  }),
+  z.object({
+    id: blockId,
+    blockType: z.literal("sequence"),
+    photoIds: z.array(photoId).min(2).max(6),
+    captionDe: z.string().trim().max(500).optional(),
+    captionEn: z.string().trim().max(500).optional(),
+  }),
+  z.object({
+    id: blockId,
+    blockType: z.literal("pullQuote"),
+    quoteDe: z.string().trim().min(1).max(500),
+    quoteEn: z.string().trim().max(500).optional(),
+    attributionDe: z.string().trim().max(200).optional(),
+    attributionEn: z.string().trim().max(200).optional(),
+  }),
+  z.object({
+    id: blockId,
+    blockType: z.literal("textParagraph"),
+    textDe: richTextValueSchema,
+    textEn: richTextValueSchema.optional(),
+  }),
+]);
+
+export const storyContentSchema = z.object({
+  id: z.number().int().positive(),
+  coverPhotoId: photoId.nullable(),
+  summaryDe: richTextValueSchema.optional(),
+  summaryEn: richTextValueSchema.optional(),
+  blocks: z.array(storyBlockSchema).max(50),
+});
+
+export type StoryBlockInput = z.infer<typeof storyBlockSchema>;
+export type StoryContentInput = z.infer<typeof storyContentSchema>;
