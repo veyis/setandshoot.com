@@ -36,9 +36,18 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next({ request });
   }
 
-  // Gate /admin: Neon Auth is the only login. Payload admin trusts the same session
-  // via the `neon` custom auth strategy (no separate CMS password).
-  if (pathname.startsWith("/admin")) {
+  // Gate /admin and /studio: Neon Auth is the only login. Payload admin trusts
+  // the same session via the `neon` custom auth strategy (no separate CMS
+  // password). /studio pages live inside the [locale] tree, so after the gate
+  // they must continue through intl routing instead of NextResponse.next.
+  const isAdminPath = pathname.startsWith("/admin");
+  const isStudioPath =
+    pathname === "/studio" ||
+    pathname.startsWith("/studio/") ||
+    pathname === "/en/studio" ||
+    pathname.startsWith("/en/studio/");
+
+  if (isAdminPath || isStudioPath) {
     let { data: session } = await auth.getSession();
     if (!session?.user) {
       const url = request.nextUrl.clone();
@@ -60,17 +69,20 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    // Native Payload login is disabled (Neon-only auth), so the legacy
-    // /admin/login route can only render an empty Payload splash. Funnel it
-    // back through the gate → dashboard if signed in, → /sign-in if not.
-    if (pathname === "/admin/login" || pathname.startsWith("/admin/login/")) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/admin";
-      url.search = "";
-      return NextResponse.redirect(url);
+    if (isAdminPath) {
+      // Native Payload login is disabled (Neon-only auth), so the legacy
+      // /admin/login route can only render an empty Payload splash. Funnel it
+      // back through the gate → dashboard if signed in, → /sign-in if not.
+      if (pathname === "/admin/login" || pathname.startsWith("/admin/login/")) {
+        const url = request.nextUrl.clone();
+        url.pathname = "/admin";
+        url.search = "";
+        return NextResponse.redirect(url);
+      }
+      return NextResponse.next({ request });
     }
 
-    return NextResponse.next({ request });
+    return handleI18nRouting(request);
   }
 
   return handleI18nRouting(request);
