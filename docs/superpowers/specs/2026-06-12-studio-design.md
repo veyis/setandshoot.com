@@ -97,3 +97,4 @@ Every localized field shows DE/EN side-by-side (or tabbed on small screens). Sav
 - Schema changes, new collections, or data migration.
 - Booking status workflow (bookings have no status field; inbox is read-only for now).
 - Option C (full Payload removal) — separate future spec; this design only requires that all data access stays inside `src/lib/studio/actions/`.
+- Files over 4 MB per upload (Vercel request-body limit). Follow-up: presigned direct-to-R2 upload to lift the cap.

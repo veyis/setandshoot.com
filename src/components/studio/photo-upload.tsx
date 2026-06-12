@@ -3,8 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useRef, useState, type DragEvent } from "react";
 import { useTranslations } from "next-intl";
+import { MAX_UPLOAD_BYTES } from "@/lib/studio/schemas";
 
-type QueueItem = { name: string; status: "pending" | "uploading" | "done" | "error" };
+type QueueItem = { name: string; status: "pending" | "uploading" | "done" | "error" | "tooLarge" };
 
 export function PhotoUpload() {
   const t = useTranslations("studio");
@@ -21,6 +22,10 @@ export function PhotoUpload() {
     // One file per request: large originals + Sharp processing can approach
     // serverless time limits, so never batch.
     for (let i = 0; i < files.length; i += 1) {
+      if (files[i]!.size > MAX_UPLOAD_BYTES) {
+        setQueue((q) => q.map((item, idx) => (idx === i ? { ...item, status: "tooLarge" } : item)));
+        continue;
+      }
       setQueue((q) => q.map((item, idx) => (idx === i ? { ...item, status: "uploading" } : item)));
       const form = new FormData();
       form.append("file", files[i]!);
@@ -85,9 +90,11 @@ export function PhotoUpload() {
                   ? t("uploadDone")
                   : item.status === "error"
                     ? t("uploadError")
-                    : item.status === "uploading"
-                      ? t("uploading")
-                      : "…"}
+                    : item.status === "tooLarge"
+                      ? t("uploadTooLarge")
+                      : item.status === "uploading"
+                        ? t("uploading")
+                        : "…"}
               </span>
             </li>
           ))}

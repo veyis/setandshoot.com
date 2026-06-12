@@ -172,6 +172,7 @@
     "uploadHint": "Drag files here or click (JPEG, PNG, WebP, AVIF)",
     "uploadDone": "Uploaded",
     "uploadError": "Failed",
+    "uploadTooLarge": "Too large (max 4 MB)",
     "uploading": "Uploading …",
     "photosTitle": "Photos",
     "photosEmpty": "No photos yet.",

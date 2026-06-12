@@ -172,6 +172,7 @@
     "uploadHint": "Dateien hierher ziehen oder klicken (JPEG, PNG, WebP, AVIF)",
     "uploadDone": "Hochgeladen",
     "uploadError": "Fehlgeschlagen",
+    "uploadTooLarge": "Zu groß (max. 4 MB)",
     "uploading": "Lädt hoch …",
     "photosTitle": "Fotos",
     "photosEmpty": "Noch keine Fotos.",
