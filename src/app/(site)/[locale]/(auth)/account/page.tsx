@@ -26,13 +26,22 @@ export default async function AccountPage() {
             {t("bookings")}
           </Link>
           {user.role === "admin" ? (
-            <Link
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              href={"/admin" as any}
-              className={quickLinkClass}
-            >
-              {t("openCms")}
-            </Link>
+            <>
+              <Link
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                href={"/studio" as any}
+                className={quickLinkClass}
+              >
+                {t("openStudio")}
+              </Link>
+              <Link
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                href={"/admin" as any}
+                className={quickLinkClass}
+              >
+                {t("openCms")}
+              </Link>
+            </>
           ) : null}
         </div>
       </header>
