@@ -31,7 +31,7 @@ export async function Footer() {
 
       {/* Row 2 — 3 columns */}
       <div className="grid grid-cols-1 gap-10 py-12 md:grid-cols-3">
-        <div className="flex flex-col gap-3">
+        <nav aria-label={t("footer.navLabel")} className="flex flex-col gap-3">
           <p className="text-ink-faint mb-2 font-mono text-[10px] tracking-[0.2em] uppercase">
             NAVIGATION
           </p>
@@ -45,8 +45,8 @@ export async function Footer() {
               {item.label}
             </Link>
           ))}
-        </div>
-        <div className="flex flex-col gap-3">
+        </nav>
+        <nav aria-label={t("footer.legalLabel")} className="flex flex-col gap-3">
           <p className="text-ink-faint mb-2 font-mono text-[10px] tracking-[0.2em] uppercase">
             LEGAL
           </p>
@@ -60,7 +60,7 @@ export async function Footer() {
               {item.label}
             </Link>
           ))}
-        </div>
+        </nav>
         <div className="flex flex-col gap-3">
           <p className="text-ink-faint mb-2 font-mono text-[10px] tracking-[0.2em] uppercase">
             CONNECT

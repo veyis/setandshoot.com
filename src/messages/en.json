@@ -57,11 +57,16 @@
     "signIn": "Sign in",
     "account": "Account",
     "menu": "Open menu",
-    "close": "Close menu"
+    "close": "Close menu",
+    "skipToContent": "Skip to content",
+    "primary": "Main navigation",
+    "language": "Switch language"
   },
   "footer": {
     "impressum": "Imprint",
-    "datenschutz": "Privacy"
+    "datenschutz": "Privacy",
+    "navLabel": "Navigation",
+    "legalLabel": "Legal"
   },
   "notFound": {
     "title": "Page not found",
@@ -244,5 +249,10 @@
     "blocksEmpty": "No blocks yet. Add the first one.",
     "photoMissing": "Please choose all photos before saving.",
     "textMissing": "Please fill in all required texts (German text/quote)."
+  },
+  "error": {
+    "title": "Something went wrong",
+    "body": "We ran into an error loading this page. Please try again.",
+    "retry": "Try again"
   }
 }

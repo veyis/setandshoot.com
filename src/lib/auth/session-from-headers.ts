@@ -41,7 +41,15 @@ export async function getNeonSessionFromHeaders(
 
   if (!response.ok) return null;
 
-  const data = (await response.json()) as NeonSessionPayload | null;
+  // Guard against a non-JSON body (network blip, proxy error). A throw here
+  // would propagate through Payload's auth strategy and break CMS login.
+  let data: NeonSessionPayload | null;
+  try {
+    data = (await response.json()) as NeonSessionPayload | null;
+  } catch (error) {
+    console.error("[neon-auth] get-session returned a non-JSON body", error);
+    return null;
+  }
   if (!data?.user?.email) return null;
 
   return data;

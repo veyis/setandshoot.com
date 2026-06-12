@@ -1,7 +1,8 @@
-import { getPayload } from "payload";
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import config from "@payload-config";
+import { getPayload } from "@/lib/payload/get-payload";
 import { type Locale } from "@/lib/i18n/config";
+import { localeAlternates } from "@/lib/seo/alternates";
 import { getAboutFallbackPhoto, getHeroPhotos, getHighlightPhotos } from "@/lib/landing/photos";
 import type { Story } from "@/payload-types";
 import { HeroScene } from "@/components/landing/hero";
@@ -10,7 +11,17 @@ import { WorkMosaicScene } from "@/components/landing/work-mosaic-scene";
 import { AboutScene } from "@/components/landing/about-scene";
 import { BookingCTA } from "@/components/landing/booking-cta";
 
-export const dynamic = "force-dynamic";
+// ISR: rebuilt hourly; the story revalidate hook busts this on publish.
+export const revalidate = 3600;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return { alternates: localeAlternates("/", locale) };
+}
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -24,7 +35,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   const aboutPortrait = getAboutFallbackPhoto(typedLocale);
 
   // One Payload story for the Featured Story scene
-  const payload = await getPayload({ config });
+  const payload = await getPayload();
   const stories = await payload.find({
     collection: "stories",
     where: { published: { equals: true } },

@@ -7,7 +7,8 @@ import { PageShell } from "@/components/site/page-shell";
 import { MarketingBlocks } from "@/components/site/marketing-blocks";
 import { AboutFallback } from "./about-fallback";
 
-export const dynamic = "force-dynamic";
+// ISR: rebuilt hourly; the aboutPage global revalidate hook busts on save.
+export const revalidate = 3600;
 
 export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

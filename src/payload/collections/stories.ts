@@ -72,6 +72,7 @@ export const Stories: CollectionConfig = {
     {
       name: "playedAt",
       type: "date",
+      index: true,
       admin: { date: { pickerAppearance: "dayOnly" } },
     },
     { name: "result", type: "text", label: "Ergebnis" },
@@ -96,6 +97,7 @@ export const Stories: CollectionConfig = {
       name: "featured",
       type: "checkbox",
       defaultValue: false,
+      index: true,
       admin: { position: "sidebar" },
     },
     {
@@ -110,6 +112,7 @@ export const Stories: CollectionConfig = {
       name: "published",
       type: "checkbox",
       defaultValue: false,
+      index: true,
       admin: { position: "sidebar" },
     },
     {
