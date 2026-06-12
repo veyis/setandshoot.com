@@ -1,7 +1,11 @@
 "use server";
 
-import { auth } from "@/lib/auth/server";
 import { storyContentSchema, storyCreateSchema, storyMetaSchema } from "@/lib/studio/schemas";
+import {
+  isUniqueViolation,
+  requireAdminSession,
+  type StoryActionResult,
+} from "@/lib/studio/actions/shared";
 import {
   createStudioStory,
   setStudioStoryPublished,
@@ -9,18 +13,7 @@ import {
 } from "@/lib/studio/stories";
 import { updateStudioStoryContent } from "@/lib/studio/story-content";
 
-type Err = "forbidden" | "validation" | "server" | "slug_taken";
-export type StoryActionResult = { ok: true; id?: number } | { ok: false; error: Err };
-
-async function requireAdminSession(): Promise<boolean> {
-  const { data: session } = await auth.getSession();
-  return session?.user?.role === "admin";
-}
-
-function isUniqueViolation(error: unknown): boolean {
-  const message = error instanceof Error ? error.message.toLowerCase() : "";
-  return message.includes("unique") || message.includes("duplicate");
-}
+export type { StoryActionResult };
 
 export async function createStoryAction(input: unknown): Promise<StoryActionResult> {
   if (!(await requireAdminSession())) return { ok: false, error: "forbidden" };

@@ -94,3 +94,147 @@ export const storyContentSchema = z.object({
 
 export type StoryBlockInput = z.infer<typeof storyBlockSchema>;
 export type StoryContentInput = z.infer<typeof storyContentSchema>;
+
+export const settingsSchema = z.object({
+  defaultWatermark: z.boolean(),
+  accentColor: z.string().regex(/^#[0-9a-fA-F]{6}$/),
+  homeFeaturedCount: z.number().int().min(1).max(6),
+});
+
+export const impressumSchema = z.object({
+  legalName: z.string().trim().min(1).max(200),
+  addressLine1: z.string().trim().min(1).max(200),
+  addressLine2: z.string().trim().max(200).optional(),
+  postalCode: z.string().trim().min(1).max(20),
+  city: z.string().trim().min(1).max(100),
+  country: z.string().trim().min(1).max(100),
+  email: z.email(),
+  phone: z.string().trim().max(50).optional(),
+  ustIdNr: z.string().trim().max(50).optional(),
+  responsibleForContent: z.string().trim().max(200).optional(),
+  additionalNotesDe: z.string().trim().max(5000).optional(),
+  additionalNotesEn: z.string().trim().max(5000).optional(),
+});
+
+export const datenschutzSchema = z.object({
+  titleDe: z.string().trim().min(1).max(200),
+  titleEn: z.string().trim().max(200).optional(),
+  introDe: richTextValueSchema.optional(),
+  introEn: richTextValueSchema.optional(),
+  bodyDe: richTextValueSchema.optional(),
+  bodyEn: richTextValueSchema.optional(),
+  lastUpdated: z.iso.date(),
+});
+
+export type SettingsInput = z.infer<typeof settingsSchema>;
+export type ImpressumInput = z.infer<typeof impressumSchema>;
+export type DatenschutzInput = z.infer<typeof datenschutzSchema>;
+
+// Absent id = create, present id = update.
+const taxonomyId = z.number().int().positive().optional();
+const tierEnum = z.enum(["bundesliga", "2-bundesliga", "regional", "youth"]);
+
+export const teamSchema = z.object({
+  id: taxonomyId,
+  name: z.string().trim().min(1).max(200),
+  shortName: z.string().trim().max(50).optional(),
+  city: z.string().trim().max(100).optional(),
+  tier: tierEnum.nullable().optional(),
+  published: z.boolean(),
+});
+
+export const competitionSchema = z.object({
+  id: taxonomyId,
+  name: z.string().trim().min(1).max(200),
+  season: z.string().trim().min(1).max(50),
+  tier: tierEnum.nullable().optional(),
+  published: z.boolean(),
+});
+
+export const tagSchema = z.object({
+  id: taxonomyId,
+  nameDe: z.string().trim().min(1).max(100),
+  nameEn: z.string().trim().max(100).optional(),
+  slug: z.string().trim().min(1).max(120).regex(SLUG_PATTERN),
+  published: z.boolean(),
+});
+
+export const taxonomyDeleteSchema = z.object({
+  collection: z.enum(["teams", "competitions", "tags"]),
+  id: z.number().int().positive(),
+});
+
+export type TeamInput = z.infer<typeof teamSchema>;
+export type CompetitionInput = z.infer<typeof competitionSchema>;
+export type TagInput = z.infer<typeof tagSchema>;
+export type TaxonomyDeleteInput = z.infer<typeof taxonomyDeleteSchema>;
+
+const serviceOfferItem = z.object({
+  title: z.string().trim().min(1).max(200),
+  body: z.string().trim().min(1).max(2000),
+});
+
+export const marketingSectionSchema = z.discriminatedUnion("blockType", [
+  z.object({
+    id: blockId,
+    blockType: z.literal("pageHeader"),
+    labelDe: z.string().trim().max(200).optional(),
+    labelEn: z.string().trim().max(200).optional(),
+    titleDe: z.string().trim().min(1).max(300),
+    titleEn: z.string().trim().max(300).optional(),
+    introDe: z.string().trim().max(2000).optional(),
+    introEn: z.string().trim().max(2000).optional(),
+  }),
+  z.object({
+    id: blockId,
+    blockType: z.literal("portraitFigure"),
+    photoId: photoId.nullable(),
+    captionDe: z.string().trim().max(500).optional(),
+    captionEn: z.string().trim().max(500).optional(),
+  }),
+  z.object({
+    id: blockId,
+    blockType: z.literal("editorialProse"),
+    eyebrowDe: z.string().trim().max(200).optional(),
+    eyebrowEn: z.string().trim().max(200).optional(),
+    titleDe: z.string().trim().max(500).optional(),
+    titleEn: z.string().trim().max(500).optional(),
+    body1De: richTextValueSchema.optional(),
+    body1En: richTextValueSchema.optional(),
+    pullQuoteDe: z.string().trim().max(500).optional(),
+    pullQuoteEn: z.string().trim().max(500).optional(),
+    body2De: richTextValueSchema.optional(),
+    body2En: richTextValueSchema.optional(),
+    creditsDe: z.string().trim().max(1000).optional(),
+    creditsEn: z.string().trim().max(1000).optional(),
+  }),
+  z.object({
+    id: blockId,
+    blockType: z.literal("ctaLink"),
+    labelDe: z.string().trim().min(1).max(200),
+    labelEn: z.string().trim().max(200).optional(),
+    target: z.enum([
+      "/contact",
+      "/about",
+      "/athletes",
+      "/services",
+      "/highlights",
+      "/stories",
+      "/",
+    ]),
+  }),
+  z.object({
+    id: blockId,
+    blockType: z.literal("serviceOffers"),
+    itemsDe: z.array(serviceOfferItem).max(20),
+    itemsEn: z.array(serviceOfferItem).max(20).optional(),
+  }),
+]);
+
+export const marketingPageSchema = z.object({
+  slug: z.enum(["aboutPage", "servicesPage", "contactPage", "athletesPage", "highlightsPage"]),
+  sections: z.array(marketingSectionSchema).max(30),
+});
+
+export type MarketingSectionInput = z.infer<typeof marketingSectionSchema>;
+export type MarketingPageInput = z.infer<typeof marketingPageSchema>;
