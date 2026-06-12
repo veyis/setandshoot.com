@@ -129,7 +129,7 @@ export function MarketingBlocks({ sections, locale }: Props) {
                     key={offer.id ?? i}
                     className="border-hairline flex flex-col gap-2 rounded-sm border px-4 py-4"
                   >
-                    <h2 className="font-display text-xl tracking-tight">{offer.title}</h2>
+                    <h3 className="font-display text-xl tracking-tight">{offer.title}</h3>
                     <p className="text-ink-muted text-sm leading-relaxed">{offer.body}</p>
                   </article>
                 ))}

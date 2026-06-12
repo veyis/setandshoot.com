@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { authClient } from "@/lib/auth/client";
+
+const DRAWER_ID = "mobile-nav-drawer";
 
 type Item = { href: string; label: string };
 
@@ -20,13 +22,37 @@ export function MobileNav({ items, signInLabel, accountLabel, menuLabel, closeLa
   const close = () => setOpen(false);
   const { data: session } = authClient.useSession();
   const signedIn = Boolean(session?.user);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
-  // While open: close on Escape and lock background scroll. The drawer only
-  // renders after a client click, so document is always available here.
+  // While open: close on Escape, trap focus inside the drawer, and lock
+  // background scroll. The drawer only renders after a client click, so
+  // document is always available here.
   useEffect(() => {
     if (!open) return;
+
+    const drawer = drawerRef.current;
+    const trigger = triggerRef.current;
+    // Move focus into the drawer (first focusable element).
+    drawer?.querySelector<HTMLElement>("button, a[href]")?.focus();
+
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      if (event.key !== "Tab" || !drawer) return;
+      const focusables = drawer.querySelectorAll<HTMLElement>("button, a[href]");
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (!first || !last) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", onKey);
     const previousOverflow = document.body.style.overflow;
@@ -34,16 +60,20 @@ export function MobileNav({ items, signInLabel, accountLabel, menuLabel, closeLa
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = previousOverflow;
+      // Restore focus to the trigger when the drawer closes.
+      trigger?.focus();
     };
   }, [open]);
 
   return (
     <div className="lg:hidden">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen(true)}
         aria-label={menuLabel}
         aria-expanded={open}
+        aria-controls={DRAWER_ID}
         className="border-hairline text-ink hover:bg-ink hover:text-canvas inline-flex items-center justify-center rounded-full border p-2 transition-colors"
       >
         <svg
@@ -63,7 +93,14 @@ export function MobileNav({ items, signInLabel, accountLabel, menuLabel, closeLa
 
       {open
         ? createPortal(
-            <div className="bg-canvas fixed inset-0 z-[60] flex flex-col px-6 py-4">
+            <div
+              ref={drawerRef}
+              id={DRAWER_ID}
+              role="dialog"
+              aria-modal="true"
+              aria-label={menuLabel}
+              className="bg-canvas fixed inset-0 z-[60] flex flex-col px-6 py-4"
+            >
               <div className="flex items-center justify-end">
                 <button
                   type="button"

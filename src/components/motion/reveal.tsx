@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { flushSync } from "react-dom";
 import { useReducedMotion } from "./use-reduced-motion";
 
 type Props = {
@@ -21,16 +20,16 @@ export function Reveal({ children, delay = 0, className, threshold = 0.15 }: Pro
     if (!node) return;
     if (revealed) return;
 
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
             if (delay > 0) {
-              window.setTimeout(() => {
-                flushSync(() => setRevealed(true));
-              }, delay);
+              timer = setTimeout(() => setRevealed(true), delay);
             } else {
-              flushSync(() => setRevealed(true));
+              setRevealed(true);
             }
             observer.disconnect();
           }
@@ -39,7 +38,10 @@ export function Reveal({ children, delay = 0, className, threshold = 0.15 }: Pro
       { threshold },
     );
     observer.observe(node);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (timer !== undefined) clearTimeout(timer);
+    };
   }, [delay, threshold, revealed]);
 
   return (

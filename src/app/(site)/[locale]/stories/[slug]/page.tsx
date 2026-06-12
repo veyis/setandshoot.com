@@ -3,7 +3,9 @@ import Link from "next/link";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
+import { getPayload } from "@/lib/payload/get-payload";
 import { getStoryBySlug } from "@/lib/payload/queries/stories";
+import { localeAlternates } from "@/lib/seo/alternates";
 import { StoryBlocks } from "@/components/story/story-blocks";
 import { PayloadPhoto } from "@/components/story/payload-photo";
 import { resolvePhoto } from "@/lib/payload/media";
@@ -13,12 +15,30 @@ type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
 };
 
+// ISR: published stories are prerendered at build; the revalidateStory hook
+// busts list + detail on publish. New stories render on demand (dynamicParams).
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  const payload = await getPayload();
+  const { docs } = await payload.find({
+    collection: "stories",
+    where: { published: { equals: true } },
+    limit: 500,
+    depth: 0,
+  });
+  return docs.map((story) => ({ slug: story.slug as string }));
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;
   if (!isLocale(locale)) return {};
   const story = await getStoryBySlug(slug, locale as Locale);
   if (!story) return {};
-  return { title: story.title ?? undefined };
+  return {
+    title: story.title ?? undefined,
+    alternates: localeAlternates(`/stories/${slug}`, locale),
+  };
 }
 
 function formatPlayedAt(value: string | null | undefined, locale: string): string | null {
@@ -51,7 +71,7 @@ export default async function StoryPage({ params }: PageProps) {
           href={storiesHref as never}
           className="text-ink-muted hover:text-accent font-mono text-xs tracking-widest uppercase transition-colors"
         >
-          ← Stories
+          <span aria-hidden="true">←</span> Stories
         </Link>
         <h1 className="font-display text-5xl tracking-tight md:text-6xl">{story.title}</h1>
         {metaLine ? (

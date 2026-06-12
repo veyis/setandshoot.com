@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { getPayload } from "payload";
-import config from "@/payload/payload.config";
+import { getPayload } from "@/lib/payload/get-payload";
 import { requireUser } from "@/lib/auth/guards";
 
 export const dynamic = "force-dynamic";
@@ -9,7 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function CustomerBookingsPage() {
   const user = await requireUser("/account/bookings");
   const t = await getTranslations("account");
-  const payload = await getPayload({ config });
+  const payload = await getPayload();
   const { docs } = await payload.find({
     collection: "bookings",
     where: { customerId: { equals: user.id } },

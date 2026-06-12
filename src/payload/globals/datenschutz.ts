@@ -1,11 +1,13 @@
 import type { GlobalConfig } from "payload";
 import { isAdmin } from "@/payload/access/is-admin";
+import { revalidateMarketingPage } from "@/payload/hooks/revalidate-marketing-page";
 
 export const Datenschutz: GlobalConfig = {
   slug: "datenschutz",
   label: "Datenschutzerklärung",
   admin: { group: "Rechtliches" },
   access: { read: () => true, update: isAdmin },
+  hooks: { afterChange: [revalidateMarketingPage(["/datenschutz", "/en/datenschutz"])] },
   fields: [
     {
       name: "title",
