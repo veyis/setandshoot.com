@@ -49,6 +49,34 @@ export default async function StudioLayout({ children }: { children: React.React
           </Link>
           <Link
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            href={"/studio/seiten" as any}
+            className={navLinkClass}
+          >
+            {t("navPages")}
+          </Link>
+          <Link
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            href={"/studio/stammdaten" as any}
+            className={navLinkClass}
+          >
+            {t("navTaxonomies")}
+          </Link>
+          <Link
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            href={"/studio/rechtliches" as any}
+            className={navLinkClass}
+          >
+            {t("navLegal")}
+          </Link>
+          <Link
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            href={"/studio/einstellungen" as any}
+            className={navLinkClass}
+          >
+            {t("navSettings")}
+          </Link>
+          <Link
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             href={"/admin" as any}
             className={navLinkClass}
           >
