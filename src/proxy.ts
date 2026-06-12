@@ -1,6 +1,7 @@
 import createIntlMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "@/lib/i18n/routing";
+import { locales } from "@/lib/i18n/config";
 import { auth } from "@/lib/auth/server";
 import { isAdminEmail } from "@/lib/auth/admin-emails";
 import { promoteNeonAdminByEmail } from "@/lib/auth/promote-neon-admin";
@@ -44,8 +45,9 @@ export async function proxy(request: NextRequest) {
   const isStudioPath =
     pathname === "/studio" ||
     pathname.startsWith("/studio/") ||
-    pathname === "/en/studio" ||
-    pathname.startsWith("/en/studio/");
+    locales.some(
+      (locale) => pathname === `/${locale}/studio` || pathname.startsWith(`/${locale}/studio/`),
+    );
 
   if (isAdminPath || isStudioPath) {
     let { data: session } = await auth.getSession();

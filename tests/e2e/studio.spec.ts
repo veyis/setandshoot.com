@@ -14,6 +14,18 @@ test("unauthenticated /studio/fotos redirects to sign-in", async ({ page }) => {
   expect(page.url()).toContain("next=%2Fstudio%2Ffotos");
 });
 
+test("unauthenticated /en/studio redirects to sign-in", async ({ page }) => {
+  await page.goto("/en/studio");
+  await expect(page).toHaveURL(/\/sign-in/);
+  expect(page.url()).toContain("next=%2Fen%2Fstudio");
+});
+
+test("unauthenticated /de/studio redirects to sign-in", async ({ page }) => {
+  await page.goto("/de/studio");
+  await expect(page).toHaveURL(/\/sign-in/);
+  expect(page.url()).toContain("next=%2Fde%2Fstudio");
+});
+
 // Authenticated journey (upload photo → appears in grid) needs a Neon Auth
 // test user — same blocker as the fixme in tests/e2e/auth.spec.ts. Until that
 // fixture exists, the upload flow is verified manually (see the Fotos task).
