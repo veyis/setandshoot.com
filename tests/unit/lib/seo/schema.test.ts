@@ -35,7 +35,6 @@ describe("schema builders", () => {
       { name: "Stories", url: "https://s.com/stories" },
     ]);
     const items = s.itemListElement as { position: number }[];
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     expect(items[1]!.position).toBe(2);
   });
 
