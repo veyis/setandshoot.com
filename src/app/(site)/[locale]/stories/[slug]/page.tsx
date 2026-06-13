@@ -97,10 +97,7 @@ export default async function StoryPage({ params }: PageProps) {
       />
       <JsonLd
         data={breadcrumbSchema([
-          {
-            name: "Home",
-            url: locale === "de" ? `${siteUrl}/` : `${siteUrl}/en`,
-          },
+          { name: "Home", url: locale === "de" ? siteUrl : `${siteUrl}/en` },
           {
             name: seoCopy(locale, "stories").title,
             url: locale === "de" ? `${siteUrl}/stories` : `${siteUrl}/en/stories`,
