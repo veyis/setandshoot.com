@@ -5,6 +5,10 @@ import type { Locale } from "@/lib/i18n/config";
 import { seoCopy } from "@/lib/seo/copy";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { notFound } from "next/navigation";
+import { env } from "@/env";
+import { JsonLd } from "@/components/seo/json-ld";
+import { localBusinessSchema } from "@/lib/seo/schema";
+import { getOrgIdentity } from "@/lib/seo/identity";
 import { BookingForm } from "@/components/booking/booking-form";
 import { PageShell } from "@/components/site/page-shell";
 import { EditablePageHeader } from "@/components/site/editable-page-header";
@@ -28,9 +32,11 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
   const t = await getTranslations("contact");
+  const org = await getOrgIdentity();
 
   return (
     <PageShell>
+      <JsonLd data={localBusinessSchema({ siteUrl: env.NEXT_PUBLIC_SITE_URL, org })} />
       <EditablePageHeader
         slug="contactPage"
         locale={locale as Locale}

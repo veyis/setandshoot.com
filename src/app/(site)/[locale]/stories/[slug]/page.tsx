@@ -11,6 +11,9 @@ import { resolvePhoto, photoSrc, photoDimensions, photoAlt } from "@/lib/payload
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { seoCopy } from "@/lib/seo/copy";
 import type { Metadata } from "next";
+import { env } from "@/env";
+import { JsonLd } from "@/components/seo/json-ld";
+import { articleSchema, breadcrumbSchema } from "@/lib/seo/schema";
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -74,8 +77,37 @@ export default async function StoryPage({ params }: PageProps) {
 
   const metaLine = [playedAt, story.venue, story.result].filter(Boolean).join(" · ");
 
+  const siteUrl = env.NEXT_PUBLIC_SITE_URL;
+  const canonical =
+    locale === "de" ? `${siteUrl}/stories/${story.slug}` : `${siteUrl}/en/stories/${story.slug}`;
+  const ogUrl = photoSrc(cover, "feed");
+  const dims = photoDimensions(cover, "feed");
+
   return (
     <article className="mx-auto max-w-4xl px-6 py-16 md:px-12">
+      <JsonLd
+        data={articleSchema({
+          siteUrl,
+          title: story.title ?? "",
+          description: seoCopy(locale, "stories").description,
+          url: canonical,
+          image: ogUrl ? { url: ogUrl, width: dims.width, height: dims.height } : undefined,
+          datePublished: story.publishedAt ?? undefined,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbSchema([
+          {
+            name: "Home",
+            url: locale === "de" ? `${siteUrl}/` : `${siteUrl}/en`,
+          },
+          {
+            name: seoCopy(locale, "stories").title,
+            url: locale === "de" ? `${siteUrl}/stories` : `${siteUrl}/en/stories`,
+          },
+          { name: story.title ?? "", url: canonical },
+        ])}
+      />
       <header className="mb-12 flex flex-col gap-6">
         <Link
           href={storiesHref as never}

@@ -5,6 +5,9 @@ import type { Locale } from "@/lib/i18n/config";
 import { seoCopy } from "@/lib/seo/copy";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { notFound } from "next/navigation";
+import { env } from "@/env";
+import { JsonLd } from "@/components/seo/json-ld";
+import { serviceSchema } from "@/lib/seo/schema";
 import { BookingForm } from "@/components/booking/booking-form";
 import { PageShell } from "@/components/site/page-shell";
 import { EditablePageHeader } from "@/components/site/editable-page-header";
@@ -37,6 +40,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
 
   return (
     <PageShell>
+      <JsonLd data={serviceSchema({ siteUrl: env.NEXT_PUBLIC_SITE_URL, offers })} />
       <EditablePageHeader
         slug="servicesPage"
         locale={locale as Locale}
