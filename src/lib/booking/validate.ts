@@ -11,6 +11,7 @@ export function validateBookingFields(input: {
   message: string;
   organization?: string;
 }): BookingFieldErrors {
+  // locale is a dummy here — the schema requires it, but client-side field validation ignores it.
   const result = bookingInquirySchema.safeParse({ ...input, locale: "de" });
   if (result.success) return {};
   const errors: BookingFieldErrors = {};

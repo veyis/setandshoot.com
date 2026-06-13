@@ -114,8 +114,8 @@ export function BookingForm() {
           type="text"
           required
           aria-required="true"
-          aria-invalid={Boolean(fieldErrors.name)}
-          aria-errormessage="booking-err-name"
+          aria-invalid={fieldErrors.name ? true : undefined}
+          aria-errormessage={fieldErrors.name ? "booking-err-name" : undefined}
           autoComplete="name"
           disabled={state === "submitting"}
           className={fieldClass}
@@ -137,8 +137,8 @@ export function BookingForm() {
           type="email"
           required
           aria-required="true"
-          aria-invalid={Boolean(fieldErrors.email)}
-          aria-errormessage="booking-err-email"
+          aria-invalid={fieldErrors.email ? true : undefined}
+          aria-errormessage={fieldErrors.email ? "booking-err-email" : undefined}
           autoComplete="email"
           disabled={state === "submitting"}
           className={fieldClass}
@@ -173,8 +173,8 @@ export function BookingForm() {
           name="message"
           required
           aria-required="true"
-          aria-invalid={Boolean(fieldErrors.message)}
-          aria-errormessage="booking-err-message"
+          aria-invalid={fieldErrors.message ? true : undefined}
+          aria-errormessage={fieldErrors.message ? "booking-err-message" : undefined}
           rows={5}
           disabled={state === "submitting"}
           className={`${fieldClass} resize-y`}
