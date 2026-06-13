@@ -33,7 +33,9 @@ export function PhotoCard({ photo, tags }: { photo: StudioPhoto; tags: StudioTag
     const result = await updatePhotoMetaAction({
       id: photo.id,
       altDe,
-      altEn: altEn.trim() === "" ? undefined : altEn,
+      // Always send EN (including "") so an emptied field clears the EN
+      // override instead of silently keeping the old value.
+      altEn,
       published,
       isHighlight,
       isCover,

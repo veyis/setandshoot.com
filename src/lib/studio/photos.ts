@@ -1,5 +1,6 @@
 import "server-only";
 import { getPayload } from "payload";
+import { sql } from "@payloadcms/db-postgres";
 import config from "@/payload/payload.config";
 import { photoSrc } from "@/lib/payload/media";
 import { altFor, type LocalizedText } from "@/lib/studio/localized";
@@ -109,13 +110,32 @@ export async function updatePhotoMeta(input: {
     locale: "de",
     overrideAccess: true,
   });
-  if (input.altEn && input.altEn.trim() !== "") {
-    await payload.update({
-      collection: "photos",
-      id: input.id,
-      data: { alt: input.altEn },
-      locale: "en",
-      overrideAccess: true,
-    });
+  // EN alt is tri-state:
+  //   undefined        -> leave the EN override untouched
+  //   non-empty string -> set the EN override via the Local API
+  //   "" (cleared)     -> remove the EN override
+  // Clearing can't go through payload.update: `alt` is required + NOT NULL, so
+  // the API rejects a blank value and the column can't be nulled. The locale
+  // row also stores the localized `caption`, so deleting the row would drop it.
+  // Blank just the EN alt column directly; a missing EN row makes this a no-op
+  // (EN already falls back to DE).
+  if (input.altEn !== undefined) {
+    const altEn = input.altEn.trim();
+    if (altEn !== "") {
+      await payload.update({
+        collection: "photos",
+        id: input.id,
+        data: { alt: altEn },
+        locale: "en",
+        overrideAccess: true,
+      });
+    } else {
+      const db = payload.db as unknown as {
+        drizzle: { execute: (query: unknown) => Promise<unknown> };
+      };
+      await db.drizzle.execute(
+        sql`UPDATE payload.photos_locales SET alt = '' WHERE _locale = 'en' AND _parent_id = ${input.id}`,
+      );
+    }
   }
 }
