@@ -5,10 +5,11 @@ import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getPayload } from "@/lib/payload/get-payload";
 import { getStoryBySlug } from "@/lib/payload/queries/stories";
-import { localeAlternates } from "@/lib/seo/alternates";
 import { StoryBlocks } from "@/components/story/story-blocks";
 import { PayloadPhoto } from "@/components/story/payload-photo";
-import { resolvePhoto } from "@/lib/payload/media";
+import { resolvePhoto, photoSrc, photoDimensions, photoAlt } from "@/lib/payload/media";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import { seoCopy } from "@/lib/seo/copy";
 import type { Metadata } from "next";
 
 type PageProps = {
@@ -35,10 +36,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!isLocale(locale)) return {};
   const story = await getStoryBySlug(slug, locale as Locale);
   if (!story) return {};
-  return {
-    title: story.title ?? undefined,
-    alternates: localeAlternates(`/stories/${slug}`, locale),
-  };
+
+  const cover = resolvePhoto(story.coverPhoto);
+  const url = photoSrc(cover, "feed");
+  const { width, height } = photoDimensions(cover, "feed");
+  const fallback = seoCopy(locale, "stories");
+
+  return buildPageMetadata({
+    locale,
+    path: `/stories/${slug}`,
+    title: story.title ?? fallback.title,
+    description: fallback.description,
+    image: url ? { url, width, height, alt: photoAlt(cover, story.title ?? "") } : undefined,
+  });
 }
 
 function formatPlayedAt(value: string | null | undefined, locale: string): string | null {
