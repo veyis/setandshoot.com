@@ -7,13 +7,25 @@ import config from "@payload-config";
 
 const OUT = "scripts/experiments/studio-e2e-cleanup.out";
 const log = (...p: unknown[]) => appendFileSync(OUT, p.join(" ") + "\n");
-const EMAIL = "studio-smoketest-1306@example.com";
+const EMAIL = process.env.TEST_EMAIL ?? "studio-smoketest-1306@example.com";
 
 const resolved = await config;
 const stories = resolved.collections.find((c: any) => c.slug === "stories");
 if (stories) (stories.hooks as any).afterChange = [];
 
 const payload = await getPayload({ config });
+
+// 0. delete smoke-test photos uploaded during the e2e run
+const smokePhotos = await payload.find({
+  collection: "photos",
+  where: { filename: { contains: "studio-smoke-test-bitte-loeschen" } },
+  limit: 100,
+  overrideAccess: true,
+});
+for (const doc of smokePhotos.docs) {
+  await payload.delete({ collection: "photos", id: doc.id, overrideAccess: true });
+}
+log(`deleted ${smokePhotos.docs.length} smoke-test photo(s)`);
 
 // 1. delete the smoke-test story (by slug, draft only)
 const found = await payload.find({

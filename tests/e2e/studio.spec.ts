@@ -56,7 +56,76 @@ test("unauthenticated /de/studio redirects to sign-in", async ({ page }) => {
   expect(page.url()).toContain("next=%2Fde%2Fstudio");
 });
 
-// Authenticated journey (upload photo → appears in grid) needs a Neon Auth
-// test user — same blocker as the fixme in tests/e2e/auth.spec.ts. Until that
-// fixture exists, the upload flow is verified manually (see the Fotos task).
-test.fixme("admin can upload a photo and see it in the studio grid", () => {});
+/**
+ * AUTHENTICATED UPLOAD JOURNEY — writes to the shared Neon DB.
+ *
+ * This describe block is SKIPPED by default. It only runs when both
+ * TEST_EMAIL and TEST_PASSWORD env vars are set.
+ *
+ * Run order:
+ *   1. pnpm tsx scripts/experiments/studio-e2e-setup.ts
+ *   2. TEST_EMAIL=… TEST_PASSWORD=… pnpm exec playwright test tests/e2e/studio.spec.ts
+ *   3. pnpm tsx scripts/experiments/studio-e2e-cleanup.ts
+ *
+ * The uploaded file is named "studio-smoke-test-bitte-loeschen.jpg" so the
+ * cleanup script can find and delete it from the `photos` collection.
+ */
+test.describe("studio upload (authenticated)", () => {
+  test.describe.configure({ mode: "serial" });
+
+  test.skip(
+    !process.env.TEST_EMAIL || !process.env.TEST_PASSWORD,
+    "set TEST_EMAIL and TEST_PASSWORD (and run scripts/experiments/studio-e2e-setup.ts first) to run the authenticated upload journey",
+  );
+
+  test("admin can upload a photo and see it in the studio grid", async ({ page }) => {
+    // -- Step 1: log in --
+    await page.goto("/sign-in");
+    await page.getByLabel(/email/i).fill(process.env.TEST_EMAIL!);
+    await page.getByLabel(/password/i).fill(process.env.TEST_PASSWORD!);
+    await page.getByRole("button", { name: /^log ?in$/i }).click();
+    await page.waitForURL((url) => !url.pathname.endsWith("/sign-in"), {
+      timeout: 20_000,
+    });
+
+    // -- Step 2: navigate to fotos grid --
+    await page.goto("/studio/fotos");
+    await expect(page.getByRole("heading", { name: /fotos/i }).first()).toBeVisible({
+      timeout: 15_000,
+    });
+
+    // -- Step 3: count existing cards --
+    const before = await page.locator("main ul li").count();
+
+    // -- Step 4: upload a minimal 1×1 JPEG from memory --
+    const b64 =
+      "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAAA//EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AfwD/2Q==";
+    const jpeg = Buffer.from(b64, "base64");
+    await page.locator('input[type="file"]').setInputFiles({
+      name: "studio-smoke-test-bitte-loeschen.jpg",
+      mimeType: "image/jpeg",
+      buffer: jpeg,
+    });
+
+    // -- Step 5: wait for upload success indicator --
+    await expect(page.getByText(/^(Hochgeladen|Uploaded)$/)).toBeVisible({
+      timeout: 30_000,
+    });
+
+    // -- Step 6: assert the grid grew and the new card carries the derived alt --
+    // Photos sort newest-first, so the just-uploaded photo is the first card.
+    // Use toHaveValue (reads the .value property), not an [value="…"] CSS
+    // attribute selector — PhotoCard is a controlled React input whose attribute
+    // does not reflect the property after hydration. The filename slug
+    // "studio-smoke-test-bitte-loeschen.jpg" derives the alt "studio smoke test
+    // bitte loeschen".
+    await expect
+      .poll(async () => page.locator("main ul li").count(), { timeout: 15_000 })
+      .toBeGreaterThan(before);
+
+    const newestAltDe = page.locator("main ul li").first().getByRole("textbox").first();
+    await expect(newestAltDe).toHaveValue("studio smoke test bitte loeschen", {
+      timeout: 15_000,
+    });
+  });
+});

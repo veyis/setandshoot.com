@@ -7,7 +7,7 @@ import config from "@payload-config";
 const OUT = "scripts/experiments/studio-e2e-setup.out";
 const log = (...p: unknown[]) => appendFileSync(OUT, p.join(" ") + "\n");
 
-const SITE = "https://setandshoot.com";
+const SITE = process.env.E2E_BASE_URL ?? "http://localhost:3000";
 const EMAIL = process.env.TEST_EMAIL!;
 const PASSWORD = process.env.TEST_PASSWORD!;
 
