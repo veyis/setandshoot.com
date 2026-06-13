@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useState, type FormEvent } from "react";
 import type { Locale } from "@/lib/i18n/config";
+import { validateBookingFields, type BookingFieldErrors } from "@/lib/booking/validate";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -15,6 +16,7 @@ export function BookingForm() {
   const locale = useLocale() as Locale;
   const [state, setState] = useState<FormState>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<BookingFieldErrors>({});
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -33,6 +35,19 @@ export function BookingForm() {
       company: String(data.get("company") ?? ""),
       locale,
     };
+
+    const fieldErrs = validateBookingFields({
+      name: payload.name,
+      email: payload.email,
+      message: payload.message,
+      organization: payload.organization,
+    });
+    if (Object.keys(fieldErrs).length > 0) {
+      setFieldErrors(fieldErrs);
+      setState("idle");
+      return;
+    }
+    setFieldErrors({});
 
     try {
       const response = await fetch("/api/booking", {
@@ -99,10 +114,17 @@ export function BookingForm() {
           type="text"
           required
           aria-required="true"
+          aria-invalid={Boolean(fieldErrors.name)}
+          aria-errormessage="booking-err-name"
           autoComplete="name"
           disabled={state === "submitting"}
           className={fieldClass}
         />
+        {fieldErrors.name && (
+          <span id="booking-err-name" className="text-accent text-xs">
+            {fieldErrors.name}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col gap-2">
@@ -115,10 +137,17 @@ export function BookingForm() {
           type="email"
           required
           aria-required="true"
+          aria-invalid={Boolean(fieldErrors.email)}
+          aria-errormessage="booking-err-email"
           autoComplete="email"
           disabled={state === "submitting"}
           className={fieldClass}
         />
+        {fieldErrors.email && (
+          <span id="booking-err-email" className="text-accent text-xs">
+            {fieldErrors.email}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col gap-2">
@@ -144,10 +173,17 @@ export function BookingForm() {
           name="message"
           required
           aria-required="true"
+          aria-invalid={Boolean(fieldErrors.message)}
+          aria-errormessage="booking-err-message"
           rows={5}
           disabled={state === "submitting"}
           className={`${fieldClass} resize-y`}
         />
+        {fieldErrors.message && (
+          <span id="booking-err-message" className="text-accent text-xs">
+            {fieldErrors.message}
+          </span>
+        )}
       </div>
 
       {/* Persistent live region so screen readers reliably announce errors
