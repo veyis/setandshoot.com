@@ -27,6 +27,11 @@ export function AuthUIProvider({ children }: { children: ReactNode }) {
         magicLink={false}
         passkey={false}
         oneTap={false}
+        // Google OAuth. The button proxies through /api/auth/sign-in/social to the
+        // Neon Auth server, which holds the Google client ID/secret (configured in
+        // the Neon console). `redirectTo` on each AuthView becomes the post-login
+        // callback, so the existing ?next= flow is preserved.
+        social={{ providers: ["google"] }}
       >
         {children}
         <Toaster richColors theme="dark" />
