@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
-import { seoCopy } from "@/lib/seo/copy";
+import { seoCopy, resolveSeo } from "@/lib/seo/copy";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+import { getPayload } from "@/lib/payload/get-payload";
 import { notFound } from "next/navigation";
 import { LandingImage } from "@/components/landing/landing-image";
 import { PageShell } from "@/components/site/page-shell";
@@ -19,7 +20,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const safeLocale = isLocale(locale) ? locale : defaultLocale;
-  const copy = seoCopy(safeLocale, "highlights");
+  const payload = await getPayload();
+  const data = await payload.findGlobal({ slug: "highlightsPage", locale: safeLocale });
+  const copy = resolveSeo(
+    seoCopy(safeLocale, "highlights"),
+    (data as { seo?: { title?: string | null; description?: string | null } }).seo,
+  );
   return buildPageMetadata({ locale: safeLocale, path: "/highlights", ...copy });
 }
 

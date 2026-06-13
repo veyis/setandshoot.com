@@ -22,3 +22,14 @@ export function seoCopy(locale: string, page: SeoPage): SeoEntry {
   const table = locale === "en" ? tables.en : tables.de;
   return table[page];
 }
+
+/** i18n default overridden by a non-empty CMS value. */
+export function resolveSeo(
+  base: { title: string; description: string },
+  override?: { title?: string | null; description?: string | null },
+): { title: string; description: string } {
+  return {
+    title: override?.title?.trim() || base.title,
+    description: override?.description?.trim() || base.description,
+  };
+}
