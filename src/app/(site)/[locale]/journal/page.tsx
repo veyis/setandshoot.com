@@ -1,6 +1,9 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { isLocale, type Locale } from "@/lib/i18n/config";
+import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
+import { seoCopy } from "@/lib/seo/copy";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 import { notFound } from "next/navigation";
 import { LandingImage } from "@/components/landing/landing-image";
 import { PageShell } from "@/components/site/page-shell";
@@ -8,6 +11,17 @@ import { getLandingPhotos } from "@/lib/landing/photos";
 
 // Static content (translations + bundled photos); revalidate hourly.
 export const revalidate = 3600;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const safeLocale = isLocale(locale) ? locale : defaultLocale;
+  const copy = seoCopy(safeLocale, "journal");
+  return buildPageMetadata({ locale: safeLocale, path: "/journal", ...copy });
+}
 
 export default async function JournalPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
