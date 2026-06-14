@@ -1,5 +1,8 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { isLocale, type Locale } from "@/lib/i18n/config";
+import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
+import { seoCopy } from "@/lib/seo/copy";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 import { notFound } from "next/navigation";
 import { getPublishedStories } from "@/lib/payload/queries/stories";
 import { StoryCard } from "@/components/story/story-card";
@@ -7,6 +10,17 @@ import { PageShell } from "@/components/site/page-shell";
 
 // ISR: rebuilt hourly; the story revalidate hook busts this on publish.
 export const revalidate = 3600;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const safeLocale = isLocale(locale) ? locale : defaultLocale;
+  const copy = seoCopy(safeLocale, "stories");
+  return buildPageMetadata({ locale: safeLocale, path: "/stories", ...copy });
+}
 
 export default async function StoriesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

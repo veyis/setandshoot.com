@@ -315,5 +315,35 @@
     "title": "Etwas ist schiefgelaufen",
     "body": "Beim Laden dieser Seite ist ein Fehler aufgetreten. Bitte versuche es erneut.",
     "retry": "Erneut versuchen"
+  },
+  "seo": {
+    "about": {
+      "title": "Über mich — Volleyball-Fotografin aus Bremen",
+      "description": "Lerne Belin Akguel kennen: cinematische Volleyball- und Sportfotografie aus Bremen, mit einem Blick für Bewegung, Licht und den entscheidenden Moment."
+    },
+    "services": {
+      "title": "Leistungen — Volleyball- & Sportfotografie",
+      "description": "Buche Belin Akguel für Spieltag-Reportagen, Team-Porträts und Highlight-Sessions. Professionelle Volleyball- und Sportfotografie aus Bremen."
+    },
+    "contact": {
+      "title": "Kontakt & Buchung",
+      "description": "Frag deinen Foto-Termin an: Volleyball- und Sportfotografie aus Bremen. Schnelle Antwort, unkomplizierte Buchung."
+    },
+    "highlights": {
+      "title": "Highlights — Ausgewählte Volleyball-Momente",
+      "description": "Eine Auswahl der stärksten Volleyball- und Sportaufnahmen von Belin Akguel — Bewegung, Emotion und Licht in einem Bild."
+    },
+    "athletes": {
+      "title": "Athletinnen & Athleten — Sportporträts",
+      "description": "Porträts und Spielszenen von Volleyballerinnen und Volleyballern, fotografiert von Belin Akguel in Bremen."
+    },
+    "journal": {
+      "title": "Journal — Hinter den Kulissen",
+      "description": "Notizen, Spieltage und Geschichten hinter den Bildern von Belin Akguel — Volleyball- und Sportfotografie aus Bremen."
+    },
+    "stories": {
+      "title": "Stories — Volleyball-Reportagen",
+      "description": "Bildstrecken und Reportagen von Spieltagen und Turnieren, fotografiert von Belin Akguel aus Bremen."
+    }
   }
 }

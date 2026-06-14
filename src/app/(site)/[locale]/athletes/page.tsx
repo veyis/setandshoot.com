@@ -1,6 +1,10 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { isLocale, type Locale } from "@/lib/i18n/config";
+import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
+import { seoCopy, resolveSeo } from "@/lib/seo/copy";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import { getPayload } from "@/lib/payload/get-payload";
 import { notFound } from "next/navigation";
 import { LandingImage } from "@/components/landing/landing-image";
 import { PageShell } from "@/components/site/page-shell";
@@ -9,6 +13,27 @@ import { EditablePageHeader } from "@/components/site/editable-page-header";
 
 // ISR: rebuilt hourly; the athletesPage global revalidate hook busts on save.
 export const revalidate = 3600;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const safeLocale = isLocale(locale) ? locale : defaultLocale;
+  const payload = await getPayload();
+  let data: { seo?: { title?: string | null; description?: string | null } } | null = null;
+  try {
+    data = await payload.findGlobal({ slug: "athletesPage", locale: safeLocale });
+  } catch (err) {
+    console.warn(
+      "[athletesPage metadata] global read failed; using i18n default (pending migration?)",
+      err,
+    );
+  }
+  const copy = resolveSeo(seoCopy(safeLocale, "athletes"), data?.seo);
+  return buildPageMetadata({ locale: safeLocale, path: "/athletes", ...copy });
+}
 
 export default async function AthletesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

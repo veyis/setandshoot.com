@@ -894,6 +894,13 @@ export interface Setting {
   defaultWatermark?: boolean | null;
   accentColor?: string | null;
   homeFeaturedCount?: number | null;
+  organization?: {
+    instagram?: string | null;
+    linkedin?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    city?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -904,6 +911,10 @@ export interface Setting {
 export interface AboutPage {
   id: number;
   sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock | ServiceOffersBlock)[] | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1007,6 +1018,10 @@ export interface ServiceOffersBlock {
 export interface ContactPage {
   id: number;
   sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock | ServiceOffersBlock)[] | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1017,6 +1032,10 @@ export interface ContactPage {
 export interface ServicesPage {
   id: number;
   sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock | ServiceOffersBlock)[] | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1027,6 +1046,10 @@ export interface ServicesPage {
 export interface AthletesPage {
   id: number;
   sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock | ServiceOffersBlock)[] | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1037,6 +1060,10 @@ export interface AthletesPage {
 export interface HighlightsPage {
   id: number;
   sections?: (PageHeaderBlock | PortraitFigureBlock | EditorialProseBlock | CtaLinkBlock | ServiceOffersBlock)[] | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1081,6 +1108,15 @@ export interface SettingsSelect<T extends boolean = true> {
   defaultWatermark?: T;
   accentColor?: T;
   homeFeaturedCount?: T;
+  organization?:
+    | T
+    | {
+        instagram?: T;
+        linkedin?: T;
+        email?: T;
+        phone?: T;
+        city?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1098,6 +1134,12 @@ export interface AboutPageSelect<T extends boolean = true> {
         editorialProse?: T | EditorialProseBlockSelect<T>;
         ctaLink?: T | CtaLinkBlockSelect<T>;
         serviceOffers?: T | ServiceOffersBlockSelect<T>;
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1177,6 +1219,12 @@ export interface ContactPageSelect<T extends boolean = true> {
         ctaLink?: T | CtaLinkBlockSelect<T>;
         serviceOffers?: T | ServiceOffersBlockSelect<T>;
       };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1194,6 +1242,12 @@ export interface ServicesPageSelect<T extends boolean = true> {
         editorialProse?: T | EditorialProseBlockSelect<T>;
         ctaLink?: T | CtaLinkBlockSelect<T>;
         serviceOffers?: T | ServiceOffersBlockSelect<T>;
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1213,6 +1267,12 @@ export interface AthletesPageSelect<T extends boolean = true> {
         ctaLink?: T | CtaLinkBlockSelect<T>;
         serviceOffers?: T | ServiceOffersBlockSelect<T>;
       };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1230,6 +1290,12 @@ export interface HighlightsPageSelect<T extends boolean = true> {
         editorialProse?: T | EditorialProseBlockSelect<T>;
         ctaLink?: T | CtaLinkBlockSelect<T>;
         serviceOffers?: T | ServiceOffersBlockSelect<T>;
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
       };
   updatedAt?: T;
   createdAt?: T;

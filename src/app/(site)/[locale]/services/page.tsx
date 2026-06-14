@@ -1,13 +1,41 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { isLocale } from "@/lib/i18n/config";
+import { isLocale, defaultLocale } from "@/lib/i18n/config";
 import type { Locale } from "@/lib/i18n/config";
+import { seoCopy, resolveSeo } from "@/lib/seo/copy";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import { getPayload } from "@/lib/payload/get-payload";
 import { notFound } from "next/navigation";
+import { env } from "@/env";
+import { JsonLd } from "@/components/seo/json-ld";
+import { serviceSchema } from "@/lib/seo/schema";
 import { BookingForm } from "@/components/booking/booking-form";
 import { PageShell } from "@/components/site/page-shell";
 import { EditablePageHeader } from "@/components/site/editable-page-header";
 
 // ISR: rebuilt hourly; the servicesPage global revalidate hook busts on save.
 export const revalidate = 3600;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const safeLocale = isLocale(locale) ? locale : defaultLocale;
+  const payload = await getPayload();
+  let data: { seo?: { title?: string | null; description?: string | null } } | null = null;
+  try {
+    data = await payload.findGlobal({ slug: "servicesPage", locale: safeLocale });
+  } catch (err) {
+    console.warn(
+      "[servicesPage metadata] global read failed; using i18n default (pending migration?)",
+      err,
+    );
+  }
+  const copy = resolveSeo(seoCopy(safeLocale, "services"), data?.seo);
+  return buildPageMetadata({ locale: safeLocale, path: "/services", ...copy });
+}
 
 export default async function ServicesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -23,6 +51,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
 
   return (
     <PageShell>
+      <JsonLd data={serviceSchema({ siteUrl: env.NEXT_PUBLIC_SITE_URL, offers })} />
       <EditablePageHeader
         slug="servicesPage"
         locale={locale as Locale}

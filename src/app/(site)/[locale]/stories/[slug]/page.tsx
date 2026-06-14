@@ -5,11 +5,15 @@ import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getPayload } from "@/lib/payload/get-payload";
 import { getStoryBySlug } from "@/lib/payload/queries/stories";
-import { localeAlternates } from "@/lib/seo/alternates";
 import { StoryBlocks } from "@/components/story/story-blocks";
 import { PayloadPhoto } from "@/components/story/payload-photo";
-import { resolvePhoto } from "@/lib/payload/media";
+import { resolvePhoto, photoSrc, photoDimensions, photoAlt } from "@/lib/payload/media";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import { seoCopy } from "@/lib/seo/copy";
 import type { Metadata } from "next";
+import { env } from "@/env";
+import { JsonLd } from "@/components/seo/json-ld";
+import { articleSchema, breadcrumbSchema } from "@/lib/seo/schema";
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -35,10 +39,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!isLocale(locale)) return {};
   const story = await getStoryBySlug(slug, locale as Locale);
   if (!story) return {};
-  return {
-    title: story.title ?? undefined,
-    alternates: localeAlternates(`/stories/${slug}`, locale),
-  };
+
+  const cover = resolvePhoto(story.coverPhoto);
+  const url = photoSrc(cover, "feed");
+  const { width, height } = photoDimensions(cover, "feed");
+  const fallback = seoCopy(locale, "stories");
+
+  return buildPageMetadata({
+    locale,
+    path: `/stories/${slug}`,
+    title: story.title ?? fallback.title,
+    description: fallback.description,
+    image: url ? { url, width, height, alt: photoAlt(cover, story.title ?? "") } : undefined,
+  });
 }
 
 function formatPlayedAt(value: string | null | undefined, locale: string): string | null {
@@ -64,8 +77,34 @@ export default async function StoryPage({ params }: PageProps) {
 
   const metaLine = [playedAt, story.venue, story.result].filter(Boolean).join(" · ");
 
+  const siteUrl = env.NEXT_PUBLIC_SITE_URL;
+  const canonical =
+    locale === "de" ? `${siteUrl}/stories/${story.slug}` : `${siteUrl}/en/stories/${story.slug}`;
+  const ogUrl = photoSrc(cover, "feed");
+  const dims = photoDimensions(cover, "feed");
+
   return (
     <article className="mx-auto max-w-4xl px-6 py-16 md:px-12">
+      <JsonLd
+        data={articleSchema({
+          siteUrl,
+          title: story.title ?? "",
+          description: seoCopy(locale, "stories").description,
+          url: canonical,
+          image: ogUrl ? { url: ogUrl, width: dims.width, height: dims.height } : undefined,
+          datePublished: story.publishedAt ?? undefined,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", url: locale === "de" ? siteUrl : `${siteUrl}/en` },
+          {
+            name: seoCopy(locale, "stories").title,
+            url: locale === "de" ? `${siteUrl}/stories` : `${siteUrl}/en/stories`,
+          },
+          { name: story.title ?? "", url: canonical },
+        ])}
+      />
       <header className="mb-12 flex flex-col gap-6">
         <Link
           href={storiesHref as never}

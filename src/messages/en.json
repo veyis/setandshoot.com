@@ -315,5 +315,35 @@
     "title": "Something went wrong",
     "body": "We ran into an error loading this page. Please try again.",
     "retry": "Try again"
+  },
+  "seo": {
+    "about": {
+      "title": "About — Volleyball Photographer in Bremen",
+      "description": "Meet Belin Akguel: cinematic volleyball and sports photography from Bremen, with an eye for motion, light, and the decisive moment."
+    },
+    "services": {
+      "title": "Services — Volleyball & Sports Photography",
+      "description": "Book Belin Akguel for match-day reportage, team portraits, and highlight sessions. Professional volleyball and sports photography from Bremen."
+    },
+    "contact": {
+      "title": "Contact & Booking",
+      "description": "Request your shoot: volleyball and sports photography from Bremen. Fast reply, easy booking."
+    },
+    "highlights": {
+      "title": "Highlights — Selected Volleyball Moments",
+      "description": "A selection of Belin Akguel's strongest volleyball and sports images — motion, emotion, and light in a single frame."
+    },
+    "athletes": {
+      "title": "Athletes — Sports Portraits",
+      "description": "Portraits and game action of volleyball players, photographed by Belin Akguel in Bremen."
+    },
+    "journal": {
+      "title": "Journal — Behind the Scenes",
+      "description": "Notes, match days, and the stories behind Belin Akguel's images — volleyball and sports photography from Bremen."
+    },
+    "stories": {
+      "title": "Stories — Volleyball Reportage",
+      "description": "Photo stories and reportage from match days and tournaments, shot by Belin Akguel from Bremen."
+    }
   }
 }

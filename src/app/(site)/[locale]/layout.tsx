@@ -8,6 +8,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { isLocale, locales, defaultLocale, type Locale } from "@/lib/i18n/config";
 import { env } from "@/env";
 import { fraunces, inter, jetbrainsMono } from "@/lib/design/fonts";
+import { JsonLd } from "@/components/seo/json-ld";
+import { personSchema, webSiteSchema } from "@/lib/seo/schema";
+import { getOrgIdentity } from "@/lib/seo/identity";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { LenisProvider } from "@/components/motion/lenis-provider";
@@ -37,7 +40,9 @@ export async function generateMetadata({
   const meta = SITE_META[isLocale(locale) ? locale : defaultLocale];
   return {
     metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
-    title: meta.title,
+    // Brand the HTML <title> once for every page (child pages set a bare topic
+    // string). The og-card route reads seoCopy directly, so cards stay unbranded.
+    title: { default: meta.title, template: "%s — Belin Akguel" },
     description: meta.description,
   };
 }
@@ -59,6 +64,9 @@ export default async function LocaleLayout({
   // request, so pages under this layout can be statically prerendered (ISR).
   setRequestLocale(locale);
 
+  const org = await getOrgIdentity();
+  const siteUrl = env.NEXT_PUBLIC_SITE_URL;
+
   const messages = await getMessages();
   const t = await getTranslations("nav");
 
@@ -69,6 +77,8 @@ export default async function LocaleLayout({
       suppressHydrationWarning
     >
       <body>
+        <JsonLd data={personSchema({ siteUrl, org })} />
+        <JsonLd data={webSiteSchema({ siteUrl })} />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <LenisProvider>
             <a

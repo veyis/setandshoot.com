@@ -27,5 +27,17 @@ export const Settings: GlobalConfig = {
       max: 6,
       label: "Anzahl Featured Stories auf der Startseite",
     },
+    {
+      name: "organization",
+      type: "group",
+      label: "Profil / SEO",
+      fields: [
+        { name: "instagram", type: "text", label: "Instagram-URL" },
+        { name: "linkedin", type: "text", label: "LinkedIn-URL" },
+        { name: "email", type: "email", label: "Kontakt-E-Mail" },
+        { name: "phone", type: "text", label: "Telefon" },
+        { name: "city", type: "text", defaultValue: "Bremen", label: "Stadt" },
+      ],
+    },
   ],
 };
