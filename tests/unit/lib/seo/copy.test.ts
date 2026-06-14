@@ -4,7 +4,7 @@ import { seoCopy, type SeoPage } from "@/lib/seo/copy";
 describe("seoCopy", () => {
   it("returns German copy for de", () => {
     const c = seoCopy("de", "about");
-    expect(c.title).toMatch(/Belin Akguel/);
+    expect(c.title).toMatch(/Volleyball-Fotografin/);
     expect(c.description.length).toBeGreaterThan(20);
   });
   it("returns English copy for en", () => {

@@ -40,7 +40,9 @@ export async function generateMetadata({
   const meta = SITE_META[isLocale(locale) ? locale : defaultLocale];
   return {
     metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
-    title: meta.title,
+    // Brand the HTML <title> once for every page (child pages set a bare topic
+    // string). The og-card route reads seoCopy directly, so cards stay unbranded.
+    title: { default: meta.title, template: "%s — Belin Akguel" },
     description: meta.description,
   };
 }
