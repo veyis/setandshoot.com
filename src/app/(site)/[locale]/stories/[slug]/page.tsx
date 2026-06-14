@@ -10,6 +10,7 @@ import { PayloadPhoto } from "@/components/story/payload-photo";
 import { resolvePhoto, photoSrc, photoDimensions, photoAlt } from "@/lib/payload/media";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { seoCopy } from "@/lib/seo/copy";
+import { lexicalToPlainText } from "@/lib/payload/lexical-text";
 import type { Metadata } from "next";
 import { env } from "@/env";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -44,12 +45,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const url = photoSrc(cover, "feed");
   const { width, height } = photoDimensions(cover, "feed");
   const fallback = seoCopy(locale, "stories");
+  const summaryText = lexicalToPlainText(story.summary);
+  const description = summaryText ? summaryText.slice(0, 155).trim() : fallback.description;
 
   return buildPageMetadata({
     locale,
     path: `/stories/${slug}`,
     title: story.title ?? fallback.title,
-    description: fallback.description,
+    description,
     image: url ? { url, width, height, alt: photoAlt(cover, story.title ?? "") } : undefined,
   });
 }
@@ -82,6 +85,10 @@ export default async function StoryPage({ params }: PageProps) {
     locale === "de" ? `${siteUrl}/stories/${story.slug}` : `${siteUrl}/en/stories/${story.slug}`;
   const ogUrl = photoSrc(cover, "feed");
   const dims = photoDimensions(cover, "feed");
+  const articleSummaryText = lexicalToPlainText(story.summary);
+  const articleDescription = articleSummaryText
+    ? articleSummaryText.slice(0, 155).trim()
+    : seoCopy(locale, "stories").description;
 
   return (
     <article className="mx-auto max-w-4xl px-6 py-16 md:px-12">
@@ -89,7 +96,7 @@ export default async function StoryPage({ params }: PageProps) {
         data={articleSchema({
           siteUrl,
           title: story.title ?? "",
-          description: seoCopy(locale, "stories").description,
+          description: articleDescription,
           url: canonical,
           image: ogUrl ? { url: ogUrl, width: dims.width, height: dims.height } : undefined,
           datePublished: story.publishedAt ?? undefined,
