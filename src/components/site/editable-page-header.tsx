@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { AboutPage } from "@/payload-types";
 import type { Locale } from "@/lib/i18n/config";
 import { getPayload } from "@/lib/payload/get-payload";
 import { MarketingBlocks } from "@/components/site/marketing-blocks";
@@ -24,9 +25,17 @@ export async function EditablePageHeader({
   fallback: ReactNode;
 }) {
   const payload = await getPayload();
-  const data = await payload.findGlobal({ slug, locale });
-  if (data.sections?.length) {
-    return <MarketingBlocks sections={data.sections} locale={locale} />;
+  let data: { sections?: unknown[] | null } | null = null;
+  try {
+    data = await payload.findGlobal({ slug, locale });
+  } catch (err) {
+    console.warn(
+      `[EditablePageHeader] ${slug} read failed; using fallback (pending migration?)`,
+      err,
+    );
+  }
+  if (data?.sections?.length) {
+    return <MarketingBlocks sections={data.sections as AboutPage["sections"]} locale={locale} />;
   }
   return <>{fallback}</>;
 }

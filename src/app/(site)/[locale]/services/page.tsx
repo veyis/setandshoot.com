@@ -24,11 +24,16 @@ export async function generateMetadata({
   const { locale } = await params;
   const safeLocale = isLocale(locale) ? locale : defaultLocale;
   const payload = await getPayload();
-  const data = await payload.findGlobal({ slug: "servicesPage", locale: safeLocale });
-  const copy = resolveSeo(
-    seoCopy(safeLocale, "services"),
-    (data as { seo?: { title?: string | null; description?: string | null } }).seo,
-  );
+  let data: { seo?: { title?: string | null; description?: string | null } } | null = null;
+  try {
+    data = await payload.findGlobal({ slug: "servicesPage", locale: safeLocale });
+  } catch (err) {
+    console.warn(
+      "[servicesPage metadata] global read failed; using i18n default (pending migration?)",
+      err,
+    );
+  }
+  const copy = resolveSeo(seoCopy(safeLocale, "services"), data?.seo);
   return buildPageMetadata({ locale: safeLocale, path: "/services", ...copy });
 }
 
