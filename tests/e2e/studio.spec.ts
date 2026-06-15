@@ -59,6 +59,10 @@ test("unauthenticated /de/studio redirects to sign-in", async ({ page }) => {
 /**
  * AUTHENTICATED UPLOAD JOURNEY — writes to the shared Neon DB.
  *
+ * The uploader now uses the presigned direct-to-R2 flow (presign → PUT straight
+ * to R2 → finalize), so driving the file input here also exercises that R2
+ * round-trip end-to-end against the configured (preview) bucket.
+ *
  * This describe block is SKIPPED by default. It only runs when both
  * TEST_EMAIL and TEST_PASSWORD env vars are set.
  *
