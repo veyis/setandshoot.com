@@ -116,4 +116,28 @@ describe("POST /api/studio/upload/finalize", () => {
     expect(createPhotoFromUpload).not.toHaveBeenCalled();
     expect(deleteObject).toHaveBeenCalledWith("tmp/uuid/evil.zip");
   });
+
+  it("returns 500 and still deletes the temp object when createPhotoFromUpload throws", async () => {
+    asAdmin();
+    vi.mocked(getObjectBuffer).mockResolvedValue({
+      buffer: Buffer.from("img"),
+      contentType: "image/jpeg",
+    });
+    vi.mocked(createPhotoFromUpload).mockRejectedValue(new Error("sharp blew up"));
+    const res = await finalizePOST(jsonReq({ tempKey: "tmp/uuid/photo.jpg" }));
+    expect(res.status).toBe(500);
+    expect(deleteObject).toHaveBeenCalledWith("tmp/uuid/photo.jpg");
+  });
+
+  it("returns 400 on malformed JSON without reading the object", async () => {
+    asAdmin();
+    const badReq = new Request("http://test/api", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: "{ not json",
+    });
+    const res = await finalizePOST(badReq);
+    expect(res.status).toBe(400);
+    expect(getObjectBuffer).not.toHaveBeenCalled();
+  });
 });
