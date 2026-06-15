@@ -147,7 +147,21 @@
   "auth": {
     "backToSignIn": "Back to sign in",
     "adminRequired": "This account does not have CMS access yet. Sign in with an admin email, or create an account first.",
-    "adminNext": "One account for the site and the CMS — sign in once and you go straight to the admin panel."
+    "adminNext": "One account for the site and the CMS — sign in once and you go straight to the admin panel.",
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Sign in with your email address.",
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot your password?",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "orContinue": "Or continue with",
+      "withGoogle": "Sign in with Google",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "error": "Sign-in failed. Check your email and password."
+    }
   },
   "account": {
     "title": "Account",
