@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { AuthViewClient } from "@/components/auth/auth-view-client";
+import { LoginForm } from "@/components/auth/login-form";
 import { safeRedirectPath } from "@/lib/auth/safe-redirect";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +18,7 @@ export default async function SignInPage({ searchParams }: Props) {
       {safeNext.startsWith("/admin") ? (
         <p className="text-ink-muted mb-6 text-sm">{t("adminNext")}</p>
       ) : null}
-      <AuthViewClient view="sign-in" nextPath={safeNext} />
+      <LoginForm nextPath={safeNext} />
     </main>
   );
 }

@@ -147,7 +147,21 @@
   "auth": {
     "backToSignIn": "Zurück zur Anmeldung",
     "adminRequired": "Dieses Konto hat noch keinen CMS-Zugang. Melde dich mit einer Admin-E-Mail an oder erstelle zuerst ein Konto.",
-    "adminNext": "Ein Konto für Website und CMS — einmal anmelden, und du landest direkt im Admin-Bereich."
+    "adminNext": "Ein Konto für Website und CMS — einmal anmelden, und du landest direkt im Admin-Bereich.",
+    "login": {
+      "title": "Anmelden",
+      "subtitle": "Melde dich mit deiner E-Mail-Adresse an.",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "forgotPassword": "Passwort vergessen?",
+      "submit": "Anmelden",
+      "submitting": "Wird angemeldet…",
+      "orContinue": "Oder weiter mit",
+      "withGoogle": "Mit Google anmelden",
+      "noAccount": "Noch kein Konto?",
+      "signUp": "Registrieren",
+      "error": "Anmeldung fehlgeschlagen. Prüfe E-Mail und Passwort."
+    }
   },
   "account": {
     "title": "Konto",
