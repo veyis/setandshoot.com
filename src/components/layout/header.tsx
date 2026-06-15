@@ -45,7 +45,12 @@ export async function Header() {
         ))}
       </nav>
       <div className="flex items-center gap-4">
-        <HeaderAuthButton signInLabel={t("signIn")} accountLabel={t("account")} />
+        <HeaderAuthButton
+          signInLabel={t("signIn")}
+          accountLabel={t("account")}
+          adminLabel={t("adminOption")}
+          logOutLabel={t("logOut")}
+        />
         <LocaleSwitcher />
         <MobileNav
           items={items}
