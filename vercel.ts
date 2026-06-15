@@ -2,7 +2,7 @@ import { type VercelConfig, routes } from "@vercel/config/v1";
 
 export const config: VercelConfig = {
   framework: "nextjs",
-  buildCommand: "pnpm build",
+  buildCommand: "bash scripts/deploy-migrate.sh && pnpm build",
   installCommand: "pnpm install --frozen-lockfile",
   regions: ["fra1"],
   headers: [
