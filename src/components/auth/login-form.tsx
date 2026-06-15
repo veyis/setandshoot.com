@@ -41,8 +41,16 @@ export function LoginForm({ nextPath = "/account" }: { nextPath?: string }) {
         setError(t("error"));
         return;
       }
-      router.push(nextPath as Parameters<typeof router.push>[0]);
-      router.refresh();
+
+      try {
+        const { data: sessionData } = await authClient.getSession();
+        const destination = sessionData?.user?.role === "admin" ? "/studio" : nextPath;
+        router.push(destination as Parameters<typeof router.push>[0]);
+        router.refresh();
+      } catch {
+        router.push(nextPath as Parameters<typeof router.push>[0]);
+        router.refresh();
+      }
     } catch {
       setState("error");
       setError(t("error"));
@@ -53,9 +61,11 @@ export function LoginForm({ nextPath = "/account" }: { nextPath?: string }) {
     if (busy) return;
     setState("google");
     setError(null);
-    // Redirects to the Neon Auth → Google flow, returning to nextPath.
     try {
-      await authClient.signIn.social({ provider: "google", callbackURL: nextPath });
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: `/api/auth-redirect?next=${encodeURIComponent(nextPath)}`,
+      });
     } catch {
       setState("error");
       setError(t("error"));
@@ -69,7 +79,23 @@ export function LoginForm({ nextPath = "/account" }: { nextPath?: string }) {
         <p className="text-ink-muted text-sm">{t("subtitle")}</p>
       </div>
 
-      <form onSubmit={onSubmit} className="mt-6 flex flex-col gap-5" noValidate>
+      <button
+        type="button"
+        onClick={onGoogle}
+        disabled={busy}
+        className="border-hairline hover:bg-canvas mt-6 flex w-full items-center justify-center gap-2 rounded-sm border px-6 py-2.5 text-sm font-medium transition-colors disabled:opacity-60"
+      >
+        <GoogleIcon />
+        {state === "google" ? t("submitting") : t("withGoogle")}
+      </button>
+
+      <div className="my-6 flex items-center gap-3">
+        <span className="border-hairline flex-1 border-t" />
+        <span className="text-ink-muted text-xs tracking-wide uppercase">{t("orContinue")}</span>
+        <span className="border-hairline flex-1 border-t" />
+      </div>
+
+      <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
         <div className="flex flex-col gap-2">
           <label htmlFor="login-email" className="text-sm">
             {t("email")}
@@ -127,22 +153,6 @@ export function LoginForm({ nextPath = "/account" }: { nextPath?: string }) {
           {state === "email" ? t("submitting") : t("submit")}
         </button>
       </form>
-
-      <div className="my-6 flex items-center gap-3">
-        <span className="border-hairline flex-1 border-t" />
-        <span className="text-ink-muted text-xs tracking-wide uppercase">{t("orContinue")}</span>
-        <span className="border-hairline flex-1 border-t" />
-      </div>
-
-      <button
-        type="button"
-        onClick={onGoogle}
-        disabled={busy}
-        className="border-hairline hover:bg-canvas flex w-full items-center justify-center gap-2 rounded-sm border px-6 py-2.5 text-sm font-medium transition-colors disabled:opacity-60"
-      >
-        <GoogleIcon />
-        {state === "google" ? t("submitting") : t("withGoogle")}
-      </button>
 
       <p className="text-ink-muted mt-6 text-center text-sm">
         {t("noAccount")}{" "}
