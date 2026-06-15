@@ -1,8 +1,51 @@
 import { z } from "zod";
 
-// 4 MB — Vercel rejects serverless request bodies over ~4.5 MB platform-side.
-// Follow-up: presigned direct-to-R2 upload to lift the cap.
-export const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+// 50 MB. The client uploads originals directly to R2 via a presigned PUT, so the
+// old ~4.5 MB Vercel function-body limit no longer applies.
+export const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
+
+export const ALLOWED_MIME = ["image/jpeg", "image/png", "image/webp", "image/avif"] as const;
+export const TEMP_PREFIX = "tmp/";
+
+export function isAllowedMime(contentType: string): boolean {
+  return (ALLOWED_MIME as readonly string[]).includes(contentType);
+}
+
+/** Reduce an uploaded filename to a safe object-key segment (no paths/unsafe chars). */
+export function sanitizeFilename(name: string): string {
+  const base = name.split(/[\\/]/).pop() ?? name;
+  const cleaned = base
+    .replace(/[^a-zA-Z0-9.\-_]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^[-.]+/, "")
+    .replace(/-\./g, ".")
+    .slice(0, 200);
+  return cleaned || "upload";
+}
+
+/** Guard finalize against reading arbitrary R2 keys — only our temp objects. */
+export function isTempKey(key: string): boolean {
+  return (
+    typeof key === "string" &&
+    key.startsWith(TEMP_PREFIX) &&
+    key.length > TEMP_PREFIX.length &&
+    !key.includes("..") &&
+    !key.includes("//")
+  );
+}
+
+export const presignSchema = z.object({
+  filename: z.string().trim().min(1).max(255),
+  contentType: z.string().trim().min(1),
+  size: z.number().int().positive(),
+});
+
+export const finalizeSchema = z.object({
+  tempKey: z.string().trim().min(1),
+});
+
+export type PresignInput = z.infer<typeof presignSchema>;
+export type FinalizeInput = z.infer<typeof finalizeSchema>;
 
 export const photoMetaSchema = z.object({
   id: z.number().int().positive(),
