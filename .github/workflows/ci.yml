@@ -76,6 +76,11 @@ jobs:
       DATABASE_URL: ${{ secrets.DATABASE_URL_PREVIEW }}
       PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      # env.ts requires these; the dev server (and the /api/health e2e) won't
+      # start without them. NEON_AUTH_BASE_URL is the public JWKS endpoint;
+      # the cookie secret is a CI-only dummy (real auth isn't exercised in e2e).
+      NEON_AUTH_BASE_URL: ${{ vars.NEON_AUTH_BASE_URL }}
+      NEON_AUTH_COOKIE_SECRET: ${{ secrets.NEON_AUTH_COOKIE_SECRET }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
