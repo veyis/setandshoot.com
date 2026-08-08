@@ -20,6 +20,7 @@ beforeEach(() => {
   class MockIO implements IntersectionObserver {
     root = null;
     rootMargin = "";
+    scrollMargin = "";
     thresholds: ReadonlyArray<number> = [];
     constructor(callback: IntersectionObserverCallback) {
       this._cb = callback;
