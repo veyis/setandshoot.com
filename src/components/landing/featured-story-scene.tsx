@@ -102,7 +102,7 @@ export async function FeaturedStoryScene({ story }: Props) {
           <Reveal>
             <div className="flex flex-col gap-6">
               <Link
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                 
                 href={`/stories/${story.slug}` as any}
                 className="font-display hover:text-accent w-fit text-2xl italic underline-offset-4 transition-colors hover:underline"
               >

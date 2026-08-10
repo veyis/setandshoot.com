@@ -20,7 +20,7 @@ export default async function CustomerBookingsPage() {
     <main className="mx-auto max-w-3xl px-4 pt-32 pb-16">
       <p className="mb-6 text-sm">
         <Link
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+           
           href={"/account" as any}
           className="text-ink-muted hover:text-ink transition-colors"
         >

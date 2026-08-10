@@ -16,7 +16,7 @@ export default async function StudioDashboardPage() {
     <main>
       <div className="grid gap-4 sm:grid-cols-2">
         <Link
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+           
           href={"/studio/fotos" as any}
           className={cardClass}
         >
@@ -26,7 +26,7 @@ export default async function StudioDashboardPage() {
           </p>
         </Link>
         <Link
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+           
           href={"/studio/anfragen" as any}
           className={cardClass}
         >
@@ -36,7 +36,7 @@ export default async function StudioDashboardPage() {
           </p>
         </Link>
         <Link
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+           
           href={"/studio/stories" as any}
           className={cardClass}
         >
@@ -46,7 +46,7 @@ export default async function StudioDashboardPage() {
           </p>
         </Link>
         <Link
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+           
           href={"/studio/seiten" as any}
           className={cardClass}
         >
@@ -66,7 +66,7 @@ export default async function StudioDashboardPage() {
         ).map((link) => (
           <Link
             key={link.href}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+             
             href={link.href as any}
             className="text-ink-muted hover:text-ink text-sm underline underline-offset-4 transition-colors"
           >

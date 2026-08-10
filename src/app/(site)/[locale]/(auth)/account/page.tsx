@@ -19,7 +19,7 @@ export default async function AccountPage() {
         <p className="text-ink-muted mt-1 text-sm">{t("signedInAs", { email: user.email })}</p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+             
             href={"/account/bookings" as any}
             className={quickLinkClass}
           >
@@ -28,14 +28,14 @@ export default async function AccountPage() {
           {user.role === "admin" ? (
             <>
               <Link
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                 
                 href={"/studio" as any}
                 className={quickLinkClass}
               >
                 {t("openStudio")}
               </Link>
               <Link
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                 
                 href={"/admin" as any}
                 className={quickLinkClass}
               >

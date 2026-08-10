@@ -12,12 +12,15 @@ type QueueItem = {
   status: "pending" | "uploading" | "done" | "error" | "tooLarge" | "unsupported";
 };
 
-export function PhotoUpload() {
+type Watermark = "none" | "light" | "standard";
+
+export function PhotoUpload({ defaultWatermark = false }: { defaultWatermark?: boolean }) {
   const t = useTranslations("studio");
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [busy, setBusy] = useState(false);
+  const [watermark, setWatermark] = useState<Watermark>(defaultWatermark ? "standard" : "none");
 
   async function uploadFiles(files: File[]) {
     if (busy || files.length === 0) return;
@@ -40,6 +43,7 @@ export function PhotoUpload() {
       setQueue((q) => q.map((item, idx) => (idx === i ? { ...item, status: "uploading" } : item)));
       const form = new FormData();
       form.append("file", files[i]!);
+      form.append("watermark", watermark);
       let newStatus: QueueItem["status"] = "error";
       try {
         const response = await fetch("/api/studio/upload", { method: "POST", body: form });
@@ -68,6 +72,19 @@ export function PhotoUpload() {
   return (
     <section className="mb-10">
       <h2 className="font-display mb-3 text-xl tracking-tight">{t("uploadTitle")}</h2>
+      <label className="text-ink-muted mb-3 flex items-center gap-2 text-sm">
+        {t("watermarkFieldLabel")}
+        <select
+          value={watermark}
+          disabled={busy}
+          onChange={(event) => setWatermark(event.target.value as Watermark)}
+          className="border-hairline rounded-md border bg-transparent px-2 py-1"
+        >
+          <option value="none">{t("watermarkNone")}</option>
+          <option value="light">{t("watermarkLight")}</option>
+          <option value="standard">{t("watermarkStandard")}</option>
+        </select>
+      </label>
       <div
         role="button"
         tabIndex={0}

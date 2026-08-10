@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import "dotenv/config";
 import { appendFileSync } from "node:fs";
 import { sql } from "@payloadcms/db-postgres";

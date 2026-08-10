@@ -6,7 +6,7 @@ import { LocaleSwitcher } from "./locale-switcher";
 import { MobileNav } from "./mobile-nav";
 
 type NavItem = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   href: any;
   label: string;
 };
@@ -27,7 +27,7 @@ export async function Header() {
   return (
     <HeaderShell>
       <Link
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         href={"/" as any}
         className="font-display text-base tracking-tight"
       >

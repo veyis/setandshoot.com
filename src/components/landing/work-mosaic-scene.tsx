@@ -101,7 +101,7 @@ export async function WorkMosaicScene({ photos }: Props) {
 
       <Reveal>
         <Link
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+           
           href={"/highlights" as any}
           className="hover:text-accent mt-10 inline-block font-mono text-xs tracking-[0.2em] uppercase transition-colors"
         >

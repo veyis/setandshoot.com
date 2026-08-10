@@ -6,6 +6,8 @@ import { MAX_UPLOAD_BYTES } from "@/lib/studio/schemas";
 export const dynamic = "force-dynamic";
 
 const ALLOWED_MIME = ["image/jpeg", "image/png", "image/webp", "image/avif"];
+const WATERMARK_LEVELS = ["none", "light", "standard"] as const;
+type Watermark = (typeof WATERMARK_LEVELS)[number];
 // 4 MB — Vercel rejects serverless request bodies over ~4.5 MB platform-side, so a higher
 // limit here would be a false promise. Follow-up: presigned direct-to-R2 upload.
 const MAX_BYTES = MAX_UPLOAD_BYTES;
@@ -34,12 +36,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "File too large (max 4 MB)." }, { status: 413 });
   }
 
+  const rawWatermark = form.get("watermark");
+  const watermark: Watermark = WATERMARK_LEVELS.includes(rawWatermark as Watermark)
+    ? (rawWatermark as Watermark)
+    : "none";
+
   try {
     const { id } = await createPhotoFromUpload({
       data: Buffer.from(await file.arrayBuffer()),
       name: file.name,
       mimetype: file.type,
       size: file.size,
+      watermark,
     });
     return NextResponse.json({ ok: true, id }, { status: 201 });
   } catch (error) {

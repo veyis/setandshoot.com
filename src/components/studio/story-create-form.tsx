@@ -38,7 +38,7 @@ export function StoryCreateForm() {
     const result = await createStoryAction({ slug, titleDe });
     setCreating(false);
     if (result.ok && typeof result.id === "number") {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       router.push(`/studio/stories/${result.id}` as any);
       return;
     }
