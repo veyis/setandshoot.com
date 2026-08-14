@@ -5,11 +5,7 @@ import { getPayload } from "@/lib/payload/get-payload";
 import { MarketingBlocks } from "@/components/site/marketing-blocks";
 
 type MarketingGlobalSlug =
-  | "aboutPage"
-  | "contactPage"
-  | "servicesPage"
-  | "athletesPage"
-  | "highlightsPage";
+  "aboutPage" | "contactPage" | "servicesPage" | "athletesPage" | "highlightsPage";
 
 /**
  * Renders an editable page header from the page's Payload global, falling back

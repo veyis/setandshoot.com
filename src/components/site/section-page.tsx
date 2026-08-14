@@ -6,11 +6,7 @@ import Link from "next/link";
 type SectionPageProps = {
   params: Promise<{ locale: string }>;
   namespace:
-    | "pages.stories"
-    | "pages.highlights"
-    | "pages.athletes"
-    | "pages.about"
-    | "pages.journal";
+    "pages.stories" | "pages.highlights" | "pages.athletes" | "pages.about" | "pages.journal";
 };
 
 export async function SectionPage({ params, namespace }: SectionPageProps) {

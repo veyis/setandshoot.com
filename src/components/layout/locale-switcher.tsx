@@ -16,7 +16,7 @@ export function LocaleSwitcher() {
     if (next === locale) return;
     const stripped = pathname.replace(/^\/(de|en)(?=\/|$)/, "");
     const target = next === "de" ? stripped || "/" : `/${next}${stripped || ""}`;
-     
+
     startTransition(() => router.replace(target as any));
   };
 

@@ -70,9 +70,7 @@ export async function applyWatermark(image: Buffer, level: WatermarkLevel): Prom
   try {
     logo = await readFile(LOGO_PATH);
   } catch {
-    console.warn(
-      "[watermark] no logo at public/watermark-logo.png — uploading without watermark",
-    );
+    console.warn("[watermark] no logo at public/watermark-logo.png — uploading without watermark");
     return image;
   }
   return compositeWatermark(image, logo, level);

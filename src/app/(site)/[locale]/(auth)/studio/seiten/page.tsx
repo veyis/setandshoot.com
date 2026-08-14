@@ -25,7 +25,7 @@ export default async function StudioPagesPage() {
       {PAGES.map((page) => (
         <Link
           key={page.slug}
-           
+
           href={`/studio/seiten/${page.slug}` as any}
           className={cardClass}
         >

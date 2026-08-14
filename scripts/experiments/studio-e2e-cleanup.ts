@@ -1,4 +1,3 @@
- 
 import "dotenv/config";
 import { appendFileSync } from "node:fs";
 import { sql } from "@payloadcms/db-postgres";

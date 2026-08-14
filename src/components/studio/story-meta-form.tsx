@@ -200,7 +200,6 @@ export function StoryMetaForm({
         </button>
         {story.published ? (
           <Link
-             
             href={`/stories/${story.slug}` as any}
             target="_blank"
             rel="noreferrer"

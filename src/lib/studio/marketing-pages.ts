@@ -56,7 +56,6 @@ function itemsByLocale(value: unknown): {
   return { de: toItems(wrapped.de), en: toItems(wrapped.en) };
 }
 
- 
 function toEditorSection(raw: any): MarketingSectionInput | null {
   // Payload returns id: string | null; the schema rejects null — normalize.
   const id: string | undefined = raw?.id ?? undefined;
@@ -118,7 +117,6 @@ function toEditorSection(raw: any): MarketingSectionInput | null {
       return null;
   }
 }
- 
 
 export async function getMarketingPage(slug: MarketingPageSlug): Promise<StudioMarketingPage> {
   const payload = await getPayload({ config });

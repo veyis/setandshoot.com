@@ -19,11 +19,7 @@ export default async function CustomerBookingsPage() {
   return (
     <main className="mx-auto max-w-3xl px-4 pt-32 pb-16">
       <p className="mb-6 text-sm">
-        <Link
-           
-          href={"/account" as any}
-          className="text-ink-muted hover:text-ink transition-colors"
-        >
+        <Link href={"/account" as any} className="text-ink-muted hover:text-ink transition-colors">
           ← {t("backToAccount")}
         </Link>
       </p>

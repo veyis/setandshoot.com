@@ -15,41 +15,25 @@ export default async function StudioDashboardPage() {
   return (
     <main>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Link
-           
-          href={"/studio/fotos" as any}
-          className={cardClass}
-        >
+        <Link href={"/studio/fotos" as any} className={cardClass}>
           <h2 className="font-display text-xl tracking-tight">{t("cardPhotosTitle")}</h2>
           <p className="text-ink-muted group-hover:text-canvas/70 mt-1 text-sm">
             {t("cardPhotosBody")}
           </p>
         </Link>
-        <Link
-           
-          href={"/studio/anfragen" as any}
-          className={cardClass}
-        >
+        <Link href={"/studio/anfragen" as any} className={cardClass}>
           <h2 className="font-display text-xl tracking-tight">{t("cardBookingsTitle")}</h2>
           <p className="text-ink-muted group-hover:text-canvas/70 mt-1 text-sm">
             {t("cardBookingsBody")}
           </p>
         </Link>
-        <Link
-           
-          href={"/studio/stories" as any}
-          className={cardClass}
-        >
+        <Link href={"/studio/stories" as any} className={cardClass}>
           <h2 className="font-display text-xl tracking-tight">{t("cardStoriesTitle")}</h2>
           <p className="text-ink-muted group-hover:text-canvas/70 mt-1 text-sm">
             {t("cardStoriesBody")}
           </p>
         </Link>
-        <Link
-           
-          href={"/studio/seiten" as any}
-          className={cardClass}
-        >
+        <Link href={"/studio/seiten" as any} className={cardClass}>
           <h2 className="font-display text-xl tracking-tight">{t("cardPagesTitle")}</h2>
           <p className="text-ink-muted group-hover:text-canvas/70 mt-1 text-sm">
             {t("cardPagesBody")}
@@ -66,7 +50,7 @@ export default async function StudioDashboardPage() {
         ).map((link) => (
           <Link
             key={link.href}
-             
+
             href={link.href as any}
             className="text-ink-muted hover:text-ink text-sm underline underline-offset-4 transition-colors"
           >

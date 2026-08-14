@@ -6,7 +6,7 @@
 //     bash scripts/payload-cli.sh run scripts/experiments/content-roundtrip.ts
 // (the probe tsconfig maps "server-only" to a stub so tsx can load the
 // server-only data module outside Next.js)
- 
+
 import "dotenv/config";
 import { appendFileSync } from "node:fs";
 import { getPayload } from "payload";

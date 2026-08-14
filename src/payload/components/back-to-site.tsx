@@ -4,7 +4,6 @@ import Link from "next/link";
 export function BackToSite() {
   return (
     <Link
-       
       href={"/" as any}
       className="nav__link"
       style={{ display: "block", padding: "4px 0", marginBottom: "12px" }}

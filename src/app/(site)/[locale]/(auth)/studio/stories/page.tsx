@@ -50,7 +50,6 @@ export default async function StudioStoriesPage() {
                 </div>
               </div>
               <Link
-                 
                 href={`/studio/stories/${story.id}` as any}
                 className="border-hairline text-ink hover:bg-ink hover:text-canvas inline-flex shrink-0 rounded-sm border px-3 py-1.5 font-mono text-xs tracking-[0.15em] uppercase transition-colors"
               >

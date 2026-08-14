@@ -2,13 +2,7 @@ import de from "@/messages/de.json";
 import en from "@/messages/en.json";
 
 export type SeoPage =
-  | "about"
-  | "services"
-  | "contact"
-  | "highlights"
-  | "athletes"
-  | "journal"
-  | "stories";
+  "about" | "services" | "contact" | "highlights" | "athletes" | "journal" | "stories";
 
 type SeoEntry = { title: string; description: string };
 

@@ -20,7 +20,6 @@ export async function BookingCTA() {
         </p>
         <div className="mt-2 flex flex-col gap-2">
           <Link
-             
             href={"/contact" as any}
             className="cta-primary hover:text-accent hover:border-accent inline-flex w-fit items-center gap-3 border-b border-current pb-1 font-mono text-xs tracking-[0.2em] uppercase transition-colors"
           >

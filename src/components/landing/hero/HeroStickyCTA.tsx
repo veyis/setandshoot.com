@@ -54,14 +54,12 @@ export function HeroStickyCTA({ primaryLabel, primaryHref, secondaryLabel, secon
       className="hero-cta-bar absolute right-0 bottom-0 left-0 z-[4] grid grid-cols-[1.4fr_1fr] gap-2 px-[14px] pt-3 pb-[max(22px,env(safe-area-inset-bottom))] md:right-auto md:bottom-[10%] md:left-[3%] md:flex md:gap-2 md:p-0"
     >
       <Link
-         
         href={primaryHref as any}
         className="hero-cta-primary bg-accent text-canvas hover:bg-accent/90 px-4 py-3 text-center font-mono text-[10px] tracking-[0.2em] uppercase transition-colors"
       >
         {primaryLabel}
       </Link>
       <Link
-         
         href={secondaryHref as any}
         className="hero-cta-ghost border-ink/45 text-ink hover:text-accent hover:border-accent border px-4 py-3 text-center font-mono text-[10px] tracking-[0.2em] uppercase transition-colors"
       >

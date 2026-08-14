@@ -43,7 +43,9 @@ export const Bookings: CollectionConfig = {
               "<h2>Neue Buchungsanfrage</h2>",
               `<p><strong>Name:</strong> ${esc(doc.name)}</p>`,
               `<p><strong>E-Mail:</strong> <a href="mailto:${esc(doc.email)}">${esc(doc.email)}</a></p>`,
-              doc.organization ? `<p><strong>Organisation:</strong> ${esc(doc.organization)}</p>` : "",
+              doc.organization
+                ? `<p><strong>Organisation:</strong> ${esc(doc.organization)}</p>`
+                : "",
               `<p><strong>Sprache:</strong> ${esc(doc.locale)}</p>`,
               `<p><strong>Nachricht:</strong></p><pre style="white-space:pre-wrap;font-family:inherit">${esc(doc.message)}</pre>`,
             ]

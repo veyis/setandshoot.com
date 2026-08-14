@@ -29,7 +29,6 @@ function textFor(value: unknown, locale: "de" | "en"): string {
   return altFor(value as LocalizedText, locale);
 }
 
- 
 function toEditorBlock(raw: any): StoryBlockInput | null {
   // Payload returns id: string | null; the schema rejects null — normalize.
   const id: string | undefined = raw?.id ?? undefined;
@@ -100,7 +99,6 @@ function toEditorBlock(raw: any): StoryBlockInput | null {
       return null;
   }
 }
- 
 
 export async function getStudioStoryContent(id: number): Promise<StudioStoryContent | null> {
   const payload = await getPayload({ config });

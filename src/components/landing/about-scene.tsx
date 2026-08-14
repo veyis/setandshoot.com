@@ -62,7 +62,6 @@ export async function AboutScene({ portrait }: Props) {
           </Reveal>
           <Reveal delay={720}>
             <Link
-               
               href={"/about" as any}
               className="hover:text-accent inline-flex w-fit items-center text-sm transition-colors"
             >

@@ -38,7 +38,6 @@ export function StoryCreateForm() {
     const result = await createStoryAction({ slug, titleDe });
     setCreating(false);
     if (result.ok && typeof result.id === "number") {
-       
       router.push(`/studio/stories/${result.id}` as any);
       return;
     }

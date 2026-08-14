@@ -18,27 +18,15 @@ export default async function AccountPage() {
         <h1 className="font-display text-3xl tracking-tight">{t("title")}</h1>
         <p className="text-ink-muted mt-1 text-sm">{t("signedInAs", { email: user.email })}</p>
         <div className="mt-5 flex flex-wrap gap-3">
-          <Link
-             
-            href={"/account/bookings" as any}
-            className={quickLinkClass}
-          >
+          <Link href={"/account/bookings" as any} className={quickLinkClass}>
             {t("bookings")}
           </Link>
           {user.role === "admin" ? (
             <>
-              <Link
-                 
-                href={"/studio" as any}
-                className={quickLinkClass}
-              >
+              <Link href={"/studio" as any} className={quickLinkClass}>
                 {t("openStudio")}
               </Link>
-              <Link
-                 
-                href={"/admin" as any}
-                className={quickLinkClass}
-              >
+              <Link href={"/admin" as any} className={quickLinkClass}>
                 {t("openCms")}
               </Link>
             </>

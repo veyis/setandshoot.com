@@ -619,13 +619,7 @@ import { useTranslations } from "next-intl";
 import { ALLOWED_MIME, MAX_UPLOAD_BYTES } from "@/lib/studio/schemas";
 
 type Status =
-  | "pending"
-  | "uploading"
-  | "finalizing"
-  | "done"
-  | "error"
-  | "tooLarge"
-  | "unsupported";
+  "pending" | "uploading" | "finalizing" | "done" | "error" | "tooLarge" | "unsupported";
 
 type QueueItem = { name: string; status: Status; progress: number };
 
