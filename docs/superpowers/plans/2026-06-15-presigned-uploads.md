@@ -41,6 +41,7 @@ If either deviation is unwanted, say so during review and the relevant task adap
 ### Task 1: Shared upload constants & pure helpers
 
 **Files:**
+
 - Modify: `src/lib/studio/schemas.ts:1-5`
 - Test: `tests/unit/lib/studio-upload.test.ts`
 
@@ -101,8 +102,12 @@ describe("presignSchema", () => {
     expect(r.size).toBe(10);
   });
   it("rejects empty filename / non-positive size", () => {
-    expect(() => presignSchema.parse({ filename: "", contentType: "image/jpeg", size: 10 })).toThrow();
-    expect(() => presignSchema.parse({ filename: "a.jpg", contentType: "image/jpeg", size: 0 })).toThrow();
+    expect(() =>
+      presignSchema.parse({ filename: "", contentType: "image/jpeg", size: 10 }),
+    ).toThrow();
+    expect(() =>
+      presignSchema.parse({ filename: "a.jpg", contentType: "image/jpeg", size: 0 }),
+    ).toThrow();
   });
 });
 
@@ -191,6 +196,7 @@ git commit -m "feat(uploads): shared 50MB cap, MIME allowlist, temp-key helpers 
 ### Task 2: R2 helper module + AWS SDK dependencies
 
 **Files:**
+
 - Create: `src/lib/studio/r2.ts`
 - Modify: `package.json`, `pnpm-lock.yaml` (via `pnpm add`)
 
@@ -199,9 +205,11 @@ git commit -m "feat(uploads): shared 50MB cap, MIME allowlist, temp-key helpers 
 - [ ] **Step 1: Add the dependencies**
 
 Run:
+
 ```bash
 pnpm add @aws-sdk/s3-request-presigner @aws-sdk/client-s3
 ```
+
 Expected: both added to `dependencies` in `package.json`; lockfile updated. (`@aws-sdk/client-s3` is currently only a transitive dep of `@payloadcms/storage-s3` and is not directly resolvable under pnpm, so it must be declared directly.)
 
 - [ ] **Step 2: Create `src/lib/studio/r2.ts`**
@@ -256,9 +264,7 @@ export async function presignPutUrl(key: string, contentType: string): Promise<s
 export async function getObjectBuffer(
   key: string,
 ): Promise<{ buffer: Buffer; contentType: string }> {
-  const res = await getR2Client().send(
-    new GetObjectCommand({ Bucket: requireBucket(), Key: key }),
-  );
+  const res = await getR2Client().send(new GetObjectCommand({ Bucket: requireBucket(), Key: key }));
   if (!res.Body) throw new Error(`Temp object has no body: ${key}`);
   const bytes = await res.Body.transformToByteArray();
   return { buffer: Buffer.from(bytes), contentType: res.ContentType ?? "application/octet-stream" };
@@ -287,6 +293,7 @@ git commit -m "feat(uploads): R2 presign/get/delete helper using the AWS S3 SDK"
 ### Task 3: Presign route
 
 **Files:**
+
 - Create: `src/app/api/studio/upload/presign/route.ts`
 - Test: `tests/unit/app/studio-upload-routes.test.ts`
 
@@ -328,14 +335,18 @@ beforeEach(() => vi.clearAllMocks());
 describe("POST /api/studio/upload/presign", () => {
   it("rejects non-admins with 403", async () => {
     asGuest();
-    const res = await presignPOST(jsonReq({ filename: "a.jpg", contentType: "image/jpeg", size: 10 }));
+    const res = await presignPOST(
+      jsonReq({ filename: "a.jpg", contentType: "image/jpeg", size: 10 }),
+    );
     expect(res.status).toBe(403);
     expect(presignPutUrl).not.toHaveBeenCalled();
   });
 
   it("rejects unsupported MIME with 415", async () => {
     asAdmin();
-    const res = await presignPOST(jsonReq({ filename: "a.gif", contentType: "image/gif", size: 10 }));
+    const res = await presignPOST(
+      jsonReq({ filename: "a.gif", contentType: "image/gif", size: 10 }),
+    );
     expect(res.status).toBe(415);
   });
 
@@ -447,6 +458,7 @@ git commit -m "feat(uploads): admin-only presign route (validate -> presigned PU
 ### Task 4: Finalize route
 
 **Files:**
+
 - Create: `src/app/api/studio/upload/finalize/route.ts`
 - Test: `tests/unit/app/studio-upload-routes.test.ts` (extend)
 
@@ -589,6 +601,7 @@ git commit -m "feat(uploads): admin-only finalize route (GetObject -> payload.cr
 ### Task 5: Client uploader + i18n; remove the old route
 
 **Files:**
+
 - Modify: `src/components/studio/photo-upload.tsx`
 - Modify: `src/messages/de.json`, `src/messages/en.json`
 - Delete: `src/app/api/studio/upload/route.ts`
@@ -799,11 +812,13 @@ export function PhotoUpload() {
 - [ ] **Step 4: Delete the old route and confirm nothing else references it**
 
 Run:
+
 ```bash
 git rm "src/app/api/studio/upload/route.ts"
 grep -rn "api/studio/upload\"" src   # should print nothing (the new calls use /presign and /finalize)
 grep -rn "createPhotoFromUpload" src # should show photos.ts (def) + finalize/route.ts (caller) only
 ```
+
 Expected: no reference to the bare `"/api/studio/upload"` endpoint remains; `createPhotoFromUpload` is still used by the finalize route.
 
 - [ ] **Step 5: Verify typecheck + the full unit suite**
@@ -824,6 +839,7 @@ git commit -m "feat(uploads): direct-to-R2 uploader (presign -> PUT w/ progress 
 ### Task 6: Operator runbook — R2 temp lifecycle + memory note
 
 **Files:**
+
 - Create: `docs/runbooks/r2-temp-uploads.md`
 
 - [ ] **Step 1: Write the runbook**
@@ -870,6 +886,7 @@ git commit -m "docs(uploads): R2 tmp/ lifecycle + finalize function resources ru
 ### Task 7: E2E note + full verification
 
 **Files:**
+
 - Modify: `tests/e2e/studio.spec.ts` (doc comment only)
 
 - [ ] **Step 1: Update the e2e doc comment**
@@ -891,6 +908,7 @@ Expected: PASS — confirms the new routes + `r2.ts` (and the AWS SDK deps) comp
 - [ ] **Step 4: Manual verification (record results, do not skip silently)**
 
 With R2 env configured (local `.env.local` direct endpoint), run `pnpm dev`, sign in as admin, open `/studio/fotos`, and:
+
 - Upload a **> 4 MB** JPEG → expect a progress bar, then "Uploaded"; the new card shows the derived alt and a thumbnail (focal-cropped); the public `feed` variant renders.
 - Confirm **no `tmp/` object remains** in the R2 bucket after success.
 - Upload a non-image → "Unsupported"; an oversize (>50 MB) file → "Too large".
@@ -910,6 +928,7 @@ git commit -m "test(uploads): note e2e journey now exercises the presign->PUT->f
 ## Self-Review (completed by plan author)
 
 **Spec coverage:**
+
 - presign endpoint (auth/MIME/size/tmp key) → Task 3 ✅
 - finalize endpoint (auth/tmp-prefix guard/GetObject→create→delete) → Task 4 ✅
 - client presign→PUT(progress)→finalize, drop 4 MB copy, progress bar → Task 5 ✅
@@ -927,4 +946,7 @@ git commit -m "test(uploads): note e2e journey now exercises the presign->PUT->f
 **Type consistency:** `presignPutUrl(key, contentType)`, `getObjectBuffer(key) → {buffer, contentType}`, `deleteObject(key)`, `createPhotoFromUpload({data,name,mimetype,size}) → {id}`, `isTempKey`/`isAllowedMime`/`sanitizeFilename` — names/signatures match across r2.ts, the routes, and their tests. Temp key shape `tmp/<uuid>/<filename>` is consistent in the presign builder, the `isTempKey` guard, and the finalize `name` recovery (`split("/").pop()`).
 
 **Note for executor:** Land all tasks as a single PR — intermediate commits raise the cap to 50 MB before the old POST route is removed, so a >4.5 MB upload via the old flow would fail at the Vercel platform until Task 5; this only matters if a commit is deployed mid-stack, which won't happen.
+
+```
+
 ```

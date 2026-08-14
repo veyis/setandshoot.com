@@ -12,8 +12,8 @@ describe("i18n config", () => {
     expect(isLocale("")).toBe(false);
   });
 
-  it("defaults to German", () => {
-    expect(defaultLocale).toBe("de");
+  it("defaults to English", () => {
+    expect(defaultLocale).toBe("en");
   });
 
   it("exposes exactly two locales", () => {
