@@ -127,7 +127,7 @@ export function MobileNav({ items, signInLabel, accountLabel, menuLabel, closeLa
                 {items.map((item) => (
                   <Link
                     key={item.href}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
                     href={item.href as any}
                     onClick={close}
                     className="font-display text-ink hover:text-accent text-3xl tracking-tight transition-colors"
@@ -138,7 +138,6 @@ export function MobileNav({ items, signInLabel, accountLabel, menuLabel, closeLa
               </nav>
 
               <Link
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 href={(signedIn ? "/account" : "/sign-in") as any}
                 onClick={close}
                 className="border-hairline text-ink hover:bg-ink hover:text-canvas mt-auto inline-flex w-fit rounded-sm border px-5 py-2.5 font-mono text-xs tracking-[0.15em] uppercase transition-colors"

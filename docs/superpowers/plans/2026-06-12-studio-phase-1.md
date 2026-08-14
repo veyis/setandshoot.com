@@ -661,8 +661,7 @@ import { photoMetaSchema } from "@/lib/studio/schemas";
 import { updatePhotoMeta } from "@/lib/studio/photos";
 
 export type ActionResult =
-  | { ok: true }
-  | { ok: false; error: "forbidden" | "validation" | "server" };
+  { ok: true } | { ok: false; error: "forbidden" | "validation" | "server" };
 
 export async function updatePhotoMetaAction(input: unknown): Promise<ActionResult> {
   // Server actions are public POST endpoints — re-check the session here,

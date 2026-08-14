@@ -2,7 +2,7 @@
 // subfields inside (non-localized) block arrays on update?
 // Creates an UNPUBLISHED story, probes, deletes it. Run:
 //   bash scripts/payload-cli.sh run scripts/experiments/block-locale.ts
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import "dotenv/config";
 import { appendFileSync } from "node:fs";
 import { getPayload } from "payload";

@@ -4,6 +4,7 @@ import { sql } from "@payloadcms/db-postgres";
 import config from "@/payload/payload.config";
 import { photoSrc } from "@/lib/payload/media";
 import { altFor, type LocalizedText } from "@/lib/studio/localized";
+import { applyWatermark, type WatermarkLevel } from "@/lib/studio/watermark";
 import type { Photo } from "@/payload-types";
 
 export type StudioPhoto = {
@@ -68,6 +69,7 @@ export async function createPhotoFromUpload(file: {
   name: string;
   mimetype: string;
   size: number;
+  watermark?: "none" | WatermarkLevel;
 }): Promise<{ id: number }> {
   const payload = await getPayload({ config });
   // Beginner-friendly default: derive alt text from the filename; it is
@@ -77,10 +79,15 @@ export async function createPhotoFromUpload(file: {
       .replace(/\.[^.]+$/, "")
       .replace(/[-_]+/g, " ")
       .trim() || file.name;
+  // Bake the watermark into the master before Payload resizes, so every size
+  // (and the stored original) inherits it. Re-encoding changes the byte length,
+  // so recompute `size`.
+  const watermark = file.watermark ?? "none";
+  const data = watermark === "none" ? file.data : await applyWatermark(file.data, watermark);
   const doc = await payload.create({
     collection: "photos",
-    data: { alt: fallbackAlt, published: false },
-    file,
+    data: { alt: fallbackAlt, published: false, watermark },
+    file: { data, name: file.name, mimetype: file.mimetype, size: data.length },
     locale: "de",
     overrideAccess: true,
   });

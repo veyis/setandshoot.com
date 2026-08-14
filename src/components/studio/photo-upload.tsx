@@ -3,104 +3,61 @@
 import { useRouter } from "next/navigation";
 import { useRef, useState, type DragEvent } from "react";
 import { useTranslations } from "next-intl";
-import { ALLOWED_MIME, MAX_UPLOAD_BYTES } from "@/lib/studio/schemas";
+import { MAX_UPLOAD_BYTES } from "@/lib/studio/schemas";
 
-type Status =
-  | "pending"
-  | "uploading"
-  | "finalizing"
-  | "done"
-  | "error"
-  | "tooLarge"
-  | "unsupported";
+const ALLOWED_MIME = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 
-type QueueItem = { name: string; status: Status; progress: number };
+type QueueItem = {
+  name: string;
+  status: "pending" | "uploading" | "done" | "error" | "tooLarge" | "unsupported";
+};
 
-// fetch() has no upload progress, so the direct-to-R2 PUT uses XHR.
-function putWithProgress(
-  url: string,
-  file: File,
-  onProgress: (pct: number) => void,
-): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("PUT", url);
-    xhr.setRequestHeader("Content-Type", file.type);
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100));
-    };
-    xhr.onload = () =>
-      xhr.status >= 200 && xhr.status < 300
-        ? resolve()
-        : reject(new Error(`PUT failed (${xhr.status})`));
-    xhr.onerror = () => reject(new Error("PUT failed"));
-    xhr.send(file);
-  });
-}
+type Watermark = "none" | "light" | "standard";
 
-export function PhotoUpload() {
+export function PhotoUpload({ defaultWatermark = false }: { defaultWatermark?: boolean }) {
   const t = useTranslations("studio");
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [busy, setBusy] = useState(false);
-
-  function update(i: number, patch: Partial<QueueItem>) {
-    setQueue((q) => q.map((item, idx) => (idx === i ? { ...item, ...patch } : item)));
-  }
+  const [watermark, setWatermark] = useState<Watermark>(defaultWatermark ? "standard" : "none");
 
   async function uploadFiles(files: File[]) {
     if (busy || files.length === 0) return;
     setBusy(true);
-    setQueue(files.map((file) => ({ name: file.name, status: "pending", progress: 0 })));
+    setQueue(files.map((file) => ({ name: file.name, status: "pending" })));
 
-    // One file at a time: large originals + Sharp processing can approach
+    // One file per request: large originals + Sharp processing can approach
     // serverless time limits, so never batch.
     for (let i = 0; i < files.length; i += 1) {
-      const file = files[i]!;
-      if (!ALLOWED_MIME.includes(file.type as (typeof ALLOWED_MIME)[number])) {
-        update(i, { status: "unsupported" });
+      if (!ALLOWED_MIME.includes(files[i]!.type)) {
+        setQueue((q) =>
+          q.map((item, idx) => (idx === i ? { ...item, status: "unsupported" } : item)),
+        );
         continue;
       }
-      if (file.size > MAX_UPLOAD_BYTES) {
-        update(i, { status: "tooLarge" });
+      if (files[i]!.size > MAX_UPLOAD_BYTES) {
+        setQueue((q) => q.map((item, idx) => (idx === i ? { ...item, status: "tooLarge" } : item)));
         continue;
       }
-      update(i, { status: "uploading", progress: 0 });
+      setQueue((q) => q.map((item, idx) => (idx === i ? { ...item, status: "uploading" } : item)));
+      const form = new FormData();
+      form.append("file", files[i]!);
+      form.append("watermark", watermark);
+      let newStatus: QueueItem["status"] = "error";
       try {
-        const presignRes = await fetch("/api/studio/upload/presign", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ filename: file.name, contentType: file.type, size: file.size }),
-        });
-        if (!presignRes.ok) {
-          update(i, {
-            status:
-              presignRes.status === 413
-                ? "tooLarge"
-                : presignRes.status === 415
-                  ? "unsupported"
-                  : "error",
-          });
-          continue;
+        const response = await fetch("/api/studio/upload", { method: "POST", body: form });
+        if (response.ok) {
+          newStatus = "done";
+        } else if (response.status === 413) {
+          newStatus = "tooLarge";
+        } else if (response.status === 415) {
+          newStatus = "unsupported";
         }
-        const { uploadUrl, tempKey } = (await presignRes.json()) as {
-          uploadUrl: string;
-          tempKey: string;
-        };
-
-        await putWithProgress(uploadUrl, file, (pct) => update(i, { progress: pct }));
-
-        update(i, { status: "finalizing" });
-        const finalizeRes = await fetch("/api/studio/upload/finalize", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ tempKey }),
-        });
-        update(i, { status: finalizeRes.ok ? "done" : "error" });
       } catch {
-        update(i, { status: "error" });
+        newStatus = "error";
       }
+      setQueue((q) => q.map((item, idx) => (idx === i ? { ...item, status: newStatus } : item)));
     }
 
     setBusy(false);
@@ -112,28 +69,22 @@ export function PhotoUpload() {
     void uploadFiles(Array.from(event.dataTransfer.files));
   }
 
-  function label(item: QueueItem): string {
-    switch (item.status) {
-      case "done":
-        return t("uploadDone");
-      case "error":
-        return t("uploadError");
-      case "tooLarge":
-        return t("uploadTooLarge");
-      case "unsupported":
-        return t("uploadUnsupported");
-      case "uploading":
-        return `${item.progress}%`;
-      case "finalizing":
-        return t("finalizing");
-      default:
-        return "…";
-    }
-  }
-
   return (
     <section className="mb-10">
       <h2 className="font-display mb-3 text-xl tracking-tight">{t("uploadTitle")}</h2>
+      <label className="text-ink-muted mb-3 flex items-center gap-2 text-sm">
+        {t("watermarkFieldLabel")}
+        <select
+          value={watermark}
+          disabled={busy}
+          onChange={(event) => setWatermark(event.target.value as Watermark)}
+          className="border-hairline rounded-md border bg-transparent px-2 py-1"
+        >
+          <option value="none">{t("watermarkNone")}</option>
+          <option value="light">{t("watermarkLight")}</option>
+          <option value="standard">{t("watermarkStandard")}</option>
+        </select>
+      </label>
       <div
         role="button"
         tabIndex={0}
@@ -164,19 +115,21 @@ export function PhotoUpload() {
       {queue.length > 0 ? (
         <ul className="mt-3 space-y-1 text-sm">
           {queue.map((item, index) => (
-            <li key={`${item.name}-${index}`} className="flex flex-col gap-1">
-              <div className="flex justify-between gap-4">
-                <span className="truncate">{item.name}</span>
-                <span className="text-ink-muted shrink-0">{label(item)}</span>
-              </div>
-              {item.status === "uploading" ? (
-                <div className="bg-canvas h-1 w-full overflow-hidden rounded-full">
-                  <div
-                    className="bg-accent h-full transition-[width]"
-                    style={{ width: `${item.progress}%` }}
-                  />
-                </div>
-              ) : null}
+            <li key={`${item.name}-${index}`} className="flex justify-between gap-4">
+              <span className="truncate">{item.name}</span>
+              <span className="text-ink-muted shrink-0">
+                {item.status === "done"
+                  ? t("uploadDone")
+                  : item.status === "error"
+                    ? t("uploadError")
+                    : item.status === "tooLarge"
+                      ? t("uploadTooLarge")
+                      : item.status === "unsupported"
+                        ? t("uploadUnsupported")
+                        : item.status === "uploading"
+                          ? t("uploading")
+                          : "…"}
+              </span>
             </li>
           ))}
         </ul>

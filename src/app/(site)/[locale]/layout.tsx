@@ -44,6 +44,9 @@ export async function generateMetadata({
     // string). The og-card route reads seoCopy directly, so cards stay unbranded.
     title: { default: meta.title, template: "%s — Belin Akguel" },
     description: meta.description,
+    verification: {
+      google: "googleb238538e402fae05",
+    },
   };
 }
 

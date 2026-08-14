@@ -82,11 +82,7 @@ export function RichTextLocaleField({
       ) : (
         <p className="text-ink-muted text-sm">
           {t("lockedRichText")}{" "}
-          <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            href={adminUrl as any}
-            className="text-ink underline underline-offset-4"
-          >
+          <Link href={adminUrl as any} className="text-ink underline underline-offset-4">
             {t("openInAdmin")}
           </Link>
         </p>

@@ -200,7 +200,6 @@ export function StoryMetaForm({
         </button>
         {story.published ? (
           <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             href={`/stories/${story.slug}` as any}
             target="_blank"
             rel="noreferrer"

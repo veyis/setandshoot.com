@@ -38,7 +38,7 @@ export async function Footer() {
           {nav.map((item) => (
             <Link
               key={item.href}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
               href={item.href as any}
               className="text-ink-muted hover:text-ink w-fit font-mono text-xs transition-colors"
             >
@@ -53,7 +53,7 @@ export async function Footer() {
           {legal.map((item) => (
             <Link
               key={item.href}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
               href={item.href as any}
               className="text-ink-muted hover:text-ink w-fit font-mono text-xs transition-colors"
             >

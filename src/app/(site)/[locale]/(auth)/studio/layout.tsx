@@ -19,67 +19,31 @@ export default async function StudioLayout({ children }: { children: React.React
         <h1 className="font-display text-3xl tracking-tight">{t("title")}</h1>
         <p className="text-ink-muted mt-1 text-sm">{t("subtitle")}</p>
         <nav className="mt-5 flex flex-wrap gap-3">
-          <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            href={"/studio" as any}
-            className={navLinkClass}
-          >
+          <Link href={"/studio" as any} className={navLinkClass}>
             {t("navOverview")}
           </Link>
-          <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            href={"/studio/stories" as any}
-            className={navLinkClass}
-          >
+          <Link href={"/studio/stories" as any} className={navLinkClass}>
             {t("navStories")}
           </Link>
-          <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            href={"/studio/fotos" as any}
-            className={navLinkClass}
-          >
+          <Link href={"/studio/fotos" as any} className={navLinkClass}>
             {t("navPhotos")}
           </Link>
-          <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            href={"/studio/anfragen" as any}
-            className={navLinkClass}
-          >
+          <Link href={"/studio/anfragen" as any} className={navLinkClass}>
             {t("navBookings")}
           </Link>
-          <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            href={"/studio/seiten" as any}
-            className={navLinkClass}
-          >
+          <Link href={"/studio/seiten" as any} className={navLinkClass}>
             {t("navPages")}
           </Link>
-          <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            href={"/studio/stammdaten" as any}
-            className={navLinkClass}
-          >
+          <Link href={"/studio/stammdaten" as any} className={navLinkClass}>
             {t("navTaxonomies")}
           </Link>
-          <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            href={"/studio/rechtliches" as any}
-            className={navLinkClass}
-          >
+          <Link href={"/studio/rechtliches" as any} className={navLinkClass}>
             {t("navLegal")}
           </Link>
-          <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            href={"/studio/einstellungen" as any}
-            className={navLinkClass}
-          >
+          <Link href={"/studio/einstellungen" as any} className={navLinkClass}>
             {t("navSettings")}
           </Link>
-          <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            href={"/admin" as any}
-            className={navLinkClass}
-          >
+          <Link href={"/admin" as any} className={navLinkClass}>
             {t("advancedEditor")} ↗
           </Link>
         </nav>

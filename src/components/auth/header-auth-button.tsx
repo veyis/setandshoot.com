@@ -44,7 +44,7 @@ export function HeaderAuthButton({
   async function handleSignOut() {
     setIsOpen(false);
     await authClient.signOut();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     router.push("/" as any);
     router.refresh();
   }
@@ -64,7 +64,6 @@ export function HeaderAuthButton({
         {isOpen && (
           <div className="border-hairline bg-canvas absolute top-full right-0 z-50 mt-2 flex w-48 flex-col rounded-sm border p-1 shadow-sm">
             <Link
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               href={"/account" as any}
               onClick={() => setIsOpen(false)}
               className="text-ink hover:bg-elevated rounded-sm px-3 py-2 text-sm transition-colors"
@@ -73,7 +72,6 @@ export function HeaderAuthButton({
             </Link>
             {user.role === "admin" && (
               <Link
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 href={"/studio" as any}
                 onClick={() => setIsOpen(false)}
                 className="text-ink hover:bg-elevated rounded-sm px-3 py-2 text-sm transition-colors"
@@ -95,7 +93,6 @@ export function HeaderAuthButton({
 
   return (
     <Link
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       href={"/sign-in" as any}
       aria-label={signInLabel}
       title={signInLabel}

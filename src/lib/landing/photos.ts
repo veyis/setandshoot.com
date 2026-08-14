@@ -14,14 +14,7 @@ export const HERO_IMAGE_FILES = [
 
 /** Custom-generated landing frames under /images/landing. */
 export type LandingPhotoRole =
-  | "cover"
-  | "joust"
-  | "spike"
-  | "set"
-  | "block"
-  | "serve"
-  | "dig"
-  | "audience";
+  "cover" | "joust" | "spike" | "set" | "block" | "serve" | "dig" | "audience";
 
 export type LandingPhotoHeroMeta = {
   kicker: Record<Locale, string>;

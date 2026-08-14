@@ -13,6 +13,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // `server-only` throws under Node; stub it so server-marked modules are testable.
+      "server-only": path.resolve(__dirname, "./tests/unit/stubs/server-only.ts"),
     },
   },
 });
