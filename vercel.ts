@@ -14,6 +14,16 @@ export const config: VercelConfig = {
   ],
   redirects: [
     {
+      source: "/portal",
+      destination: "https://pxlpeak.com/portal",
+      permanent: false,
+    },
+    {
+      source: "/portal/:path*",
+      destination: "https://pxlpeak.com/portal/:path*",
+      permanent: false,
+    },
+    {
       source: "/admin/",
       destination: "/admin",
       permanent: true,
