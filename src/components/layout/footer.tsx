@@ -79,6 +79,12 @@ export async function Footer() {
           >
             Email
           </a>
+          <a
+            href="/portal"
+            className="text-ink-muted hover:text-ink w-fit font-mono text-xs transition-colors"
+          >
+            Client Portal
+          </a>
         </div>
       </div>
 
