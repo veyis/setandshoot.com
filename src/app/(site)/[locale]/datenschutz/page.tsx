@@ -1,11 +1,26 @@
+import type { Metadata } from "next";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 import { getPayload } from "@/lib/payload/get-payload";
-import { isLocale } from "@/lib/i18n/config";
+import { isLocale, defaultLocale } from "@/lib/i18n/config";
+import { localeAlternates } from "@/lib/seo/alternates";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 // ISR: rebuilt hourly; the datenschutz global revalidate hook busts on save.
 export const revalidate = 3600;
+
+// Legal pages carry no seoCopy entry, so they inherit the layout's title and
+// description. They still need a self-referencing canonical — without one
+// Search Console reports them as "Duplicate without user-selected canonical".
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const safeLocale = isLocale(locale) ? locale : defaultLocale;
+  return { alternates: localeAlternates("/datenschutz", safeLocale) };
+}
 
 export default async function DatenschutzPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

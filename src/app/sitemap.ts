@@ -5,7 +5,10 @@ import { env } from "@/env";
 // Refresh hourly so newly published stories appear without a redeploy.
 export const revalidate = 3600;
 
-// German is the unprefixed default locale; English lives under /en.
+// English is the unprefixed default locale (lib/i18n/config.ts: defaultLocale
+// "en" + localePrefix "as-needed"); German lives under /de. Submitting /en/*
+// here put 12 redirecting URLs in the sitemap — next-intl 307s /en/* back to
+// the unprefixed path — which is what Search Console reported in Aug 2026.
 const STATIC_PATHS = [
   "",
   "/stories",
@@ -20,12 +23,12 @@ const STATIC_PATHS = [
 ];
 
 function localized(base: string, path: string, lastModified?: Date): MetadataRoute.Sitemap {
-  const de = `${base}${path || "/"}`;
-  const en = `${base}/en${path}`;
+  const en = `${base}${path || "/"}`;
+  const de = `${base}/de${path}`;
   const alternates = { languages: { de, en } };
   return [
-    { url: de, lastModified, alternates },
     { url: en, lastModified, alternates },
+    { url: de, lastModified, alternates },
   ];
 }
 
