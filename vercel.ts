@@ -38,5 +38,15 @@ export const config: VercelConfig = {
       destination: "/sign-up",
       permanent: false,
     },
+    {
+      source: "/gallery",
+      destination: "/stories",
+      permanent: true,
+    },
+    {
+      source: "/photo/:id",
+      destination: "/stories",
+      permanent: true,
+    },
   ],
 };
