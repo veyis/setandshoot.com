@@ -25,11 +25,6 @@
     "seed:about-page": "bash scripts/payload-cli.sh run scripts/seed/about-page.ts",
     "seed:marketing-pages": "bash scripts/payload-cli.sh run scripts/seed/marketing-pages.ts"
   },
-  "pnpm": {
-    "ignoredBuiltDependencies": [
-      "core-js"
-    ]
-  },
   "engines": {
     "node": ">=24"
   },
