@@ -1,4 +1,5 @@
 import "@/app/globals.css";
+import Script from "next/script";
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
@@ -80,6 +81,15 @@ export default async function LocaleLayout({
       suppressHydrationWarning
     >
       <body>
+        {/* GA4 — property setandshoot.com, stream 15533916722. This site had no
+            analytics of any kind before 2026-08-31. */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-GT5YK23462"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4" strategy="afterInteractive">
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-GT5YK23462');`}
+        </Script>
         <JsonLd data={personSchema({ siteUrl, org })} />
         <JsonLd data={webSiteSchema({ siteUrl })} />
         <NextIntlClientProvider locale={locale} messages={messages}>
