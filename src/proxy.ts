@@ -91,8 +91,8 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Exclude `opengraph-image` metadata routes (next/og) — they have no file
+  // Exclude `opengraph-image`, `icon` and `apple-icon` metadata routes (next/og) — they have no file
   // extension, so the `.*\\..*` clause doesn't catch them, and intl rewriting
   // would 404 the root card and add a redirect hop to the per-locale cards.
-  matcher: ["/((?!api/auth|_next|_vercel|.*opengraph-image.*|.*\\..*).*)"],
+  matcher: ["/((?!api/auth|_next|_vercel|icon$|apple-icon$|.*opengraph-image.*|.*\\..*).*)"],
 };
