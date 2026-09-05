@@ -8,13 +8,13 @@ describe("buildPageMetadata", () => {
     const m = buildPageMetadata({ ...base, locale: "de", path: "/services" });
     expect(m.title).toBe("Leistungen");
     expect(m.description).toBe("Volleyball.");
-    expect(m.alternates?.canonical).toBe("/services");
-    expect(m.alternates?.languages).toMatchObject({ en: "/en/services", de: "/services" });
+    expect(m.alternates?.canonical).toBe("/de/services");
+    expect(m.alternates?.languages).toMatchObject({ en: "/services", de: "/de/services" });
   });
 
-  it("sets the English canonical under /en", () => {
+  it("sets the English canonical unprefixed", () => {
     const m = buildPageMetadata({ ...base, locale: "en", path: "/services" });
-    expect(m.alternates?.canonical).toBe("/en/services");
+    expect(m.alternates?.canonical).toBe("/services");
   });
 
   it("emits og + twitter card with the same title", () => {
