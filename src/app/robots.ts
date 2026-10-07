@@ -6,7 +6,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin", "/account", "/api/", "/sign-in", "/sign-up"],
+      // Public auth pages must be crawlable for their noindex metadata to be read.
+      disallow: ["/admin", "/account", "/api/"],
     },
     sitemap: `${env.NEXT_PUBLIC_SITE_URL}/sitemap.xml`,
   };
