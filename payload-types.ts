@@ -160,6 +160,7 @@ export interface User {
   resetPasswordExpiration?: string | null;
   salt?: string | null;
   hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
   sessions?:
@@ -294,6 +295,7 @@ export interface Photo {
   orderInStory?: number | null;
   watermark?: ('none' | 'light' | 'standard') | null;
   published?: boolean | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -563,6 +565,7 @@ export interface UsersSelect<T extends boolean = true> {
   resetPasswordExpiration?: T;
   salt?: T;
   hash?: T;
+  resetPasswordRequestedAt?: T;
   loginAttempts?: T;
   lockUntil?: T;
   sessions?:
@@ -688,6 +691,7 @@ export interface PhotosSelect<T extends boolean = true> {
   orderInStory?: T;
   watermark?: T;
   published?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
