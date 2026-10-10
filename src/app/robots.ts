@@ -11,7 +11,14 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/account", "/api/"],
       },
       {
+        // Owner decision 2026-10-10: allow AI crawlers, training and search alike.
+        // Named so the policy reads as deliberate, not as an omission.
         userAgent: [
+          "GPTBot",
+          "ClaudeBot",
+          "Google-Extended",
+          "CCBot",
+          "Applebot-Extended",
           "OAI-SearchBot",
           "Claude-SearchBot",
           "PerplexityBot",
