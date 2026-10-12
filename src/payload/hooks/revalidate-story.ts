@@ -7,15 +7,21 @@ export const revalidateStory: CollectionAfterChangeHook = ({ doc, previousDoc, c
   // context.disableRevalidate), where revalidatePath throws.
   if (context?.disableRevalidate) return doc;
 
-  revalidatePath("/stories");
-  revalidatePath("/en/stories");
+  // The homepage also features stories; invalidate every locale destination
+  // (including the rewritten /en route) and the published-story sitemap.
+  for (const prefix of ["", "/de", "/en"]) {
+    revalidatePath(prefix || "/");
+    revalidatePath(`${prefix}/stories`);
+  }
+  revalidatePath("/sitemap.xml");
 
   const slugs = new Set(
     [doc?.slug, previousDoc?.slug].filter((s): s is string => typeof s === "string"),
   );
   for (const slug of slugs) {
-    revalidatePath(`/stories/${slug}`);
-    revalidatePath(`/en/stories/${slug}`);
+    for (const prefix of ["", "/de", "/en"]) {
+      revalidatePath(`${prefix}/stories/${slug}`);
+    }
   }
 
   return doc;
