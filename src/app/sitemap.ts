@@ -1,9 +1,7 @@
 import type { MetadataRoute } from "next";
+import { connection } from "next/server";
 import { getPayload } from "@/lib/payload/get-payload";
 import { env } from "@/env";
-
-// Refresh hourly so newly published stories appear without a redeploy.
-export const revalidate = 3600;
 
 // English is the unprefixed default locale (lib/i18n/config.ts: defaultLocale
 // "en" + localePrefix "as-needed"); German lives under /de. Submitting /en/*
@@ -33,6 +31,8 @@ function localized(base: string, path: string, lastModified?: Date): MetadataRou
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Reflect current publication status instead of retaining unpublished URLs.
+  await connection();
   const base = env.NEXT_PUBLIC_SITE_URL;
 
   const payload = await getPayload();

@@ -15,6 +15,7 @@ import { getOrgIdentity } from "@/lib/seo/identity";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { LenisProvider } from "@/components/motion/lenis-provider";
+import { Clarity } from "@/components/analytics/clarity";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -109,6 +110,7 @@ export default async function LocaleLayout({
         </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
+        <Clarity clarityId={process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID} />
       </body>
     </html>
   );
