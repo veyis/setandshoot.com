@@ -23,12 +23,17 @@
     "neon:reset-password": "bash scripts/payload-cli.sh run scripts/reset-neon-auth-password.ts",
     "seed:photos": "tsx --env-file=.env.local scripts/seed/photos.ts",
     "seed:about-page": "bash scripts/payload-cli.sh run scripts/seed/about-page.ts",
-    "seed:marketing-pages": "bash scripts/payload-cli.sh run scripts/seed/marketing-pages.ts"
+    "seed:marketing-pages": "bash scripts/payload-cli.sh run scripts/seed/marketing-pages.ts",
+    "test:a11y": "playwright test tests/e2e/a11y.spec.ts --config tests/playwright.config.ts --project=chromium",
+    "knip": "knip",
+    "checkly:test": "checkly test",
+    "checkly:deploy": "checkly deploy",
+    "links:check": "lychee --no-progress --max-concurrency 8 https://setandshoot.com/sitemap.xml"
   },
   "engines": {
     "node": ">=24"
   },
-  "packageManager": "pnpm@12.6.0",
+  "packageManager": "pnpm@12.11.2",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1146.0",
     "@aws-sdk/s3-request-presigner": "^3.1146.0",
@@ -50,18 +55,19 @@
     "gsap": "^3.15.0",
     "lenis": "^1.3.26",
     "lexical": "0.51.0",
-    "next": "^16.3.8",
+    "next": "^16.4.1",
     "next-intl": "^4.14.9",
     "payload": "3.90.2",
     "postcss": "^8.5.29",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "sharp": "^0.35.5",
     "sonner": "^2.0.8",
     "tailwindcss": "^4.3.3",
-    "zod": "^4.6.5"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
@@ -71,20 +77,21 @@
     "@types/react-dom": "^19.3.0",
     "@vercel/config": "^0.10.0",
     "@vitest/coverage-v8": "^5.0.3",
+    "checkly": "^9.5.0",
     "dotenv": "^18.0.5",
     "eslint": "^10.12.0",
-    "eslint-config-next": "^16.3.8",
+    "eslint-config-next": "^16.4.1",
     "jsdom": "^30.1.2",
+    "knip": "^6.39.0",
     "lefthook": "^2.1.17",
     "prettier": "^3.9.9",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "shadcn": "^4.21.3",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
-    "typescript-eslint": "^8.71.1",
+    "typescript-eslint": "^8.71.2",
     "typescript-v6": "npm:typescript@6.0.3",
     "vite": "8.3.3",
-    "vitest": "^5.0.3",
-    "knip": "^6.39.0"
+    "vitest": "^5.0.4"
   }
 }
