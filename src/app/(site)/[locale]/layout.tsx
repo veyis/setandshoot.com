@@ -1,11 +1,8 @@
 import "@/app/globals.css";
-import Script from "next/script";
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { isLocale, locales, defaultLocale, type Locale } from "@/lib/i18n/config";
 import { env } from "@/env";
 import { fraunces, inter, jetbrainsMono } from "@/lib/design/fonts";
@@ -15,7 +12,7 @@ import { getOrgIdentity } from "@/lib/seo/identity";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { LenisProvider } from "@/components/motion/lenis-provider";
-import { Clarity } from "@/components/analytics/clarity";
+import { AnalyticsConsent } from "@/components/analytics/analytics-consent";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -82,15 +79,6 @@ export default async function LocaleLayout({
       suppressHydrationWarning
     >
       <body>
-        {/* GA4 — property setandshoot.com, stream 15533916722. This site had no
-            analytics of any kind before 2026-08-31. */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-GT5YK23462"
-          strategy="afterInteractive"
-        />
-        <Script id="ga4" strategy="afterInteractive">
-          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-GT5YK23462');`}
-        </Script>
         <JsonLd data={personSchema({ siteUrl, org })} />
         <JsonLd data={webSiteSchema({ siteUrl })} />
         <NextIntlClientProvider locale={locale} messages={messages}>
@@ -108,9 +96,7 @@ export default async function LocaleLayout({
             <Footer />
           </LenisProvider>
         </NextIntlClientProvider>
-        <Analytics />
-        <SpeedInsights />
-        <Clarity clarityId={process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID} />
+        <AnalyticsConsent locale={locale} clarityId={process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID} />
       </body>
     </html>
   );

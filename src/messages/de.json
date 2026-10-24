@@ -66,7 +66,8 @@
     "impressum": "Impressum",
     "datenschutz": "Datenschutz",
     "navLabel": "Navigation",
-    "legalLabel": "Rechtliches"
+    "legalLabel": "Rechtliches",
+    "privacySettings": "Datenschutzeinstellungen"
   },
   "notFound": {
     "title": "Seite nicht gefunden",

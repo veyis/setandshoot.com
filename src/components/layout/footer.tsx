@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { PrivacySettingsButton } from "@/components/analytics/analytics-consent";
 
 export async function Footer() {
   const t = await getTranslations();
@@ -60,6 +61,7 @@ export async function Footer() {
               {item.label}
             </Link>
           ))}
+          <PrivacySettingsButton label={t("footer.privacySettings")} />
         </nav>
         <div className="flex flex-col gap-3">
           <p className="text-ink-faint mb-2 font-mono text-[10px] tracking-[0.2em] uppercase">
