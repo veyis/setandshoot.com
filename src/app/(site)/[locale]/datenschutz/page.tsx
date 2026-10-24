@@ -9,9 +9,7 @@ import { notFound } from "next/navigation";
 // ISR: rebuilt hourly; the datenschutz global revalidate hook busts on save.
 export const revalidate = 3600;
 
-// Legal pages carry no seoCopy entry, so they inherit the layout's title and
-// description. They still need a self-referencing canonical — without one
-// Search Console reports them as "Duplicate without user-selected canonical".
+// Legal pages need distinct metadata and a self-referencing canonical.
 export async function generateMetadata({
   params,
 }: {
@@ -19,7 +17,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const safeLocale = isLocale(locale) ? locale : defaultLocale;
-  return { alternates: localeAlternates("/datenschutz", safeLocale) };
+  return {
+    title: safeLocale === "de" ? "Datenschutz" : "Privacy Policy",
+    description: safeLocale === "de"
+      ? "Datenschutzerklärung der Fotografie-Website von Belin Akguel."
+      : "Privacy policy for Belin Akguel’s photography website.",
+    alternates: localeAlternates("/datenschutz", safeLocale),
+  };
 }
 
 export default async function DatenschutzPage({ params }: { params: Promise<{ locale: string }> }) {

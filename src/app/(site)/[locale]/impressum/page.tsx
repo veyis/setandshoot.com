@@ -8,9 +8,7 @@ import { notFound } from "next/navigation";
 // ISR: rebuilt hourly; the impressum global revalidate hook busts on save.
 export const revalidate = 3600;
 
-// Legal pages carry no seoCopy entry, so they inherit the layout's title and
-// description. They still need a self-referencing canonical — without one
-// Search Console reports them as "Duplicate without user-selected canonical".
+// Legal pages need distinct metadata and a self-referencing canonical.
 export async function generateMetadata({
   params,
 }: {
@@ -18,7 +16,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const safeLocale = isLocale(locale) ? locale : defaultLocale;
-  return { alternates: localeAlternates("/impressum", safeLocale) };
+  return {
+    title: safeLocale === "de" ? "Impressum" : "Legal Notice",
+    description: safeLocale === "de"
+      ? "Impressum und Anbieterinformationen von Belin Akguel."
+      : "Legal notice and provider information for Belin Akguel.",
+    alternates: localeAlternates("/impressum", safeLocale),
+  };
 }
 
 export default async function ImpressumPage({ params }: { params: Promise<{ locale: string }> }) {
