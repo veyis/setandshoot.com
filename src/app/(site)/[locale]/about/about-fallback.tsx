@@ -46,8 +46,6 @@ export async function AboutFallback({ locale }: { locale: Locale }) {
         </blockquote>
         <p className="text-ink-muted max-w-prose text-base leading-relaxed">{tHome("body2")}</p>
         <div className="text-ink-faint flex flex-col gap-1 font-mono text-[10px] tracking-[0.15em] uppercase">
-          <span>{tHome("publications")}</span>
-          <span>{tHome("clients")}</span>
           <span>{tHome("availability")}</span>
         </div>
       </div>

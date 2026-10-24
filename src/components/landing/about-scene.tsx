@@ -55,8 +55,6 @@ export async function AboutScene({ portrait }: Props) {
           </Reveal>
           <Reveal delay={600}>
             <div className="text-ink-faint mt-4 flex flex-col gap-1 font-mono text-[10px] tracking-[0.15em] uppercase">
-              <span>{t("publications")}</span>
-              <span>{t("clients")}</span>
               <span>{t("availability")}</span>
             </div>
           </Reveal>
