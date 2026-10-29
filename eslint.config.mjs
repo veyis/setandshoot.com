@@ -98,6 +98,7 @@ export default tseslint.config(
   },
   {
     ignores: [
+      ".claude/**", // Claude Code worktrees (claude -w)
       ".next/",
       "node_modules/",
       "playwright-report/",
