@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "verify:design-tokens": "node scripts/checks/verify-design-tokens.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

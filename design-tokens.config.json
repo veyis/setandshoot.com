@@ -1,0 +1,19 @@
+{
+  "css": "src/app/globals.css",
+  "themes": {
+    "light": ":root",
+    "dark": null
+  },
+  "srcDirs": [
+    "src"
+  ],
+  "rules": [
+    "raw-color",
+    "arbitrary-text-size",
+    "arbitrary-radius",
+    "arbitrary-shadow"
+  ],
+  "strictTokens": false,
+  "knownContrastGaps": [],
+  "baseline": "scripts/checks/design-tokens-baseline.json"
+}

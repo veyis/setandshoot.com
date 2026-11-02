@@ -1,0 +1,71 @@
+{
+  "src/app/(site)/[locale]/about/about-fallback.tsx": {
+    "arbitrary-text-size": 2
+  },
+  "src/app/(site)/[locale]/athletes/page.tsx": {
+    "arbitrary-text-size": 1
+  },
+  "src/app/(site)/[locale]/highlights/page.tsx": {
+    "arbitrary-text-size": 2
+  },
+  "src/app/(site)/[locale]/journal/page.tsx": {
+    "arbitrary-text-size": 2
+  },
+  "src/app/(site)/[locale]/not-found.tsx": {
+    "arbitrary-text-size": 1
+  },
+  "src/app/apple-icon.tsx": {
+    "raw-color": 3
+  },
+  "src/app/icon.tsx": {
+    "raw-color": 3
+  },
+  "src/components/auth/login-form.tsx": {
+    "raw-color": 4
+  },
+  "src/components/landing/about-scene.tsx": {
+    "arbitrary-text-size": 2
+  },
+  "src/components/landing/booking-cta.tsx": {
+    "arbitrary-text-size": 2
+  },
+  "src/components/landing/featured-story-scene.tsx": {
+    "raw-color": 2
+  },
+  "src/components/landing/hero/HeroCoverTitle.tsx": {
+    "arbitrary-text-size": 4
+  },
+  "src/components/landing/hero/HeroScene.tsx": {
+    "raw-color": 3
+  },
+  "src/components/landing/hero/HeroSlateFrame.tsx": {
+    "arbitrary-text-size": 4
+  },
+  "src/components/landing/hero/HeroStickyCTA.tsx": {
+    "arbitrary-text-size": 2
+  },
+  "src/components/landing/scroll-cue.tsx": {
+    "arbitrary-text-size": 1
+  },
+  "src/components/layout/footer.tsx": {
+    "arbitrary-text-size": 4
+  },
+  "src/components/site/marketing-blocks.tsx": {
+    "arbitrary-text-size": 2
+  },
+  "src/components/studio/photo-picker.tsx": {
+    "arbitrary-text-size": 1
+  },
+  "src/lib/seo/og-card.tsx": {
+    "raw-color": 4
+  },
+  "src/lib/studio/globals.ts": {
+    "raw-color": 1
+  },
+  "src/migrations/20260518_163754_stories_collections.ts": {
+    "raw-color": 1
+  },
+  "src/payload/globals/settings.ts": {
+    "raw-color": 1
+  }
+}
