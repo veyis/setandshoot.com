@@ -283,14 +283,19 @@ export const KNOWN_CONTRAST_GAPS = [];
 const isKnownGap = (c, gaps) =>
   gaps.some((g) => g.theme === c.theme && g.fgName === c.fgName && g.bgName === c.bgName && c.ratio >= g.floor - 0.005);
 
-/** Custom properties declared directly inside every block whose selector matches. */
+/**
+ * Custom properties declared directly inside every rule whose selector list
+ * includes `selector` exactly (`:root, .dark { … }` counts for both), at any
+ * nesting depth (inside @layer/@media). Nested rules are not descended into.
+ */
 function blockVars(css, selector) {
   const vars = {};
   const clean = css.replace(/\/\*[\s\S]*?\*\//g, "");
-  const esc = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const re = new RegExp(`(^|[\\s,}])${esc}\\s*\\{`, "g");
-  for (const m of clean.matchAll(re)) {
-    let depth = 0, i = m.index + m[0].length - 1, start = i + 1;
+  for (const m of clean.matchAll(/([^{};]+)\{/g)) {
+    const selectors = m[1].split(",").map((x) => x.trim().replace(/\s+/g, " "));
+    if (!selectors.includes(selector)) continue;
+    let depth = 0, i = m.index + m[0].length - 1;
+    const start = i + 1;
     for (; i < clean.length; i++) {
       if (clean[i] === "{") depth++;
       else if (clean[i] === "}" && --depth === 0) break;
@@ -312,13 +317,20 @@ function mediaDarkVars(css) {
   return out;
 }
 
-/** Light and dark custom-property maps (dark inherits light). `@theme` blocks count as light. */
+/**
+ * Light and dark custom-property maps. `themes.base` (default: the light
+ * selector) holds the always-on values plus `@theme` blocks; each theme is the
+ * base with its own selector layered on. A dark-first site models itself as
+ * { base: ":root", dark: ":root", light: ".light" }.
+ */
 export function readThemes(css, themes = { light: ":root", dark: ".dark" }) {
-  const light = { ...blockVars(css, "@theme"), ...blockVars(css, "@theme inline"), ...blockVars(css, themes.light) };
-  const out = { light };
+  const baseSel = themes.base ?? themes.light;
+  const base = { ...blockVars(css, "@theme"), ...blockVars(css, "@theme inline"), ...blockVars(css, baseSel) };
+  const layer = (sel) => (sel === baseSel ? {} : sel === "media" ? mediaDarkVars(css) : blockVars(css, sel));
+  const out = { light: { ...base, ...layer(themes.light) } };
   if (themes.dark) {
-    const dark = themes.dark === "media" ? mediaDarkVars(css) : blockVars(css, themes.dark);
-    if (Object.keys(dark).length) out.dark = { ...light, ...dark };
+    const dark = layer(themes.dark);
+    if (Object.keys(dark).length || themes.dark === baseSel) out.dark = { ...base, ...dark };
   }
   return out;
 }
