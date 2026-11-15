@@ -1,3 +1,5 @@
+@AGENTS.md
+
 ## SEO: run the checker before shipping SEO changes
 
 ```bash
