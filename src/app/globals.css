@@ -96,3 +96,12 @@
 .header-shell[data-hidden="true"] {
   transform: translateY(-100%);
 }
+
+/* Focus indicator at full strength. @neondatabase/auth-ui's stylesheet (imported
+   above into layer(neon-auth)) sets `* { outline-color: <ring> at 50% }` for the
+   whole site, which drew focus at 1.9:1 on the canvas. This rule is unlayered, so
+   it wins over that layer: the same grey ring, opaque, is 4.1:1 on the canvas and
+   4.7:1 on white (it also has to read inside the auth UI's light surfaces). */
+*:focus-visible {
+  outline-color: var(--neon-ring, oklch(55.6% 0 0));
+}
