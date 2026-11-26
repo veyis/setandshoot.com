@@ -12,7 +12,7 @@ import { MarketingBlocks } from "@/components/site/marketing-blocks";
 import { AboutFallback } from "./about-fallback";
 
 // ISR: rebuilt hourly; the aboutPage global revalidate hook busts on save.
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export async function generateMetadata({
   params,

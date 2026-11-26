@@ -7,7 +7,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 // ISR: rebuilt hourly; the datenschutz global revalidate hook busts on save.
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 // Legal pages need distinct metadata and a self-referencing canonical.
 export async function generateMetadata({

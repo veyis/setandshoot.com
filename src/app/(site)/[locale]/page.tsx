@@ -11,8 +11,8 @@ import { WorkMosaicScene } from "@/components/landing/work-mosaic-scene";
 import { AboutScene } from "@/components/landing/about-scene";
 import { BookingCTA } from "@/components/landing/booking-cta";
 
-// ISR: rebuilt hourly; the story revalidate hook busts this on publish.
-export const revalidate = 3600;
+// ISR: rebuilt daily; the story revalidate hook still busts this on publish.
+export const revalidate = 86400;
 
 export async function generateMetadata({
   params,

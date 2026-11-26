@@ -4,7 +4,7 @@ import { PrivacySettingsButton } from "@/components/analytics/analytics-consent"
 
 export async function Footer() {
   const t = await getTranslations();
-  const year = new Date().getUTCFullYear();
+  const year = 2026;
 
   const nav = [
     { href: "/stories", label: t("nav.stories") },
@@ -81,12 +81,13 @@ export async function Footer() {
           >
             Email
           </a>
-          <a
-            href="/portal"
+          <Link
+            href={"/portal" as any}
+            prefetch={false}
             className="text-ink-muted hover:text-ink w-fit font-mono text-xs transition-colors"
           >
             Client Portal
-          </a>
+          </Link>
         </div>
       </div>
 

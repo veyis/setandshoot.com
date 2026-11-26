@@ -12,6 +12,7 @@ const config: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     qualities: [60, 75, 90],
+    minimumCacheTTL: 31536000,
     deviceSizes: [640, 768, 1024, 1280, 1536, 1920, 2880],
     imageSizes: [16, 32, 64, 96, 128, 256, 384, 512],
     remotePatterns: [
@@ -34,6 +35,27 @@ const config: NextConfig = {
           {
             key: "Strict-Transport-Security",
             value: "max-age=63072000; includeSubDomains",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://*.clarity.ms https://c.bing.com https://va.vercel-scripts.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com data:",
+              "img-src 'self' data: blob: https://*.setandshoot.com https://*.r2.dev https://www.googletagmanager.com https://www.google-analytics.com https://*.clarity.ms https://c.bing.com",
+              "connect-src 'self' https://*.setandshoot.com https://*.r2.dev https://*.neon.tech https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://*.clarity.ms https://c.bing.com https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+              "frame-src 'self'",
+              "frame-ancestors 'self'",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "upgrade-insecure-requests",
+            ].join("; "),
           },
         ],
       },

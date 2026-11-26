@@ -14,7 +14,7 @@ import { PageShell } from "@/components/site/page-shell";
 import { EditablePageHeader } from "@/components/site/editable-page-header";
 
 // ISR: rebuilt hourly; the servicesPage global revalidate hook busts on save.
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export async function generateMetadata({
   params,

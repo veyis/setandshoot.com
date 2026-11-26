@@ -10,7 +10,7 @@ import { PageShell } from "@/components/site/page-shell";
 import { getLandingPhotos } from "@/lib/landing/photos";
 
 // Static content (translations + bundled photos); revalidate hourly.
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export async function generateMetadata({
   params,

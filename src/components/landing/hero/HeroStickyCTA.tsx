@@ -55,7 +55,7 @@ export function HeroStickyCTA({ primaryLabel, primaryHref, secondaryLabel, secon
     >
       <Link
         href={primaryHref as any}
-        className="hero-cta-primary bg-accent text-canvas hover:bg-accent/90 px-4 py-3 text-center font-mono text-[10px] tracking-[0.2em] uppercase transition-colors"
+        className="hero-cta-primary bg-[var(--accent-signal)] text-canvas hover:opacity-90 px-4 py-3 text-center font-mono text-[10px] tracking-[0.2em] uppercase transition-opacity"
       >
         {primaryLabel}
       </Link>

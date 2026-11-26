@@ -22,7 +22,7 @@ type PageProps = {
 
 // ISR: published stories are prerendered at build; the revalidateStory hook
 // busts list + detail on publish. New stories render on demand (dynamicParams).
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export async function generateStaticParams() {
   const payload = await getPayload();

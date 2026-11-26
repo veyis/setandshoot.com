@@ -1,15 +1,15 @@
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 
 export const fraunces = Fraunces({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   variable: "--font-fraunces",
   display: "swap",
-  axes: ["opsz", "SOFT"],
+  weight: ["400", "500"],
   style: ["normal", "italic"],
 });
 
 export const inter = Inter({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
   weight: ["400", "500", "600"],
@@ -17,7 +17,7 @@ export const inter = Inter({
 });
 
 export const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   variable: "--font-jetbrains-mono",
   display: "swap",
   weight: ["400"],

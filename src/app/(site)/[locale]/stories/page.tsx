@@ -9,7 +9,7 @@ import { StoryCard } from "@/components/story/story-card";
 import { PageShell } from "@/components/site/page-shell";
 
 // ISR: rebuilt hourly; the story revalidate hook busts this on publish.
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export async function generateMetadata({
   params,

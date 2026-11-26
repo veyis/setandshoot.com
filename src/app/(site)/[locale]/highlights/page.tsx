@@ -11,7 +11,7 @@ import { getHighlightPhotos } from "@/lib/landing/photos";
 import { EditablePageHeader } from "@/components/site/editable-page-header";
 
 // ISR: rebuilt hourly; the highlightsPage global revalidate hook busts on save.
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export async function generateMetadata({
   params,

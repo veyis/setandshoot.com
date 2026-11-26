@@ -20,7 +20,8 @@ export function LandingImage({ photo, sizes, className, priority, objectPosition
       sizes={sizes}
       className={className}
       priority={priority}
-      loading={priority ? "eager" : undefined}
+      fetchPriority={priority ? "high" : undefined}
+      loading={priority ? "eager" : "lazy"}
       style={{ objectPosition: objectPosition ?? photo.objectPosition }}
     />
   );
