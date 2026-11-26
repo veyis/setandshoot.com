@@ -1,13 +1,7 @@
 "use client";
 
 import { useLayoutEffect, type RefObject } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useReducedMotion } from "./use-reduced-motion";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 type Options = {
   pin: RefObject<HTMLElement | null>;
@@ -28,8 +22,8 @@ function unwrapPinSpacer(el: HTMLElement) {
 
 /**
  * Pins an element for a scroll distance via GSAP ScrollTrigger.
- * Cleanup runs in useLayoutEffect so pin-spacer wrappers are reverted
- * synchronously before React unmounts — avoids removeChild NotFoundError.
+ * GSAP is loaded on demand so unused pin scenes never pay the ~60KB cost
+ * on the homepage critical path.
  */
 export function usePinnedScene({ pin, trigger, end = "+=300%", scrub = false }: Options) {
   const reducedMotion = useReducedMotion();
@@ -41,22 +35,31 @@ export function usePinnedScene({ pin, trigger, end = "+=300%", scrub = false }: 
     if (!pinEl) return;
     const triggerEl = trigger?.current ?? pinEl;
 
-    let scrollTrigger: ScrollTrigger | undefined;
+    let cancelled = false;
+    let scrollTrigger: { kill: (reset?: boolean) => void } | undefined;
+    let ctx: { revert: () => void } | undefined;
 
-    const ctx = gsap.context(() => {
-      scrollTrigger = ScrollTrigger.create({
-        trigger: triggerEl,
-        start: "top top",
-        end,
-        pin: pinEl,
-        scrub,
-        anticipatePin: 1,
-      });
-    });
+    void Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(
+      ([{ gsap }, { ScrollTrigger }]) => {
+        if (cancelled) return;
+        gsap.registerPlugin(ScrollTrigger);
+        ctx = gsap.context(() => {
+          scrollTrigger = ScrollTrigger.create({
+            trigger: triggerEl,
+            start: "top top",
+            end,
+            pin: pinEl,
+            scrub,
+            anticipatePin: 1,
+          });
+        });
+      },
+    );
 
     return () => {
+      cancelled = true;
       scrollTrigger?.kill(true);
-      ctx.revert();
+      ctx?.revert();
       unwrapPinSpacer(pinEl);
     };
   }, [reducedMotion, pin, trigger, end, scrub]);

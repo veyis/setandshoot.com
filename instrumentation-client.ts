@@ -5,7 +5,8 @@ import * as Sentry from "@sentry/nextjs";
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   enabled: Boolean(process.env.NEXT_PUBLIC_SENTRY_DSN),
-  tracesSampleRate: 0.1,
+  // Marketing pages do not need continuous tracing; keep error capture only.
+  tracesSampleRate: 0,
   sendDefaultPii: false,
   replaysOnErrorSampleRate: 0,
   replaysSessionSampleRate: 0,

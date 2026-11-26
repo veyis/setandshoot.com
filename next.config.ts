@@ -66,4 +66,9 @@ const config: NextConfig = {
 export default withSentryConfig(withPayload(withNextIntl(config)), {
   silent: true,
   tunnelRoute: "/monitoring",
+  // Keep the marketing LCP path lean — drop Sentry debug helpers from the client bundle.
+  disableLogger: true,
+  sourcemaps: {
+    deleteSourcemapsAfterUpload: true,
+  },
 });
